@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: TODO_URL/sitemap.xml

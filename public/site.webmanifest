@@ -1,0 +1,31 @@
+{
+  "name": "AMARTE",
+  "short_name": "AMARTE",
+  "description": "Breathwork Inmersivo · Regula tu sistema nervioso.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "categories": ["health", "lifestyle", "wellness"],
+  "lang": "es-EC",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Próxima sesión",
+      "short_name": "Sesión",
+      "description": "Ver formato y unirse al grupo",
+      "url": "/#formato"
+    },
+    {
+      "name": "Test 1 minuto",
+      "short_name": "Test",
+      "description": "¿Tu sistema nervioso está saturado?",
+      "url": "/#test"
+    }
+  ]
+}
