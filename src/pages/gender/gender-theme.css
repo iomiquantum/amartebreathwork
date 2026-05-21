@@ -1,0 +1,230 @@
+/* gender-theme.css
+ * Overrides scoped a /mujeres y /hombres: cuando el body tiene
+ * data-vertical="women" o data-vertical="men", los componentes globales
+ * (Header, FloatingWhatsappButton, SideRail) y cualquier clase emerald-*
+ * adoptan la paleta del vertical para mantener cohesión visual.
+ *
+ * NO modifica los componentes globales — solo aplica CSS de mayor
+ * especificidad cuando se está en esa ruta. Se desactiva automáticamente
+ * al salir.
+ *
+ * Replica el patrón usado por corporate-theme.css.
+ *
+ * Paletas:
+ *  Mujeres (women): terracota cálido + ámbar dorado.
+ *    brand: #C75B4C  glow: #E8A87C  deep: #3D1F1A  accent: #D4A574
+ *  Hombres (men): cobalto profundo + acero plateado.
+ *    brand: #3A7CA5  glow: #7BB4D6  deep: #0F2940  accent: #5C7B95
+ */
+
+/* ============================================
+   MUJERES — terracota + ámbar
+   ============================================ */
+
+/* === BG SOLID === */
+body[data-vertical="women"] .bg-emerald-brand {
+  background-color: #C75B4C !important;
+}
+body[data-vertical="women"] .bg-emerald-glow {
+  background-color: #E8A87C !important;
+}
+body[data-vertical="women"] .bg-emerald-deep {
+  background-color: #3D1F1A !important;
+}
+
+/* === BG WITH OPACITY === */
+body[data-vertical="women"] [class*="bg-emerald-brand\\/"] {
+  background-color: transparent !important;
+}
+body[data-vertical="women"] .bg-emerald-brand\/10 { background-color: rgba(199, 91, 76, 0.1) !important; }
+body[data-vertical="women"] .bg-emerald-brand\/20 { background-color: rgba(199, 91, 76, 0.2) !important; }
+body[data-vertical="women"] .bg-emerald-brand\/30 { background-color: rgba(199, 91, 76, 0.3) !important; }
+body[data-vertical="women"] .bg-emerald-brand\/40 { background-color: rgba(199, 91, 76, 0.4) !important; }
+body[data-vertical="women"] .bg-emerald-brand\/50 { background-color: rgba(199, 91, 76, 0.5) !important; }
+body[data-vertical="women"] .bg-emerald-brand\/60 { background-color: rgba(199, 91, 76, 0.6) !important; }
+
+body[data-vertical="women"] .bg-emerald-deep\/20 { background-color: rgba(61, 31, 26, 0.2) !important; }
+body[data-vertical="women"] .bg-emerald-deep\/30 { background-color: rgba(61, 31, 26, 0.3) !important; }
+body[data-vertical="women"] .bg-emerald-deep\/40 { background-color: rgba(61, 31, 26, 0.4) !important; }
+body[data-vertical="women"] .bg-emerald-deep\/50 { background-color: rgba(61, 31, 26, 0.5) !important; }
+
+/* === TEXT === */
+body[data-vertical="women"] .text-emerald-brand { color: #C75B4C !important; }
+body[data-vertical="women"] .text-emerald-glow { color: #E8A87C !important; }
+body[data-vertical="women"] .text-emerald-deep { color: #3D1F1A !important; }
+
+/* === BORDER === */
+body[data-vertical="women"] .border-emerald-brand { border-color: #C75B4C !important; }
+body[data-vertical="women"] .border-emerald-glow { border-color: #E8A87C !important; }
+body[data-vertical="women"] .border-emerald-brand\/30 { border-color: rgba(199, 91, 76, 0.3) !important; }
+body[data-vertical="women"] .border-emerald-brand\/40 { border-color: rgba(199, 91, 76, 0.4) !important; }
+body[data-vertical="women"] .border-emerald-brand\/50 { border-color: rgba(199, 91, 76, 0.5) !important; }
+body[data-vertical="women"] .border-emerald-brand\/60 { border-color: rgba(199, 91, 76, 0.6) !important; }
+
+/* === HOVER STATES === */
+body[data-vertical="women"] .hover\:bg-emerald-brand:hover { background-color: #C75B4C !important; }
+body[data-vertical="women"] .hover\:bg-emerald-glow:hover { background-color: #E8A87C !important; }
+body[data-vertical="women"] .hover\:text-emerald-brand:hover { color: #C75B4C !important; }
+body[data-vertical="women"] .hover\:text-emerald-glow:hover { color: #E8A87C !important; }
+body[data-vertical="women"] .hover\:border-emerald-brand:hover { border-color: #C75B4C !important; }
+body[data-vertical="women"] .hover\:border-emerald-brand\/60:hover { border-color: rgba(199, 91, 76, 0.6) !important; }
+
+/* === FOCUS STATES (inputs) === */
+body[data-vertical="women"] .focus\:border-emerald-brand:focus { border-color: #C75B4C !important; }
+body[data-vertical="women"] .focus\:border-emerald-brand\/50:focus { border-color: rgba(199, 91, 76, 0.5) !important; }
+body[data-vertical="women"] .focus\:ring-emerald-brand:focus { box-shadow: 0 0 0 4px rgba(199, 91, 76, 0.2) !important; }
+body[data-vertical="women"] .focus\:ring-emerald-brand\/20:focus { box-shadow: 0 0 0 4px rgba(199, 91, 76, 0.2) !important; }
+
+/* === SHADOWS / GLOWS === */
+body[data-vertical="women"] .shadow-glow-emerald {
+  box-shadow: 0 0 0 1px rgba(199, 91, 76, 0.25), 0 10px 40px -10px rgba(199, 91, 76, 0.45) !important;
+}
+body[data-vertical="women"] .shadow-glow-emerald-strong {
+  box-shadow: 0 0 0 1px rgba(199, 91, 76, 0.4), 0 18px 60px -10px rgba(199, 91, 76, 0.65) !important;
+}
+
+/* === RADIAL BACKGROUNDS === */
+body[data-vertical="women"] .bg-radial-emerald {
+  background-image: radial-gradient(ellipse at top, rgba(199, 91, 76, 0.18) 0%, rgba(5, 5, 5, 0) 60%) !important;
+}
+
+/* === GRADIENT STOPS (logo, botones, etc.) === */
+body[data-vertical="women"] .from-emerald-brand {
+  --tw-gradient-from: #C75B4C var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(199, 91, 76, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+body[data-vertical="women"] .via-emerald-brand {
+  --tw-gradient-to: rgba(199, 91, 76, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #C75B4C var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+body[data-vertical="women"] .to-emerald-brand {
+  --tw-gradient-to: #C75B4C var(--tw-gradient-to-position) !important;
+}
+body[data-vertical="women"] .from-emerald-glow {
+  --tw-gradient-from: #E8A87C var(--tw-gradient-from-position) !important;
+}
+body[data-vertical="women"] .via-emerald-glow {
+  --tw-gradient-to: rgba(232, 168, 124, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #E8A87C var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+body[data-vertical="women"] .to-emerald-glow {
+  --tw-gradient-to: #E8A87C var(--tw-gradient-to-position) !important;
+}
+
+/* === HIDE SIDE RAIL (sus IDs son del HomePage) === */
+body[data-vertical="women"] nav[aria-label="Navegación lateral"] {
+  display: none !important;
+}
+
+/* === SELECTION COLOR === */
+body[data-vertical="women"] ::selection {
+  background-color: rgba(199, 91, 76, 0.35) !important;
+  color: #F5F2EA !important;
+}
+
+/* ============================================
+   HOMBRES — cobalto + acero
+   ============================================ */
+
+/* === BG SOLID === */
+body[data-vertical="men"] .bg-emerald-brand {
+  background-color: #3A7CA5 !important;
+}
+body[data-vertical="men"] .bg-emerald-glow {
+  background-color: #7BB4D6 !important;
+}
+body[data-vertical="men"] .bg-emerald-deep {
+  background-color: #0F2940 !important;
+}
+
+/* === BG WITH OPACITY === */
+body[data-vertical="men"] [class*="bg-emerald-brand\\/"] {
+  background-color: transparent !important;
+}
+body[data-vertical="men"] .bg-emerald-brand\/10 { background-color: rgba(58, 124, 165, 0.1) !important; }
+body[data-vertical="men"] .bg-emerald-brand\/20 { background-color: rgba(58, 124, 165, 0.2) !important; }
+body[data-vertical="men"] .bg-emerald-brand\/30 { background-color: rgba(58, 124, 165, 0.3) !important; }
+body[data-vertical="men"] .bg-emerald-brand\/40 { background-color: rgba(58, 124, 165, 0.4) !important; }
+body[data-vertical="men"] .bg-emerald-brand\/50 { background-color: rgba(58, 124, 165, 0.5) !important; }
+body[data-vertical="men"] .bg-emerald-brand\/60 { background-color: rgba(58, 124, 165, 0.6) !important; }
+
+body[data-vertical="men"] .bg-emerald-deep\/20 { background-color: rgba(15, 41, 64, 0.2) !important; }
+body[data-vertical="men"] .bg-emerald-deep\/30 { background-color: rgba(15, 41, 64, 0.3) !important; }
+body[data-vertical="men"] .bg-emerald-deep\/40 { background-color: rgba(15, 41, 64, 0.4) !important; }
+body[data-vertical="men"] .bg-emerald-deep\/50 { background-color: rgba(15, 41, 64, 0.5) !important; }
+
+/* === TEXT === */
+body[data-vertical="men"] .text-emerald-brand { color: #3A7CA5 !important; }
+body[data-vertical="men"] .text-emerald-glow { color: #7BB4D6 !important; }
+body[data-vertical="men"] .text-emerald-deep { color: #0F2940 !important; }
+
+/* === BORDER === */
+body[data-vertical="men"] .border-emerald-brand { border-color: #3A7CA5 !important; }
+body[data-vertical="men"] .border-emerald-glow { border-color: #7BB4D6 !important; }
+body[data-vertical="men"] .border-emerald-brand\/30 { border-color: rgba(58, 124, 165, 0.3) !important; }
+body[data-vertical="men"] .border-emerald-brand\/40 { border-color: rgba(58, 124, 165, 0.4) !important; }
+body[data-vertical="men"] .border-emerald-brand\/50 { border-color: rgba(58, 124, 165, 0.5) !important; }
+body[data-vertical="men"] .border-emerald-brand\/60 { border-color: rgba(58, 124, 165, 0.6) !important; }
+
+/* === HOVER STATES === */
+body[data-vertical="men"] .hover\:bg-emerald-brand:hover { background-color: #3A7CA5 !important; }
+body[data-vertical="men"] .hover\:bg-emerald-glow:hover { background-color: #7BB4D6 !important; }
+body[data-vertical="men"] .hover\:text-emerald-brand:hover { color: #3A7CA5 !important; }
+body[data-vertical="men"] .hover\:text-emerald-glow:hover { color: #7BB4D6 !important; }
+body[data-vertical="men"] .hover\:border-emerald-brand:hover { border-color: #3A7CA5 !important; }
+body[data-vertical="men"] .hover\:border-emerald-brand\/60:hover { border-color: rgba(58, 124, 165, 0.6) !important; }
+
+/* === FOCUS STATES (inputs) === */
+body[data-vertical="men"] .focus\:border-emerald-brand:focus { border-color: #3A7CA5 !important; }
+body[data-vertical="men"] .focus\:border-emerald-brand\/50:focus { border-color: rgba(58, 124, 165, 0.5) !important; }
+body[data-vertical="men"] .focus\:ring-emerald-brand:focus { box-shadow: 0 0 0 4px rgba(58, 124, 165, 0.2) !important; }
+body[data-vertical="men"] .focus\:ring-emerald-brand\/20:focus { box-shadow: 0 0 0 4px rgba(58, 124, 165, 0.2) !important; }
+
+/* === SHADOWS / GLOWS === */
+body[data-vertical="men"] .shadow-glow-emerald {
+  box-shadow: 0 0 0 1px rgba(58, 124, 165, 0.25), 0 10px 40px -10px rgba(58, 124, 165, 0.45) !important;
+}
+body[data-vertical="men"] .shadow-glow-emerald-strong {
+  box-shadow: 0 0 0 1px rgba(58, 124, 165, 0.4), 0 18px 60px -10px rgba(58, 124, 165, 0.65) !important;
+}
+
+/* === RADIAL BACKGROUNDS === */
+body[data-vertical="men"] .bg-radial-emerald {
+  background-image: radial-gradient(ellipse at top, rgba(58, 124, 165, 0.18) 0%, rgba(5, 5, 5, 0) 60%) !important;
+}
+
+/* === GRADIENT STOPS (logo, botones, etc.) === */
+body[data-vertical="men"] .from-emerald-brand {
+  --tw-gradient-from: #3A7CA5 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(58, 124, 165, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+body[data-vertical="men"] .via-emerald-brand {
+  --tw-gradient-to: rgba(58, 124, 165, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #3A7CA5 var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+body[data-vertical="men"] .to-emerald-brand {
+  --tw-gradient-to: #3A7CA5 var(--tw-gradient-to-position) !important;
+}
+body[data-vertical="men"] .from-emerald-glow {
+  --tw-gradient-from: #7BB4D6 var(--tw-gradient-from-position) !important;
+}
+body[data-vertical="men"] .via-emerald-glow {
+  --tw-gradient-to: rgba(123, 180, 214, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #7BB4D6 var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+body[data-vertical="men"] .to-emerald-glow {
+  --tw-gradient-to: #7BB4D6 var(--tw-gradient-to-position) !important;
+}
+
+/* === HIDE SIDE RAIL (sus IDs son del HomePage) === */
+body[data-vertical="men"] nav[aria-label="Navegación lateral"] {
+  display: none !important;
+}
+
+/* === SELECTION COLOR === */
+body[data-vertical="men"] ::selection {
+  background-color: rgba(58, 124, 165, 0.35) !important;
+  color: #F5F2EA !important;
+}

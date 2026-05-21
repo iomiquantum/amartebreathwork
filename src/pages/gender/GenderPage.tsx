@@ -19,6 +19,10 @@ import { submitGenderInquiry, isValidEmail, sanitizePhone } from "../../lib/supa
 import { trackLeadFormSubmit, trackPageView } from "../../lib/tracking";
 import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../../data/countries";
 import type { GenderContent } from "./types";
+// Activa overrides de paleta scoped a body[data-vertical="women|men"].
+// Define CSS vars --color-primary y --color-secondary cuando se aplica
+// .theme-women / .theme-men en body. Replica patrón de corporate-theme.css.
+import "./gender-theme.css";
 
 interface Props {
   content: GenderContent;
@@ -36,8 +40,23 @@ export function GenderPage({ content }: Props) {
     window.scrollTo(0, 0);
   }, [content.seoTitle, content.seoDescription]);
 
+  // Activa la paleta del vertical en TODO el documento (incluye Header,
+  // FloatingWhatsappButton, etc.) via data-vertical + theme class en body.
+  // - data-vertical=women|men dispara los overrides CSS de gender-theme.css
+  // - theme-women|men setea las CSS vars --color-primary / --color-secondary
+  // Al desmontar (cambio de ruta) se limpia y la home vuelve al verde marca.
+  useEffect(() => {
+    const body = document.body;
+    body.dataset.vertical = content.audience;
+    body.classList.add(content.themeClass);
+    return () => {
+      delete body.dataset.vertical;
+      body.classList.remove(content.themeClass);
+    };
+  }, [content.audience, content.themeClass]);
+
   return (
-    <main className={`${content.themeClass} bg-ink text-bone antialiased`}>
+    <main className="bg-ink text-bone antialiased">
       <Hero content={content} />
       <Stats content={content} />
       <Problem content={content} />
