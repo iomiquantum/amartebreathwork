@@ -1,5 +1,6 @@
 // HomePage — Landing principal de AMARTE (ruta /)
-// Todas las secciones del home viven aquí. Header/Footer/modals son globales en App.tsx.
+// Estructura optimizada para conversión: funnel claro de arriba a abajo.
+// Las secciones de profundización viven en /proceso, /sobre-amarte y /test.
 
 import { Suspense, lazy } from "react";
 import { Hero } from "../components/Hero";
@@ -8,65 +9,35 @@ import { ProblemSection } from "../components/ProblemSection";
 import { SectionSkeleton } from "../components/SectionSkeleton";
 
 // Lazy below-the-fold sections
-const ExperienceSection = lazy(() =>
-  import("../components/ExperienceSection").then((m) => ({ default: m.ExperienceSection }))
-);
-const HowItWorks = lazy(() =>
-  import("../components/HowItWorks").then((m) => ({ default: m.HowItWorks }))
-);
-const IncludesSection = lazy(() =>
-  import("../components/IncludesSection").then((m) => ({ default: m.IncludesSection }))
-);
-const Gallery = lazy(() =>
-  import("../components/Gallery").then((m) => ({ default: m.Gallery }))
-);
-const AudioWavePreview = lazy(() =>
-  import("../components/AudioWavePreview").then((m) => ({ default: m.AudioWavePreview }))
-);
-const Comparison = lazy(() =>
-  import("../components/Comparison").then((m) => ({ default: m.Comparison }))
-);
 const NerveTest = lazy(() =>
   import("../components/NerveTest").then((m) => ({ default: m.NerveTest }))
 );
-const BenefitsSection = lazy(() =>
-  import("../components/BenefitsSection").then((m) => ({ default: m.BenefitsSection }))
-);
-const ForWhoSection = lazy(() =>
-  import("../components/ForWhoSection").then((m) => ({ default: m.ForWhoSection }))
-);
-const Manifesto = lazy(() =>
-  import("../components/Manifesto").then((m) => ({ default: m.Manifesto }))
-);
-const OriginStory = lazy(() =>
-  import("../components/OriginStory").then((m) => ({ default: m.OriginStory }))
-);
-const BehindTheScenes = lazy(() =>
-  import("../components/BehindTheScenes").then((m) => ({ default: m.BehindTheScenes }))
-);
-const GuideSection = lazy(() =>
-  import("../components/GuideSection").then((m) => ({ default: m.GuideSection }))
-);
-const Testimonials = lazy(() =>
-  import("../components/Testimonials").then((m) => ({ default: m.Testimonials }))
-);
-const PressStrip = lazy(() =>
-  import("../components/PressStrip").then((m) => ({ default: m.PressStrip }))
-);
-const EventFormat = lazy(() =>
-  import("../components/EventFormat").then((m) => ({ default: m.EventFormat }))
-);
-const EventsCalendar = lazy(() =>
-  import("../components/EventsCalendar").then((m) => ({ default: m.EventsCalendar }))
+const ExperienceSection = lazy(() =>
+  import("../components/ExperienceSection").then((m) => ({ default: m.ExperienceSection }))
 );
 const FrequenciesPlayer = lazy(() =>
   import("../components/FrequenciesPlayer").then((m) => ({ default: m.FrequenciesPlayer }))
 );
+const Gallery = lazy(() =>
+  import("../components/Gallery").then((m) => ({ default: m.Gallery }))
+);
+const Testimonials = lazy(() =>
+  import("../components/Testimonials").then((m) => ({ default: m.Testimonials }))
+);
+const BenefitsSection = lazy(() =>
+  import("../components/BenefitsSection").then((m) => ({ default: m.BenefitsSection }))
+);
+const SectionBanner = lazy(() =>
+  import("../components/SectionBanner").then((m) => ({ default: m.SectionBanner }))
+);
+const GuideSection = lazy(() =>
+  import("../components/GuideSection").then((m) => ({ default: m.GuideSection }))
+);
+const EventsCalendar = lazy(() =>
+  import("../components/EventsCalendar").then((m) => ({ default: m.EventsCalendar }))
+);
 const WhatsappCommunity = lazy(() =>
   import("../components/WhatsappCommunity").then((m) => ({ default: m.WhatsappCommunity }))
-);
-const Differentiators = lazy(() =>
-  import("../components/Differentiators").then((m) => ({ default: m.Differentiators }))
 );
 const CinematicQuote = lazy(() =>
   import("../components/CinematicQuote").then((m) => ({ default: m.CinematicQuote }))
@@ -75,60 +46,121 @@ const FAQ = lazy(() => import("../components/FAQ").then((m) => ({ default: m.FAQ
 const LeadForm = lazy(() =>
   import("../components/LeadForm").then((m) => ({ default: m.LeadForm }))
 );
-const Newsletter = lazy(() =>
-  import("../components/Newsletter").then((m) => ({ default: m.Newsletter }))
-);
-const CorporateSection = lazy(() =>
-  import("../components/CorporateSection").then((m) => ({ default: m.CorporateSection }))
-);
-const ShareSection = lazy(() =>
-  import("../components/ShareSection").then((m) => ({ default: m.ShareSection }))
-);
-const ResponsibleNotice = lazy(() =>
-  import("../components/ResponsibleNotice").then((m) => ({ default: m.ResponsibleNotice }))
-);
 const FinalCTA = lazy(() =>
   import("../components/FinalCTA").then((m) => ({ default: m.FinalCTA }))
-);
-const WaveDivider = lazy(() =>
-  import("../components/WaveDivider").then((m) => ({ default: m.WaveDivider }))
 );
 
 export function HomePage() {
   return (
     <main>
+      {/* ========================================================
+          1. ATENCIÓN — Hero con slider narrativo
+         ======================================================== */}
       <Hero />
+
+      {/* ========================================================
+          2. CREDIBILIDAD INMEDIATA — TrustBar
+         ======================================================== */}
       <TrustBar />
-      <ProblemSection />
+
       <Suspense fallback={<SectionSkeleton />}>
-        <ExperienceSection />
-        <WaveDivider />
-        <HowItWorks />
-        <IncludesSection />
-        <AudioWavePreview />
-        <FrequenciesPlayer />
-        <Gallery />
+        {/* ========================================================
+            3. PROBLEMA — Te identificas con esto?
+           ======================================================== */}
+        <ProblemSection />
+
+        {/* ========================================================
+            4. INTERACTIVO #1 — Test del sistema nervioso
+            (engancha cognitivamente y autoidentifica)
+           ======================================================== */}
         <NerveTest />
-        <Comparison />
-        <BenefitsSection />
-        <ForWhoSection />
-        <OriginStory />
-        <BehindTheScenes />
-        <Manifesto />
-        <GuideSection />
+
+        {/* ========================================================
+            5. SOLUCIÓN — Qué es la experiencia
+           ======================================================== */}
+        <ExperienceSection />
+
+        {/* ========================================================
+            6. INTERACTIVO #2 — Frecuencias en vivo
+            (sentir el producto antes de comprar)
+           ======================================================== */}
+        <FrequenciesPlayer />
+
+        {/* ========================================================
+            7. ATMÓSFERA — Manifiestos + Gallery (visual fuerte)
+           ======================================================== */}
+        <Gallery />
+
+        {/* ========================================================
+            8. PRUEBA SOCIAL — Testimonios (movido arriba)
+           ======================================================== */}
         <Testimonials />
-        <PressStrip />
-        <EventFormat />
+
+        {/* ========================================================
+            9. TRANSFORMACIÓN — Beneficios
+           ======================================================== */}
+        <BenefitsSection />
+
+        {/* ========================================================
+            10. BANNER — Profundización proceso
+           ======================================================== */}
+        <SectionBanner
+          eyebrow="El proceso completo"
+          title="¿Curioso por cómo construimos cada sesión?"
+          description="Diseño narrativo, capas sonoras, frecuencias específicas y ambiente físico. Mira el detalle de lo que pasa antes de que cierres los ojos."
+          cta="Ver el proceso →"
+          href="/proceso"
+          image="/sections/experience.jpg"
+          alt="Sesión inmersiva AMARTE en auditorio con audífonos verdes brillando"
+        />
+
+        {/* ========================================================
+            11. GUÍA — Quién está detrás (StoryBrand)
+           ======================================================== */}
+        <GuideSection />
+
+        {/* ========================================================
+            12. BANNER — Profundización sobre AMARTE
+           ======================================================== */}
+        <SectionBanner
+          eyebrow="La historia"
+          title="AMARTE no nació de una franquicia."
+          description="Una marca de respiración inmersiva nacida de una historia personal. Manifiesto, diferenciadores y el origen completo."
+          cta="Conocer AMARTE →"
+          href="/sobre-amarte"
+          image="/sections/origin.jpg"
+          alt="Grupo en sesión AMARTE en sillones reclinables, audífonos verdes brillando"
+          reverse
+        />
+
+        {/* ========================================================
+            13. OFERTA CONCRETA — Eventos próximos
+           ======================================================== */}
         <EventsCalendar />
+
+        {/* ========================================================
+            14. COMUNIDAD — Grupo WhatsApp
+           ======================================================== */}
         <WhatsappCommunity />
-        <Differentiators />
+
+        {/* ========================================================
+            15. CLIMAX EMOCIONAL — Cinematic quote + breath pacer
+           ======================================================== */}
         <CinematicQuote />
+
+        {/* ========================================================
+            16. OBJECTION HANDLING — FAQ
+           ======================================================== */}
         <FAQ />
+
+        {/* ========================================================
+            17. CAPTURA — Lead form
+           ======================================================== */}
         <LeadForm />
-        <Newsletter />
-        <CorporateSection />
-        <ShareSection />
-        <ResponsibleNotice />
+
+        {/* ========================================================
+            18. CIERRE — Final CTA con background fuerte
+           ======================================================== */}
         <FinalCTA />
       </Suspense>
     </main>

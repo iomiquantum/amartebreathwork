@@ -25,4 +25,22 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://breathwork.amarteinc.com/evento/ritual-nocturno-cumbaya-jun-2026</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://breathwork.amarteinc.com/evento/amarte-online-jun-2026</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://breathwork.amarteinc.com/evento/sesion-inmersiva-guayaquil-jul-2026</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

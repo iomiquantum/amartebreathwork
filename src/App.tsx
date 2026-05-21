@@ -36,6 +36,17 @@ const YouthPage = lazy(() =>
   import("./pages/YouthPage").then((m) => ({ default: m.YouthPage }))
 );
 
+// Lazy: páginas de profundización del funnel
+const ProcessPage = lazy(() =>
+  import("./pages/ProcessPage").then((m) => ({ default: m.ProcessPage }))
+);
+const AboutPage = lazy(() =>
+  import("./pages/AboutPage").then((m) => ({ default: m.AboutPage }))
+);
+const TestPage = lazy(() =>
+  import("./pages/TestPage").then((m) => ({ default: m.TestPage }))
+);
+
 // Lazy: NotFoundPage para rutas no reconocidas
 const NotFoundPage = lazy(() =>
   import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage }))
@@ -168,6 +179,30 @@ function App() {
               element={
                 <Suspense fallback={<div className="min-h-screen" />}>
                   <YouthPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/proceso"
+              element={
+                <Suspense fallback={<div className="min-h-screen bg-ink" />}>
+                  <ProcessPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/sobre-amarte"
+              element={
+                <Suspense fallback={<div className="min-h-screen bg-ink" />}>
+                  <AboutPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/test"
+              element={
+                <Suspense fallback={<div className="min-h-screen bg-ink" />}>
+                  <TestPage />
                 </Suspense>
               }
             />
