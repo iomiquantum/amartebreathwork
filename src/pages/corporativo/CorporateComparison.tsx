@@ -69,7 +69,7 @@ const ROWS: { label: string; teamBuilding: Cell; apps: Cell; charlas: Cell; amar
 function CellRender({ cell, highlight = false }: { cell: Cell; highlight?: boolean }) {
   if (typeof cell === "string") {
     return (
-      <span className={`text-sm ${highlight ? "text-emerald-glow font-medium" : "text-bone/75"}`}>
+      <span className={`text-sm ${highlight ? "text-orange-glow font-medium" : "text-bone/75"}`}>
         {cell}
       </span>
     );
@@ -77,11 +77,11 @@ function CellRender({ cell, highlight = false }: { cell: Cell; highlight?: boole
   if (cell.type === "check") {
     return (
       <div className="flex items-center justify-center gap-1.5">
-        <span className={`grid size-6 place-items-center rounded-full ${highlight ? "bg-emerald-brand/20 text-emerald-glow" : "bg-bone/10 text-bone/60"}`}>
+        <span className={`grid size-6 place-items-center rounded-full ${highlight ? "bg-orange-brand/20 text-orange-glow" : "bg-bone/10 text-bone/60"}`}>
           <Check className="size-3.5" strokeWidth={2.4} />
         </span>
         {cell.label && (
-          <span className={`text-xs ${highlight ? "text-emerald-glow font-medium" : "text-bone/70"}`}>
+          <span className={`text-xs ${highlight ? "text-orange-glow font-medium" : "text-bone/70"}`}>
             {cell.label}
           </span>
         )}
@@ -112,16 +112,16 @@ function CellRender({ cell, highlight = false }: { cell: Cell; highlight?: boole
 export function CorporateComparison() {
   return (
     <section id="comparativa" className="relative bg-ink py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-30" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-orange opacity-30" />
 
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Comparativa honesta
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
             Por qué AMARTE no compite —{" "}
-            <span className="bg-gradient-to-r from-emerald-brand to-gold-warm bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-brand to-gold-warm bg-clip-text text-transparent">
               desplaza.
             </span>
           </h2>
@@ -164,9 +164,9 @@ export function CorporateComparison() {
                 </div>
               </div>
               <div className="relative p-5 text-center">
-                <div className="absolute inset-0 bg-gradient-to-b from-emerald-deep/30 to-emerald-deep/10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-orange-deep/30 to-orange-deep/10" />
                 <div className="relative flex flex-col items-center gap-1">
-                  <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-eyebrow text-emerald-glow">
+                  <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-eyebrow text-orange-glow">
                     <Sparkles className="size-3" /> AMARTE
                   </span>
                   <span className="text-[10px] text-bone/50">breathwork inmersivo</span>
@@ -193,7 +193,7 @@ export function CorporateComparison() {
                   <CellRender cell={row.charlas} />
                 </div>
                 <div className="relative grid place-items-center p-5">
-                  <div className="absolute inset-0 bg-emerald-deep/10" />
+                  <div className="absolute inset-0 bg-orange-deep/10" />
                   <div className="relative">
                     <CellRender cell={row.amarte} highlight />
                   </div>
@@ -219,13 +219,13 @@ export function CorporateComparison() {
               transition={{ duration: 0.5 }}
               className={`rounded-2xl border p-5 ${
                 col.highlight
-                  ? "border-emerald-brand/40 bg-emerald-deep/15 shadow-glow-emerald"
+                  ? "border-orange-brand/40 bg-orange-deep/15 shadow-glow-orange"
                   : "border-white/[0.08] bg-white/[0.02]"
               }`}
             >
               <div className="flex items-center gap-2">
-                {col.highlight && <Sparkles className="size-4 text-emerald-glow" />}
-                <h3 className={`font-display text-lg ${col.highlight ? "text-emerald-glow" : "text-bone"}`}>
+                {col.highlight && <Sparkles className="size-4 text-orange-glow" />}
+                <h3 className={`font-display text-lg ${col.highlight ? "text-orange-glow" : "text-bone"}`}>
                   {col.name}
                 </h3>
               </div>
@@ -266,7 +266,7 @@ export function CorporateComparison() {
             <span className="text-bone/55">al PowerPoint.</span>
           </p>
           <p className="mt-6 font-display text-balance text-2xl sm:text-3xl">
-            <span className="bg-gradient-to-r from-emerald-brand via-emerald-glow to-gold-warm bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-brand via-orange-glow to-gold-warm bg-clip-text text-transparent">
               AMARTE le habla al sistema nervioso.
             </span>
           </p>

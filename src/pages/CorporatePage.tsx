@@ -183,7 +183,7 @@ export function CorporatePage() {
 function CorporateHero() {
   return (
     <section className="relative isolate overflow-hidden bg-ink pb-20 pt-28 sm:pt-32 lg:pb-28">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-orange opacity-50" />
       <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-30" />
       <div className="pointer-events-none absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
 
@@ -194,7 +194,7 @@ function CorporateHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/30 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-emerald-glow"
+              className="inline-flex items-center gap-2 rounded-full border border-orange-brand/30 bg-orange-deep/30 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-orange-glow"
             >
               <Building2 className="size-3" /> Para empresas
             </motion.span>
@@ -207,7 +207,7 @@ function CorporateHero() {
             >
               Tu equipo no está cansado.
               <br />
-              <span className="bg-gradient-to-r from-emerald-brand via-emerald-glow to-gold-warm bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-brand via-orange-glow to-gold-warm bg-clip-text text-transparent">
                 Su sistema nervioso está saturado.
               </span>
             </motion.h1>
@@ -231,14 +231,14 @@ function CorporateHero() {
             >
               <a
                 href="#cotizar"
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-emerald-brand px-8 text-base font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-orange-brand px-8 text-base font-medium text-ink-900 shadow-glow-orange transition-all hover:bg-orange-glow hover:shadow-glow-orange-strong"
               >
                 Cotizar para mi equipo
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
                 href="#beneficios"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/15 px-7 text-base text-bone transition-colors hover:border-emerald-brand/60 hover:text-emerald-glow"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/15 px-7 text-base text-bone transition-colors hover:border-orange-brand/60 hover:text-orange-glow"
               >
                 Ver beneficios
               </a>
@@ -250,8 +250,8 @@ function CorporateHero() {
               transition={{ duration: 1, delay: 0.5 }}
               className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-bone/70"
             >
-              <a href="#inversion" className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow">
-                <span className="text-emerald-glow font-medium">Desde $32 USD</span>
+              <a href="#inversion" className="inline-flex items-center gap-2 transition-colors hover:text-orange-glow">
+                <span className="text-orange-glow font-medium">Desde $32 USD</span>
                 <span className="text-bone/50">/ persona</span>
               </a>
               <span className="inline-flex items-center gap-2">
@@ -259,7 +259,7 @@ function CorporateHero() {
                 Cotización en 24h
               </span>
               <span className="inline-flex items-center gap-2">
-                <MapPin className="size-3.5 text-emerald-brand" />
+                <MapPin className="size-3.5 text-orange-brand" />
                 Todo Ecuador + online
               </span>
             </motion.div>
@@ -273,7 +273,7 @@ function CorporateHero() {
             className="lg:col-span-5"
           >
             <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-[2rem] gradient-border bg-ink">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-deep/40 via-ink-900 to-ink" />
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-deep/40 via-ink-900 to-ink" />
               <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
 
               {/* Grid de dots representando equipo */}
@@ -285,7 +285,7 @@ function CorporateHero() {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 0.7 }}
                       transition={{ duration: 0.5, delay: i * 0.03, type: "spring" }}
-                      className="size-3 rounded-full bg-emerald-brand"
+                      className="size-3 rounded-full bg-orange-brand"
                       style={{ boxShadow: "0 0 12px rgba(0,200,150,0.5)" }}
                     />
                   ))}
@@ -294,11 +294,11 @@ function CorporateHero() {
 
               {/* Labels */}
               <div className="absolute left-5 top-5 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/60">
-                <Building2 className="size-3 text-emerald-brand" /> Sesión privada
+                <Building2 className="size-3 text-orange-brand" /> Sesión privada
               </div>
               <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/60">
                 <span>Equipo completo</span>
-                <span className="text-emerald-brand">● Respirando juntos</span>
+                <span className="text-orange-brand">● Respirando juntos</span>
               </div>
             </div>
           </motion.div>
@@ -326,7 +326,7 @@ function CorporateStats() {
               transition={{ duration: 0.6, delay: i * 0.08 }}
               className="text-center"
             >
-              <p className="font-display text-4xl tabular-nums text-emerald-glow sm:text-5xl">
+              <p className="font-display text-4xl tabular-nums text-orange-glow sm:text-5xl">
                 {s.value}
               </p>
               <p className="mt-3 text-sm text-bone/85 leading-snug">{s.label}</p>
@@ -348,12 +348,12 @@ function CorporateBenefits() {
     <section id="beneficios" className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Beneficios
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
             Lo que tu equipo gana en{" "}
-            <span className="bg-gradient-to-r from-emerald-brand to-gold-warm bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-brand to-gold-warm bg-clip-text text-transparent">
               una sola sesión.
             </span>
           </h2>
@@ -372,9 +372,9 @@ function CorporateBenefits() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.55, delay: i * 0.06 }}
-                className="card-dark group p-7 transition-all hover:border-emerald-brand/30"
+                className="card-dark group p-7 transition-all hover:border-orange-brand/30"
               >
-                <div className="grid size-12 place-items-center rounded-2xl border border-emerald-brand/40 bg-emerald-deep/40 text-emerald-glow">
+                <div className="grid size-12 place-items-center rounded-2xl border border-orange-brand/40 bg-orange-deep/40 text-orange-glow">
                   <Icon className="size-5" strokeWidth={1.6} />
                 </div>
                 <h3 className="font-display mt-5 text-xl text-bone">{b.title}</h3>
@@ -403,7 +403,7 @@ function CorporateUseCases() {
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
             Momentos donde AMARTE{" "}
-            <span className="bg-gradient-to-r from-gold-warm to-emerald-brand bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-gold-warm to-orange-brand bg-clip-text text-transparent">
               cambia el ritmo.
             </span>
           </h2>
@@ -438,19 +438,19 @@ function CorporateProcess() {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Cómo trabajamos
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
             De la primera llamada{" "}
-            <span className="bg-gradient-to-r from-emerald-brand to-gold-warm bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-brand to-gold-warm bg-clip-text text-transparent">
               a tu equipo respirando.
             </span>
           </h2>
         </div>
 
         <div className="relative mt-16">
-          <div className="absolute left-6 top-0 hidden h-full w-px bg-gradient-to-b from-emerald-brand/0 via-emerald-brand/40 to-emerald-brand/0 sm:block lg:left-1/2" />
+          <div className="absolute left-6 top-0 hidden h-full w-px bg-gradient-to-b from-orange-brand/0 via-orange-brand/40 to-orange-brand/0 sm:block lg:left-1/2" />
 
           <ol className="space-y-10 sm:space-y-12">
             {PROCESS.map((step, i) => {
@@ -465,7 +465,7 @@ function CorporateProcess() {
                   className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-8 lg:gap-12"
                 >
                   <div className={`relative z-10 sm:flex-shrink-0 ${isRight ? "lg:order-2 lg:ml-auto" : ""}`}>
-                    <div className="grid size-12 place-items-center rounded-full border border-emerald-brand/40 bg-ink-900 font-display text-base text-emerald-glow shadow-glow-emerald">
+                    <div className="grid size-12 place-items-center rounded-full border border-orange-brand/40 bg-ink-900 font-display text-base text-orange-glow shadow-glow-orange">
                       {step.n}
                     </div>
                   </div>
@@ -501,13 +501,13 @@ function CorporateLogistics() {
     <section className="relative bg-ink-900 py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Logística
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
             Tú solo aseguras el espacio.
             <br />
-            <span className="text-emerald-glow">El resto lo llevamos nosotros.</span>
+            <span className="text-orange-glow">El resto lo llevamos nosotros.</span>
           </h2>
         </div>
 
@@ -523,7 +523,7 @@ function CorporateLogistics() {
                 transition={{ duration: 0.5, delay: i * 0.05 }}
                 className="card-dark flex flex-col gap-3 p-6"
               >
-                <Icon className="size-5 text-emerald-brand" strokeWidth={1.6} />
+                <Icon className="size-5 text-orange-brand" strokeWidth={1.6} />
                 <div>
                   <p className="text-[10px] uppercase tracking-eyebrow text-muted">{item.label}</p>
                   <p className="mt-1.5 font-display text-lg text-bone">{item.value}</p>
@@ -548,7 +548,7 @@ function CorporateFAQ() {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-tight">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Preguntas frecuentes
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-4xl text-balance">
@@ -570,7 +570,7 @@ function CorporateFAQ() {
                   <span className="text-base font-medium text-bone sm:text-lg">{f.q}</span>
                   <span
                     className={`grid size-9 flex-shrink-0 place-items-center rounded-full border border-white/10 transition-all duration-300 ${
-                      isOpen ? "rotate-45 border-emerald-brand/50 bg-emerald-deep/40 text-emerald-glow" : "text-bone/70"
+                      isOpen ? "rotate-45 border-orange-brand/50 bg-orange-deep/40 text-orange-glow" : "text-bone/70"
                     }`}
                   >
                     {isOpen ? <Minus className="size-4" strokeWidth={1.8} /> : <Plus className="size-4" strokeWidth={1.8} />}
@@ -672,20 +672,20 @@ function CorporateForm() {
             animate={{ opacity: 1, y: 0 }}
             className="mx-auto max-w-2xl rounded-3xl gradient-border p-10 text-center"
           >
-            <div className="mx-auto grid size-16 place-items-center rounded-full border border-emerald-brand/40 bg-emerald-deep/40">
-              <CheckCircle2 className="size-8 text-emerald-glow" strokeWidth={1.6} />
+            <div className="mx-auto grid size-16 place-items-center rounded-full border border-orange-brand/40 bg-orange-deep/40">
+              <CheckCircle2 className="size-8 text-orange-glow" strokeWidth={1.6} />
             </div>
             <h3 className="font-display mt-6 text-3xl text-bone">
               Recibimos tu solicitud, {contactName.split(" ")[0]}.
             </h3>
             <p className="mt-4 text-bone/80 leading-relaxed">
-              Vamos a revisarla y te respondemos en <strong className="text-emerald-glow">menos de 24 horas</strong> a{" "}
+              Vamos a revisarla y te respondemos en <strong className="text-orange-glow">menos de 24 horas</strong> a{" "}
               <strong className="text-bone">{contactEmail}</strong> con una propuesta personalizada
               para {companyName}.
             </p>
             <p className="mt-3 text-sm text-muted">
               Si necesitas algo urgente, escríbenos directo a{" "}
-              <a href={`mailto:${siteConfig.contactEmail}`} className="text-emerald-glow underline">
+              <a href={`mailto:${siteConfig.contactEmail}`} className="text-orange-glow underline">
                 {siteConfig.contactEmail}
               </a>
             </p>
@@ -697,17 +697,17 @@ function CorporateForm() {
 
   return (
     <section id="cotizar" className="relative bg-ink-900 py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-30" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-orange opacity-30" />
       <div className="container-tight relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Cotización
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
             Cuéntanos sobre tu equipo.
           </h2>
           <p className="lede mt-5">
-            Te respondemos en <strong className="text-emerald-glow">menos de 24h</strong> con una
+            Te respondemos en <strong className="text-orange-glow">menos de 24h</strong> con una
             propuesta personalizada. Sin presión, sin compromiso.
           </p>
         </div>
@@ -721,7 +721,7 @@ function CorporateForm() {
           <div className="gradient-border rounded-3xl bg-ink-900 p-7 sm:p-10">
             {/* Sección: Empresa */}
             <div className="mb-7">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-orange-brand">
                 <Briefcase className="size-3.5" /> Sobre tu empresa
               </div>
 
@@ -738,7 +738,7 @@ function CorporateForm() {
 
             {/* Sección: Sobre la sesión */}
             <div className="mb-7">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-orange-brand">
                 <Target className="size-3.5" /> Sobre la sesión
               </div>
 
@@ -762,7 +762,7 @@ function CorporateForm() {
                       onClick={() => setFormat(opt.v)}
                       className={`rounded-full border px-4 py-2 text-xs transition-all ${
                         format === opt.v
-                          ? "border-emerald-brand/50 bg-emerald-deep/50 text-emerald-glow"
+                          ? "border-orange-brand/50 bg-orange-deep/50 text-orange-glow"
                           : "border-white/10 bg-white/[0.02] text-bone/80 hover:border-white/20"
                       }`}
                     >
@@ -788,7 +788,7 @@ function CorporateForm() {
                       onClick={() => setPrimaryGoal(g.value === primaryGoal ? "" : g.value)}
                       className={`rounded-xl border px-4 py-3 text-left text-xs transition-all ${
                         primaryGoal === g.value
-                          ? "border-emerald-brand/50 bg-emerald-deep/30 text-emerald-glow"
+                          ? "border-orange-brand/50 bg-orange-deep/30 text-orange-glow"
                           : "border-white/10 bg-white/[0.02] text-bone/80 hover:border-white/20"
                       }`}
                     >
@@ -801,7 +801,7 @@ function CorporateForm() {
 
             {/* Sección: Tu contacto */}
             <div className="mb-7">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-orange-brand">
                 <Mail className="size-3.5" /> Tus datos de contacto
               </div>
 
@@ -822,7 +822,7 @@ function CorporateForm() {
                         const c = COUNTRIES.find((x) => x.code === e.target.value);
                         if (c) setCountry(c);
                       }}
-                      className="h-11 w-[5.5rem] rounded-xl border border-white/10 bg-white/[0.025] px-2 text-sm text-bone focus:border-emerald-brand/50 focus:outline-none"
+                      className="h-11 w-[5.5rem] rounded-xl border border-white/10 bg-white/[0.025] px-2 text-sm text-bone focus:border-orange-brand/50 focus:outline-none"
                     >
                       {COUNTRIES.map((c) => (
                         <option key={c.code} value={c.code} className="bg-ink-900">
@@ -837,7 +837,7 @@ function CorporateForm() {
                       value={contactWhatsapp}
                       onChange={(e) => setContactWhatsapp(e.target.value)}
                       placeholder="número"
-                      className="h-11 flex-1 rounded-xl border border-white/10 bg-white/[0.025] px-4 text-sm text-bone placeholder:text-muted/70 focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20"
+                      className="h-11 flex-1 rounded-xl border border-white/10 bg-white/[0.025] px-4 text-sm text-bone placeholder:text-muted/70 focus:border-orange-brand/50 focus:outline-none focus:ring-2 focus:ring-orange-brand/20"
                     />
                   </div>
                 </div>
@@ -853,7 +853,7 @@ function CorporateForm() {
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
                   placeholder="Cuéntanos contexto, retos del equipo, fecha específica que tengas en mente, presupuesto, etc."
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.025] p-4 text-sm text-bone placeholder:text-muted/70 focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20"
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.025] p-4 text-sm text-bone placeholder:text-muted/70 focus:border-orange-brand/50 focus:outline-none focus:ring-2 focus:ring-orange-brand/20"
                 />
               </div>
             </div>
@@ -863,7 +863,7 @@ function CorporateForm() {
             <button
               type="submit"
               disabled={!canSubmit}
-              className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-emerald-brand text-base font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-orange-brand text-base font-medium text-ink-900 shadow-glow-orange transition-all hover:bg-orange-glow hover:shadow-glow-orange-strong disabled:cursor-not-allowed disabled:opacity-50"
             >
               {status === "loading" ? (
                 <Loader2 className="size-5 animate-spin" />
@@ -892,7 +892,7 @@ function CorporateForm() {
 function CorporateFinalCTA() {
   return (
     <section className="relative isolate overflow-hidden bg-ink py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-orange" />
       <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-50" />
 
       <div className="container-tight relative text-center">
@@ -904,7 +904,7 @@ function CorporateFinalCTA() {
           className="h-display text-4xl sm:text-6xl text-balance"
         >
           Tu equipo merece{" "}
-          <span className="bg-gradient-to-r from-emerald-brand via-emerald-glow to-gold-warm bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-orange-brand via-orange-glow to-gold-warm bg-clip-text text-transparent">
             volver a respirar.
           </span>
         </motion.h2>
@@ -926,7 +926,7 @@ function CorporateFinalCTA() {
         >
           <a
             href="#cotizar"
-            className="inline-flex h-14 items-center gap-2 rounded-full bg-emerald-brand px-8 text-base font-medium text-ink-900 shadow-glow-emerald-strong transition-all hover:bg-emerald-glow"
+            className="inline-flex h-14 items-center gap-2 rounded-full bg-orange-brand px-8 text-base font-medium text-ink-900 shadow-glow-orange-strong transition-all hover:bg-orange-glow"
           >
             <Building2 className="size-5" />
             Cotizar para mi empresa
@@ -962,7 +962,7 @@ function Field({
     <div>
       <label htmlFor={id} className="text-xs uppercase tracking-eyebrow text-bone/60">
         {label}
-        {required && <span className="ml-1 text-emerald-brand">*</span>}
+        {required && <span className="ml-1 text-orange-brand">*</span>}
       </label>
       <input
         id={id}
@@ -971,7 +971,7 @@ function Field({
         required={required}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="mt-1.5 h-11 w-full rounded-xl border border-white/10 bg-white/[0.025] px-4 text-sm text-bone placeholder:text-muted/70 focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20"
+        className="mt-1.5 h-11 w-full rounded-xl border border-white/10 bg-white/[0.025] px-4 text-sm text-bone placeholder:text-muted/70 focus:border-orange-brand/50 focus:outline-none focus:ring-2 focus:ring-orange-brand/20"
       />
     </div>
   );
@@ -999,7 +999,7 @@ function SelectField({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1.5 h-11 w-full rounded-xl border border-white/10 bg-white/[0.025] px-4 text-sm text-bone focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20"
+        className="mt-1.5 h-11 w-full rounded-xl border border-white/10 bg-white/[0.025] px-4 text-sm text-bone focus:border-orange-brand/50 focus:outline-none focus:ring-2 focus:ring-orange-brand/20"
       >
         {children}
       </select>

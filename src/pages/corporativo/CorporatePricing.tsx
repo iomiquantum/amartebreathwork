@@ -50,18 +50,18 @@ const INCLUDES = [
 export function CorporatePricing() {
   return (
     <section id="inversion" className="relative bg-ink py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-40" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-orange opacity-40" />
       <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-25" />
       <div className="pointer-events-none absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
 
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Inversión
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
             No es un evento.{" "}
-            <span className="bg-gradient-to-r from-emerald-brand via-emerald-glow to-gold-warm bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-brand via-orange-glow to-gold-warm bg-clip-text text-transparent">
               Es una intervención.
             </span>
           </h2>
@@ -96,7 +96,7 @@ export function CorporatePricing() {
 
               <p className="mt-6 max-w-xl text-base text-bone/80 leading-relaxed sm:text-lg">
                 A más personas en tu equipo,{" "}
-                <span className="text-emerald-glow font-medium">menor costo por persona.</span>
+                <span className="text-orange-glow font-medium">menor costo por persona.</span>
                 <br />
                 <span className="text-bone/60 text-sm sm:text-base">
                   Cotizamos sobre objetivos, tamaño y formato — no sobre tarifa fija.
@@ -106,14 +106,14 @@ export function CorporatePricing() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <a
                   href="#cotizar"
-                  className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-emerald-brand px-8 text-base font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"
+                  className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-orange-brand px-8 text-base font-medium text-ink-900 shadow-glow-orange transition-all hover:bg-orange-glow hover:shadow-glow-orange-strong"
                 >
                   Cotizar para mi equipo
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </a>
                 <a
                   href="#beneficios"
-                  className="inline-flex h-14 items-center justify-center rounded-full border border-white/15 px-7 text-base text-bone transition-colors hover:border-emerald-brand/60 hover:text-emerald-glow"
+                  className="inline-flex h-14 items-center justify-center rounded-full border border-white/15 px-7 text-base text-bone transition-colors hover:border-orange-brand/60 hover:text-orange-glow"
                 >
                   Ver qué incluye
                 </a>
@@ -125,7 +125,7 @@ export function CorporatePricing() {
         {/* Lo que SIEMPRE incluye */}
         <div className="mx-auto mt-16 max-w-5xl">
           <div className="text-center">
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
               Lo que siempre incluye
             </span>
             <h3 className="font-display mt-3 text-2xl text-bone sm:text-3xl">
@@ -143,14 +143,14 @@ export function CorporatePricing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.5, delay: i * 0.05 }}
-                  className="card-dark group flex gap-4 p-5 transition-all hover:border-emerald-brand/30"
+                  className="card-dark group flex gap-4 p-5 transition-all hover:border-orange-brand/30"
                 >
-                  <div className="grid size-10 flex-shrink-0 place-items-center rounded-xl border border-emerald-brand/40 bg-emerald-deep/40 text-emerald-glow">
+                  <div className="grid size-10 flex-shrink-0 place-items-center rounded-xl border border-orange-brand/40 bg-orange-deep/40 text-orange-glow">
                     <Icon className="size-4" strokeWidth={1.7} />
                   </div>
                   <div>
                     <div className="flex items-start gap-1.5">
-                      <Check className="mt-0.5 size-4 flex-shrink-0 text-emerald-brand" strokeWidth={2} />
+                      <Check className="mt-0.5 size-4 flex-shrink-0 text-orange-brand" strokeWidth={2} />
                       <h4 className="font-display text-base text-bone leading-snug">
                         {item.title}
                       </h4>
@@ -177,7 +177,7 @@ export function CorporatePricing() {
               cotizamos sobre objetivos específicos del año.
               <br className="hidden sm:block" />
               Sin techo, sin paquete fijo —{" "}
-              <a href="#cotizar" className="text-emerald-glow underline underline-offset-4">
+              <a href="#cotizar" className="text-orange-glow underline underline-offset-4">
                 cuéntanos qué tienes en mente
               </a>
               .

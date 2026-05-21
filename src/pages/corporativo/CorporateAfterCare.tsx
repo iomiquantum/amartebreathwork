@@ -50,7 +50,7 @@ export function CorporateAfterCare() {
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
             No te soltamos cuando{" "}
-            <span className="bg-gradient-to-r from-gold-warm via-emerald-glow to-emerald-brand bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-gold-warm via-orange-glow to-orange-brand bg-clip-text text-transparent">
               termina el evento.
             </span>
           </h2>
@@ -71,13 +71,13 @@ export function CorporateAfterCare() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: i * 0.07 }}
-                className="card-dark group relative overflow-hidden p-7 transition-all hover:border-emerald-brand/30"
+                className="card-dark group relative overflow-hidden p-7 transition-all hover:border-orange-brand/30"
               >
                 {/* Glow decorativo */}
-                <div className="pointer-events-none absolute -top-12 -right-12 size-40 rounded-full bg-emerald-brand/[0.04] blur-3xl transition-all group-hover:bg-emerald-brand/[0.08]" />
+                <div className="pointer-events-none absolute -top-12 -right-12 size-40 rounded-full bg-orange-brand/[0.04] blur-3xl transition-all group-hover:bg-orange-brand/[0.08]" />
 
                 <div className="relative flex items-start justify-between gap-4">
-                  <div className="grid size-12 place-items-center rounded-2xl border border-emerald-brand/40 bg-emerald-deep/40 text-emerald-glow">
+                  <div className="grid size-12 place-items-center rounded-2xl border border-orange-brand/40 bg-orange-deep/40 text-orange-glow">
                     <Icon className="size-5" strokeWidth={1.6} />
                   </div>
                   <span className="inline-block rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-eyebrow text-bone/70">
@@ -103,11 +103,11 @@ export function CorporateAfterCare() {
           className="mx-auto mt-16 max-w-3xl"
         >
           <div className="gradient-border rounded-3xl bg-ink p-8 text-center sm:p-10">
-            <Heart className="mx-auto size-7 text-emerald-glow" strokeWidth={1.5} />
+            <Heart className="mx-auto size-7 text-orange-glow" strokeWidth={1.5} />
             <p className="font-display mt-5 text-balance text-xl text-bone leading-relaxed sm:text-2xl">
               Otras propuestas terminan cuando guardan el equipo.
               <br />
-              <span className="text-emerald-glow">Nosotros recién empezamos ahí.</span>
+              <span className="text-orange-glow">Nosotros recién empezamos ahí.</span>
             </p>
           </div>
         </motion.div>
