@@ -88,18 +88,20 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
   - `supabase/functions/_shared/email-templates.ts`
 - **Webhooks:** crear webhook en breathwork_reservations al cambiar status='confirmed'
 
-#### D. Admin Dashboard `/admin` [DISPONIBLE]
-- **Por qué:** gestionar eventos, leads, reservas sin entrar a Supabase Studio
-- **Tiempo:** 2-3 horas
-- **Auth:** magic link de Supabase Auth (free)
-- **Archivos nuevos:**
-  - `src/pages/admin/Login.tsx`
-  - `src/pages/admin/Dashboard.tsx`
-  - `src/pages/admin/Events.tsx`
-  - `src/pages/admin/Reservations.tsx`
-  - `src/pages/admin/Leads.tsx`
-- **Modificar:** `src/App.tsx` (rutas /admin/*) — ⚠️ COORDINAR
-- **DB:** authenticated role ya tiene acceso completo, no necesita más policies
+#### D. Admin Dashboard `/admin` ✅ [DONE — 2026-05-21]
+- **Implementado:** sistema completo de admin con magic link de Supabase Auth
+- **Auth:** allowlist hardcoded en `src/lib/auth.ts` (`breathwork@amarteinc.com`, `amarteinc@gmail.com`, `miguelvalencia0531@gmail.com`)
+- **Pages:**
+  - `/admin/login` — magic link form
+  - `/admin` — Dashboard con KPIs (leads totales, leads 7d, eventos próximos, reservas pending/confirmed)
+  - `/admin/events` — lista de eventos + cambiar status (draft/published/sold_out/cancelled/past)
+  - `/admin/reservations` — confirmar/cancelar reservas con un click (trigger DB auto-decrementa spots al confirmar)
+  - `/admin/leads` — lista con buscador en vivo + export CSV
+- **Routing:** App.tsx detecta `/admin` y renderiza sin Header público / Splash / Floating WA / etc.
+- **Bundle:** todo lazy-loaded (chunks pequeños por pagina admin)
+- **PENDIENTE MANUAL EN SUPABASE:** agregar redirect URLs en Authentication → URL Configuration:
+  - `https://breathwork.amarteinc.com/admin`
+  - `http://localhost:5173/admin` (dev)
 
 #### E. Recordatorio 24h antes del evento [DISPONIBLE — pero después de WhatsApp Cloud API]
 - **Depende:** WhatsApp Cloud API debe estar funcionando primero
@@ -253,6 +255,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | L. Mobile refinements | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | M. A11y audit | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| D. Admin Dashboard | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |

@@ -18,6 +18,26 @@ const CorporatePage = lazy(() =>
   import("./pages/CorporatePage").then((m) => ({ default: m.CorporatePage }))
 );
 
+// Lazy: admin bundle (todo /admin/* en un solo chunk)
+const AdminLogin = lazy(() =>
+  import("./pages/admin/AdminLogin").then((m) => ({ default: m.AdminLogin }))
+);
+const AdminLayout = lazy(() =>
+  import("./pages/admin/AdminLayout").then((m) => ({ default: m.AdminLayout }))
+);
+const AdminDashboard = lazy(() =>
+  import("./pages/admin/AdminDashboard").then((m) => ({ default: m.AdminDashboard }))
+);
+const AdminEvents = lazy(() =>
+  import("./pages/admin/AdminEvents").then((m) => ({ default: m.AdminEvents }))
+);
+const AdminReservations = lazy(() =>
+  import("./pages/admin/AdminReservations").then((m) => ({ default: m.AdminReservations }))
+);
+const AdminLeads = lazy(() =>
+  import("./pages/admin/AdminLeads").then((m) => ({ default: m.AdminLeads }))
+);
+
 // Lazy: globales footer-zone
 const Footer = lazy(() => import("./components/Footer").then((m) => ({ default: m.Footer })));
 const ExitIntent = lazy(() =>
@@ -44,6 +64,25 @@ function App() {
   useEffect(() => {
     trackPageView();
   }, [location.pathname]);
+
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
+  if (isAdminRoute) {
+    // Layout admin: sin Header público, sin Splash, sin footer, sin WA flotante.
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-ink" />}>
+        <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="events" element={<AdminEvents />} />
+            <Route path="reservations" element={<AdminReservations />} />
+            <Route path="leads" element={<AdminLeads />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    );
+  }
 
   return (
     <ToastProvider>
