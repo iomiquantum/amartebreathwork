@@ -23,6 +23,14 @@ const EventPage = lazy(() =>
   import("./pages/EventPage").then((m) => ({ default: m.EventPage }))
 );
 
+// Lazy: landings dedicadas por género
+const WomenPage = lazy(() =>
+  import("./pages/WomenPage").then((m) => ({ default: m.WomenPage }))
+);
+const MenPage = lazy(() =>
+  import("./pages/MenPage").then((m) => ({ default: m.MenPage }))
+);
+
 // Lazy: admin bundle (todo /admin/* en un solo chunk)
 const AdminLogin = lazy(() =>
   import("./pages/admin/AdminLogin").then((m) => ({ default: m.AdminLogin }))
@@ -111,6 +119,22 @@ function App() {
               element={
                 <Suspense fallback={<div className="min-h-screen bg-ink" />}>
                   <EventPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/mujeres"
+              element={
+                <Suspense fallback={<div className="min-h-screen" />}>
+                  <WomenPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/hombres"
+              element={
+                <Suspense fallback={<div className="min-h-screen" />}>
+                  <MenPage />
                 </Suspense>
               }
             />

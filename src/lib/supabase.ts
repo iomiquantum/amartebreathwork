@@ -351,6 +351,87 @@ export async function submitCorporateInquiry(
   return { ok: true };
 }
 
+// ============================================
+// GENDER INQUIRIES (/hombres /mujeres)
+// ============================================
+
+export type GenderAudience = "men" | "women" | "other";
+
+export interface GenderInquiryInput {
+  audience: GenderAudience;
+  name: string;
+  whatsapp: string;
+  email?: string;
+  countryCode?: string;
+  countryName?: string;
+  city?: string;
+  ageRange?: string;
+  mainInterest?: string;
+  message?: string;
+  // específicos mujeres
+  lifeStage?: string;
+  mainConcern?: string;
+  // específicos hombres
+  mainGoal?: string;
+  exerciseFrequency?: string;
+  honeypot?: string;
+}
+
+export async function submitGenderInquiry(
+  input: GenderInquiryInput
+): Promise<{ ok: boolean; error?: string; blocked?: "bot" }> {
+  if (input.honeypot && input.honeypot.length > 0) {
+    return { ok: false, error: "Bot detectado", blocked: "bot" };
+  }
+  if (input.email && !isValidEmail(input.email)) {
+    return { ok: false, error: "Email inválido" };
+  }
+  if (!supabase) {
+    console.log("[gender inquiry]", input);
+    return { ok: true };
+  }
+
+  const utm = typeof window !== "undefined"
+    ? {
+        utm_source: sessionStorage.getItem("amarte_utm_source"),
+        utm_medium: sessionStorage.getItem("amarte_utm_medium"),
+        utm_campaign: sessionStorage.getItem("amarte_utm_campaign"),
+      }
+    : { utm_source: null, utm_medium: null, utm_campaign: null };
+
+  const { error } = await supabase.from("breathwork_gender_inquiries").insert({
+    audience: input.audience,
+    name: input.name,
+    whatsapp: input.whatsapp,
+    email: input.email ? input.email.trim().toLowerCase() : null,
+    country_code: input.countryCode ?? "593",
+    country_name: input.countryName ?? "Ecuador",
+    city: input.city ?? null,
+    age_range: input.ageRange ?? null,
+    main_interest: input.mainInterest ?? null,
+    message: input.message ?? null,
+    life_stage: input.lifeStage ?? null,
+    main_concern: input.mainConcern ?? null,
+    main_goal: input.mainGoal ?? null,
+    exercise_frequency: input.exerciseFrequency ?? null,
+    utm_source: utm.utm_source,
+    utm_medium: utm.utm_medium,
+    utm_campaign: utm.utm_campaign,
+    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+  });
+
+  if (error) {
+    console.error("[supabase] gender inquiry failed", error);
+    return { ok: false, error: error.message };
+  }
+
+  if (input.email && isValidEmail(input.email)) {
+    subscribeNewsletter(input.email).catch(() => undefined);
+  }
+
+  return { ok: true };
+}
+
 export async function subscribeNewsletter(email: string) {
   if (!isValidEmail(email)) return { ok: false, error: "Email inválido" };
 
