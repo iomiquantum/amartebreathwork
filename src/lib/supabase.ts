@@ -263,6 +263,78 @@ export async function fetchBankConfig(): Promise<BankConfig | null> {
 // NEWSLETTER
 // ============================================
 
+// ============================================
+// CORPORATE INQUIRIES (B2B)
+// ============================================
+
+export interface CorporateInquiryInput {
+  contactName: string;
+  contactEmail: string;
+  contactRole?: string;
+  contactWhatsapp?: string;
+  contactCountryCode?: string;
+  companyName: string;
+  companySize?: string;
+  industry?: string;
+  format?: "presencial" | "online" | "hibrido" | "no_definido";
+  city?: string;
+  estimatedDate?: string;
+  estimatedPeople?: number;
+  primaryGoal?: string;
+  message?: string;
+  honeypot?: string;
+}
+
+export async function submitCorporateInquiry(
+  input: CorporateInquiryInput
+): Promise<{ ok: boolean; error?: string; blocked?: "bot" }> {
+  if (input.honeypot && input.honeypot.length > 0) {
+    return { ok: false, error: "Bot detectado", blocked: "bot" };
+  }
+  if (!isValidEmail(input.contactEmail)) {
+    return { ok: false, error: "Email inválido" };
+  }
+  if (!supabase) {
+    console.log("[corp inquiry]", input);
+    return { ok: true };
+  }
+
+  const utm = typeof window !== "undefined"
+    ? {
+        utm_source: sessionStorage.getItem("amarte_utm_source"),
+        utm_medium: sessionStorage.getItem("amarte_utm_medium"),
+        utm_campaign: sessionStorage.getItem("amarte_utm_campaign"),
+      }
+    : { utm_source: null, utm_medium: null, utm_campaign: null };
+
+  const { error } = await supabase.from("breathwork_corporate_inquiries").insert({
+    contact_name: input.contactName,
+    contact_email: input.contactEmail.trim().toLowerCase(),
+    contact_role: input.contactRole ?? null,
+    contact_whatsapp: input.contactWhatsapp ?? null,
+    contact_country_code: input.contactCountryCode ?? "593",
+    company_name: input.companyName,
+    company_size: input.companySize ?? null,
+    industry: input.industry ?? null,
+    format: input.format ?? "no_definido",
+    city: input.city ?? null,
+    estimated_date: input.estimatedDate ?? null,
+    estimated_people: input.estimatedPeople ?? null,
+    primary_goal: input.primaryGoal ?? null,
+    message: input.message ?? null,
+    utm_source: utm.utm_source,
+    utm_medium: utm.utm_medium,
+    utm_campaign: utm.utm_campaign,
+    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+  });
+
+  if (error) {
+    console.error("[supabase] corp inquiry failed", error);
+    return { ok: false, error: error.message };
+  }
+  return { ok: true };
+}
+
 export async function subscribeNewsletter(email: string) {
   if (!isValidEmail(email)) return { ok: false, error: "Email inválido" };
 

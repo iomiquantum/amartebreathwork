@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Check, Building2 } from "lucide-react";
+import { Check, Building2, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { siteConfig } from "../data/siteConfig";
 
 export function CorporateSection() {
@@ -42,12 +43,19 @@ export function CorporateSection() {
               ))}
             </ul>
 
-            <div className="mt-9">
-              <a
-                href={mailto}
-                className="group inline-flex h-12 items-center gap-2 rounded-full border border-emerald-brand/40 bg-emerald-deep/30 px-6 text-sm font-medium text-bone transition-all hover:border-emerald-brand/70 hover:bg-emerald-deep/60 hover:text-emerald-glow"
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link
+                to="/corporativo"
+                className="group inline-flex h-12 items-center gap-2 rounded-full bg-emerald-brand px-6 text-sm font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"
               >
                 <Building2 className="size-4" strokeWidth={1.6} />
+                Ver propuesta corporativa completa
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+              <a
+                href={mailto}
+                className="inline-flex h-12 items-center gap-2 rounded-full border border-emerald-brand/40 bg-emerald-deep/30 px-6 text-sm text-bone transition-all hover:border-emerald-brand/70 hover:bg-emerald-deep/60 hover:text-emerald-glow"
+              >
                 {c.cta} →
               </a>
             </div>
