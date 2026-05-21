@@ -39,6 +39,7 @@ const STATIC_ROUTES = [
   { loc: `${SITE_URL}/corporativo`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE_URL}/mujeres`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE_URL}/hombres`, priority: "0.9", changefreq: "weekly" },
+  { loc: `${SITE_URL}/jovenes`, priority: "0.9", changefreq: "weekly" },
 ];
 
 function escapeXml(str) {
