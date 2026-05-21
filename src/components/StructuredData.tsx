@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { siteConfig } from "../data/siteConfig";
+import { FAQS } from "../data/faqs";
 
 function aggregateRating() {
   const ts = siteConfig.testimonials ?? [];
@@ -13,33 +14,6 @@ function aggregateRating() {
     worstRating: 1,
   };
 }
-
-const FAQS = [
-  {
-    q: "¿Esto es una clase de breathwork?",
-    a: "No. Es una experiencia auditiva inmersiva que integra respiración guiada, sonido y frecuencias. No está diseñada como una clase teórica, sino como una vivencia sensorial.",
-  },
-  {
-    q: "¿Necesito experiencia previa?",
-    a: "No. La experiencia está guiada paso a paso y puedes vivirla aunque nunca hayas practicado respiración consciente.",
-  },
-  {
-    q: "¿Cada cuánto se realizan?",
-    a: "Cada 15 días, los jueves en la noche.",
-  },
-  {
-    q: "¿Cuánto dura?",
-    a: "La duración estimada es de 60 a 90 minutos, dependiendo del formato de cada experiencia.",
-  },
-  {
-    q: "¿Es terapia o tratamiento médico?",
-    a: "No. Es una experiencia de bienestar complementaria. No reemplaza atención médica, psicológica o psiquiátrica.",
-  },
-  {
-    q: "¿Cómo me entero de la próxima fecha?",
-    a: "Entrando al grupo privado de WhatsApp. Ahí se anuncian primero las fechas, horarios, valores y cupos disponibles.",
-  },
-];
 
 export function StructuredData() {
   useEffect(() => {

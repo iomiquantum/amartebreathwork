@@ -174,6 +174,9 @@ export function NerveTest() {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.45 }}
+                  role="region"
+                  aria-live="polite"
+                  aria-label="Resultado del test"
                 >
                   <div
                     className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${result.tone} p-6 sm:p-8`}
