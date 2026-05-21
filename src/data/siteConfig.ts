@@ -20,10 +20,10 @@ export const siteConfig = {
   ctaMicrocopy:
     "Recibe primero fechas, ubicación, horarios, valores y cupos disponibles.",
 
-  // WhatsApp — REEMPLAZAR aquí cuando tengas el grupo y el número
-  whatsappGroupUrl: "https://chat.whatsapp.com/REEMPLAZAR_AQUI",
+  // WhatsApp — grupo privado + mensaje directo
+  whatsappGroupUrl: "https://chat.whatsapp.com/CqOmZpEIVGL54FPOj4xXYI?mode=gi_t",
   whatsappMessageUrl:
-    "https://wa.me/593XXXXXXXXX?text=Hola%2C%20quiero%20unirme%20al%20grupo%20para%20recibir%20informaci%C3%B3n%20de%20las%20pr%C3%B3ximas%20experiencias%20inmersivas%20de%20respiraci%C3%B3n%2C%20sonido%20y%20frecuencias.",
+    "https://wa.me/593995656078?text=Hola%2C%20quiero%20unirme%20al%20grupo%20para%20recibir%20informaci%C3%B3n%20de%20las%20pr%C3%B3ximas%20experiencias%20inmersivas%20de%20respiraci%C3%B3n%2C%20sonido%20y%20frecuencias.",
 
   // Próxima experiencia
   nextDate: "Por anunciar",
@@ -53,15 +53,17 @@ export const siteConfig = {
   },
 
   // Contacto
-  contactEmail: "TODO_EMAIL",
-  instagram: "TODO_IG",
-  instagramUrl: "TODO_IG_URL",
+  contactEmail: "breathwork@amarteinc.com",
+  instagram: "@amarteinc1212",
+  instagramUrl: "https://www.instagram.com/amarteinc1212",
+  tiktok: "@amarteinc1212",
+  tiktokUrl: "https://www.tiktok.com/@amarteinc1212",
 
   // SEO
   seoTitle: "AMARTE | Breathwork Inmersivo · Regula tu sistema nervioso",
   seoDescription:
     "Experiencia auditiva inmersiva de respiración, sonido y frecuencias. Sesiones presenciales cada 15 días, jueves en la noche.",
-  siteUrl: "TODO_URL",
+  siteUrl: "https://breathwork.amarteinc.com",
 
   // Hooks rotativos (se ciclan en el hero cada 5s con fade)
   heroHooks: [

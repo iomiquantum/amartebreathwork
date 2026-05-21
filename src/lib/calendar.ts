@@ -14,7 +14,7 @@ export function buildICS(opts: { dateISO: string; durationMin?: number; title?: 
     "PRODID:-//AMARTE//ES",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
-    `UID:${start.getTime()}@TODO_DOMAIN`,
+    `UID:${start.getTime()}@amarteinc.com`,
     `DTSTAMP:${formatICS(new Date())}`,
     `DTSTART:${formatICS(start)}`,
     `DTEND:${formatICS(end)}`,

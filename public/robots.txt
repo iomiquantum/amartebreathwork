@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: TODO_URL/sitemap.xml
+Sitemap: https://breathwork.amarteinc.com/sitemap.xml

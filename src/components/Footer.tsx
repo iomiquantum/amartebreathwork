@@ -20,6 +20,19 @@ function InstagramGlyph({ className }: { className?: string }) {
   );
 }
 
+function TikTokGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden
+    >
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1Z" />
+    </svg>
+  );
+}
+
 export function Footer() {
   const year = new Date().getFullYear();
   return (
@@ -38,13 +51,25 @@ export function Footer() {
               href={siteConfig.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Instagram AMARTE"
               className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow"
             >
               <InstagramGlyph className="size-4" />
               {siteConfig.instagram}
             </a>
             <a
+              href={siteConfig.tiktokUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok AMARTE"
+              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow"
+            >
+              <TikTokGlyph className="size-4" />
+              {siteConfig.tiktok}
+            </a>
+            <a
               href={`mailto:${siteConfig.contactEmail}`}
+              aria-label="Enviar email a AMARTE"
               className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow"
             >
               <Mail className="size-4" strokeWidth={1.6} />
