@@ -1,0 +1,114 @@
+/* corporate-theme.css
+ * Override scoped a /corporativo: cuando el body tiene data-vertical="corporate",
+ * los componentes globales (Header, FloatingWhatsappButton, etc.) usan la paleta
+ * orange para mantener cohesión visual con el vertical B2B.
+ *
+ * NO modifica los componentes globales — solo aplica CSS de mayor especificidad
+ * cuando se está en esta ruta. Se desactiva automáticamente al salir.
+ */
+
+/* === BG SOLID === */
+body[data-vertical="corporate"] .bg-emerald-brand {
+  background-color: #FF6B35 !important;
+}
+body[data-vertical="corporate"] .bg-emerald-glow {
+  background-color: #FF8C5C !important;
+}
+body[data-vertical="corporate"] .bg-emerald-deep {
+  background-color: #3D1F15 !important;
+}
+
+/* === BG WITH OPACITY === */
+body[data-vertical="corporate"] [class*="bg-emerald-brand\\/"] {
+  background-color: transparent !important;
+}
+body[data-vertical="corporate"] .bg-emerald-brand\/10 { background-color: rgba(255, 107, 53, 0.1) !important; }
+body[data-vertical="corporate"] .bg-emerald-brand\/20 { background-color: rgba(255, 107, 53, 0.2) !important; }
+body[data-vertical="corporate"] .bg-emerald-brand\/30 { background-color: rgba(255, 107, 53, 0.3) !important; }
+body[data-vertical="corporate"] .bg-emerald-brand\/40 { background-color: rgba(255, 107, 53, 0.4) !important; }
+body[data-vertical="corporate"] .bg-emerald-brand\/50 { background-color: rgba(255, 107, 53, 0.5) !important; }
+body[data-vertical="corporate"] .bg-emerald-brand\/60 { background-color: rgba(255, 107, 53, 0.6) !important; }
+
+body[data-vertical="corporate"] .bg-emerald-deep\/20 { background-color: rgba(61, 31, 21, 0.2) !important; }
+body[data-vertical="corporate"] .bg-emerald-deep\/30 { background-color: rgba(61, 31, 21, 0.3) !important; }
+body[data-vertical="corporate"] .bg-emerald-deep\/40 { background-color: rgba(61, 31, 21, 0.4) !important; }
+body[data-vertical="corporate"] .bg-emerald-deep\/50 { background-color: rgba(61, 31, 21, 0.5) !important; }
+
+/* === TEXT === */
+body[data-vertical="corporate"] .text-emerald-brand { color: #FF6B35 !important; }
+body[data-vertical="corporate"] .text-emerald-glow { color: #FF8C5C !important; }
+body[data-vertical="corporate"] .text-emerald-deep { color: #3D1F15 !important; }
+
+/* === BORDER === */
+body[data-vertical="corporate"] .border-emerald-brand { border-color: #FF6B35 !important; }
+body[data-vertical="corporate"] .border-emerald-glow { border-color: #FF8C5C !important; }
+body[data-vertical="corporate"] .border-emerald-brand\/30 { border-color: rgba(255, 107, 53, 0.3) !important; }
+body[data-vertical="corporate"] .border-emerald-brand\/40 { border-color: rgba(255, 107, 53, 0.4) !important; }
+body[data-vertical="corporate"] .border-emerald-brand\/50 { border-color: rgba(255, 107, 53, 0.5) !important; }
+body[data-vertical="corporate"] .border-emerald-brand\/60 { border-color: rgba(255, 107, 53, 0.6) !important; }
+
+/* === HOVER STATES === */
+body[data-vertical="corporate"] .hover\:bg-emerald-brand:hover { background-color: #FF6B35 !important; }
+body[data-vertical="corporate"] .hover\:bg-emerald-glow:hover { background-color: #FF8C5C !important; }
+body[data-vertical="corporate"] .hover\:text-emerald-brand:hover { color: #FF6B35 !important; }
+body[data-vertical="corporate"] .hover\:text-emerald-glow:hover { color: #FF8C5C !important; }
+body[data-vertical="corporate"] .hover\:border-emerald-brand:hover { border-color: #FF6B35 !important; }
+body[data-vertical="corporate"] .hover\:border-emerald-brand\/60:hover { border-color: rgba(255, 107, 53, 0.6) !important; }
+
+/* === FOCUS STATES (inputs) === */
+body[data-vertical="corporate"] .focus\:border-emerald-brand:focus { border-color: #FF6B35 !important; }
+body[data-vertical="corporate"] .focus\:border-emerald-brand\/50:focus { border-color: rgba(255, 107, 53, 0.5) !important; }
+body[data-vertical="corporate"] .focus\:ring-emerald-brand:focus { box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2) !important; }
+body[data-vertical="corporate"] .focus\:ring-emerald-brand\/20:focus { box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2) !important; }
+
+/* === SHADOWS / GLOWS === */
+body[data-vertical="corporate"] .shadow-glow-emerald {
+  box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.25), 0 10px 40px -10px rgba(255, 107, 53, 0.45) !important;
+}
+body[data-vertical="corporate"] .shadow-glow-emerald-strong {
+  box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.4), 0 18px 60px -10px rgba(255, 107, 53, 0.65) !important;
+}
+
+/* === RADIAL BACKGROUNDS === */
+body[data-vertical="corporate"] .bg-radial-emerald {
+  background-image: radial-gradient(ellipse at top, rgba(255, 107, 53, 0.18) 0%, rgba(5, 5, 5, 0) 60%) !important;
+}
+
+/* === GRADIENT STOPS (text gradients en logo, botones, etc.) === */
+body[data-vertical="corporate"] .from-emerald-brand {
+  --tw-gradient-from: #FF6B35 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(255, 107, 53, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+body[data-vertical="corporate"] .via-emerald-brand {
+  --tw-gradient-to: rgba(255, 107, 53, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #FF6B35 var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+body[data-vertical="corporate"] .to-emerald-brand {
+  --tw-gradient-to: #FF6B35 var(--tw-gradient-to-position) !important;
+}
+body[data-vertical="corporate"] .from-emerald-glow {
+  --tw-gradient-from: #FF8C5C var(--tw-gradient-from-position) !important;
+}
+body[data-vertical="corporate"] .via-emerald-glow {
+  --tw-gradient-to: rgba(255, 140, 92, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #FF8C5C var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+body[data-vertical="corporate"] .to-emerald-glow {
+  --tw-gradient-to: #FF8C5C var(--tw-gradient-to-position) !important;
+}
+
+/* === HIDE SIDE RAIL EN /CORPORATIVO ===
+ * Los IDs del SideRail (hero, experiencia, how-it-works, voces, formato...)
+ * son del HomePage, no del CorporatePage. La barra lateral no aporta valor
+ * en este vertical — lo ocultamos para evitar enlaces rotos y mantener foco.
+ */
+body[data-vertical="corporate"] nav[aria-label="Navegación lateral"] {
+  display: none !important;
+}
+
+/* === SELECTION COLOR ALINEADO === */
+body[data-vertical="corporate"] ::selection {
+  background-color: rgba(255, 107, 53, 0.35) !important;
+  color: #F5F2EA !important;
+}

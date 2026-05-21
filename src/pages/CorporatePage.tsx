@@ -31,6 +31,7 @@ import { siteConfig } from "../data/siteConfig";
 import { CorporateComparison } from "./corporativo/CorporateComparison";
 import { CorporateAfterCare } from "./corporativo/CorporateAfterCare";
 import { CorporatePricing } from "./corporativo/CorporatePricing";
+import "./corporativo/corporate-theme.css";
 
 // ============================================
 // CONTENIDO
@@ -144,7 +145,8 @@ const GOALS = [
 // ============================================
 
 export function CorporatePage() {
-  // SEO + tracking
+  // SEO + tracking + tema visual orange aplicado al body para que el Header
+  // y demás componentes globales respeten la paleta del vertical B2B.
   useEffect(() => {
     document.title = "AMARTE Corporativo · Breathwork para empresas en Ecuador";
     const meta = document.querySelector('meta[name="description"]');
@@ -154,8 +156,13 @@ export function CorporatePage() {
         "Experiencias inmersivas de breathwork para equipos empresariales. Reducción de estrés, cohesión, productividad. Sesiones presenciales en Ecuador + online. Cotización personalizada."
       );
     }
+    document.body.setAttribute("data-vertical", "corporate");
     trackPageView();
     window.scrollTo(0, 0);
+
+    return () => {
+      document.body.removeAttribute("data-vertical");
+    };
   }, []);
 
   return (
