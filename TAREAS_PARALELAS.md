@@ -245,31 +245,23 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 
 | Tarea | Estado | Sesión asignada | Iniciado | Terminado |
 |---|---|---|---|---|
-| A. Per-event pages | Disponible | — | — | — |
-| B. PayPhone | Disponible | — | — | — |
-| C. Resend email | Disponible | — | — | — |
-| D. Admin dashboard | Disponible | — | — | — |
-| E. Recordatorio 24h | Bloqueada (espera WhatsApp) | — | — | — |
-| F. Backup auto | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| Q. Email templates | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| N. Bundle optim | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| L. Mobile refinements | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| M. A11y audit | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| G. Geolocation | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| D. Admin Dashboard | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| A. Per-event pages | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| O. PWA / SW | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
-| G. Geolocation | Disponible | — | — | — |
-| H. Sentry | Disponible | — | — | — |
+| A. Per-event pages | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| B. PayPhone | Esperando credenciales merchant | — | — | — |
+| C. Resend email | Esperando API key + domain DNS | — | — | — |
+| D. Admin dashboard | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| E. Recordatorio 24h | Bloqueada (espera WhatsApp Cloud API) | — | — | — |
+| F. Backup auto | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| G. Geolocation | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| H. Sentry | Esperando DSN | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |
 | J. og-image PNG | Disponible | — | — | — |
 | K. Gallery photos | Bloqueada (espera fotos) | — | — | — |
-| L. Mobile refinements | Disponible | — | — | — |
-| M. A11y audit | Disponible | — | — | — |
-| N. Bundle optim | Disponible | — | — | — |
-| O. PWA / SW | Disponible | — | — | — |
+| L. Mobile refinements | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| M. A11y audit | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| N. Bundle optim | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| O. PWA / SW | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | P. Plan editorial redes | Disponible | — | — | — |
-| Q. Email templates | Disponible | — | — | — |
+| Q. Email templates | **[DONE]** ✅ | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | R. Plan Meta Ads | Disponible | — | — | — |
 
 ---
