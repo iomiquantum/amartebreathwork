@@ -18,6 +18,11 @@ const CorporatePage = lazy(() =>
   import("./pages/CorporatePage").then((m) => ({ default: m.CorporatePage }))
 );
 
+// Lazy: EventPage para rutas /evento/:slug
+const EventPage = lazy(() =>
+  import("./pages/EventPage").then((m) => ({ default: m.EventPage }))
+);
+
 // Lazy: admin bundle (todo /admin/* en un solo chunk)
 const AdminLogin = lazy(() =>
   import("./pages/admin/AdminLogin").then((m) => ({ default: m.AdminLogin }))
@@ -98,6 +103,14 @@ function App() {
               element={
                 <Suspense fallback={<div className="min-h-screen" />}>
                   <CorporatePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/evento/:slug"
+              element={
+                <Suspense fallback={<div className="min-h-screen bg-ink" />}>
+                  <EventPage />
                 </Suspense>
               }
             />

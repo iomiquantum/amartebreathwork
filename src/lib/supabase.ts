@@ -166,6 +166,22 @@ export async function fetchUpcomingEvents(limit = 20): Promise<EventRow[]> {
   return (data as EventRow[]) ?? [];
 }
 
+export async function fetchEventBySlug(slug: string): Promise<EventRow | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("breathwork_events")
+    .select("*")
+    .eq("slug", slug)
+    .in("status", ["published", "sold_out", "past"])
+    .maybeSingle();
+
+  if (error) {
+    console.error("[supabase] fetch event by slug failed", error);
+    return null;
+  }
+  return (data as EventRow) ?? null;
+}
+
 // ============================================
 // RESERVATIONS
 // ============================================

@@ -6,6 +6,7 @@
 // Status válidos: draft (no se ve), published, sold_out, cancelled, past.
 
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -241,7 +242,18 @@ export function EventsCalendar() {
                                 </span>
                               )}
                             </div>
-                            <h4 className="font-display mt-3 text-lg text-bone">{e.title}</h4>
+                            <h4 className="font-display mt-3 text-lg text-bone">
+                              {e.slug ? (
+                                <Link
+                                  to={`/evento/${e.slug}`}
+                                  className="transition-colors hover:text-emerald-glow"
+                                >
+                                  {e.title}
+                                </Link>
+                              ) : (
+                                e.title
+                              )}
+                            </h4>
                             <p className="mt-1 text-sm capitalize text-bone/70">
                               {formatDate(e.date_iso)} · {formatTime(e.date_iso)}
                             </p>

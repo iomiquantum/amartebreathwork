@@ -54,17 +54,14 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 
 ### 🎯 ALTO IMPACTO — Backend
 
-#### A. Páginas por evento `/evento/{slug}` [DISPONIBLE]
-- **Por qué:** SEO + ads segmentadas pueden apuntar a evento específico
-- **Tiempo:** 2 horas
-- **Archivos nuevos:**
-  - `src/components/EventPage.tsx`
-  - `src/lib/router.tsx` (instalar react-router-dom)
-- **Archivos modificar (con cuidado):**
-  - `src/main.tsx` (wrap con Router)
-  - `src/App.tsx` (Routes) — ⚠️ CONFIRMAR PRIMERO con sesión principal
-- **DB:** ya existe campo `slug` en `breathwork_events`
-- **Dependencias:** `npm install react-router-dom`
+#### A. Páginas por evento `/evento/{slug}` ✅ [DONE — 2026-05-21]
+- **Implementado:** ruta `/evento/:slug` con SEO meta dinámico (title, description, og:image, og:url, og:type=event)
+- **fetchEventBySlug()** agregado a `src/lib/supabase.ts` — busca published/sold_out/past
+- **404 handling:** si el slug no existe muestra error friendly con CTA a /
+- **CTA reservar:** abre `ReservationModal` directamente desde la página
+- **EventsCalendar:** títulos linkean a `/evento/:slug` (descubrible por Google)
+- **Bundle:** EventPage lazy-loaded, ~5KB gzip
+- **Archivos:** `src/pages/EventPage.tsx`, `src/lib/supabase.ts`, `src/App.tsx`, `src/components/EventsCalendar.tsx`
 
 #### B. PayPhone integración real [DISPONIBLE]
 - **Por qué:** sustituir el placeholder en ReservationModal con flujo real
@@ -256,6 +253,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | M. A11y audit | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | D. Admin Dashboard | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| A. Per-event pages | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |
