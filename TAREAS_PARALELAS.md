@@ -118,14 +118,12 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 
 ### 🎨 MEDIO IMPACTO — Frontend / UX
 
-#### G. Geolocalización país automática [DISPONIBLE — COORDINAR con sesión principal]
-- **Por qué:** pre-seleccionar país del usuario en WhatsappGateModal
-- **Tiempo:** 30 min
-- **Archivos nuevos:**
-  - `src/lib/geolocation.ts`
-- **Modificar (LIGHT):** `src/components/WhatsappGateModal.tsx` — agregar useEffect
-  - ⚠️ Si la sesión principal está editando WhatsappGateModal, esperar
-- **Método:** Vercel Edge header `x-vercel-ip-country` o `https://ipapi.co/json/`
+#### G. Geolocalización país automática ✅ [DONE — 2026-05-21]
+- **Implementado:** `src/lib/geolocation.ts` con `detectCountry()` usando `ipapi.co/json/` (free 1000 req/día)
+- **Cache:** sessionStorage 24h TTL, evita refetch en cada apertura del modal
+- **Comportamiento:** solo aplica si el usuario aún no cambió el país manualmente (country === DEFAULT_COUNTRY). 20 ISOs mapeados a phone codes.
+- **AbortController:** si el modal cierra antes de que la request resuelva, se cancela
+- **Archivos:** `src/lib/geolocation.ts`, `src/components/WhatsappGateModal.tsx`
 
 #### H. Sentry integration [DISPONIBLE]
 - **Por qué:** error tracking en producción
@@ -254,6 +252,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | N. Bundle optim | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | L. Mobile refinements | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | M. A11y audit | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| G. Geolocation | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |

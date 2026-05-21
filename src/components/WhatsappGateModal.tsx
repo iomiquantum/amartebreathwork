@@ -18,6 +18,7 @@ import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../data/countries";
 import { siteConfig } from "../data/siteConfig";
 import { submitLead, sanitizePhone, isValidEmail } from "../lib/supabase";
 import { useWhatsappGate } from "../lib/whatsappGate";
+import { detectCountry } from "../lib/geolocation";
 import {
   trackLeadFormSubmit,
   trackWhatsappClick,
@@ -61,6 +62,26 @@ export function WhatsappGateModal() {
       document.body.style.overflow = prevOverflow;
     };
   }, [isOpen, closeGate]);
+
+  // Geolocation: solo cuando el modal abre por primera vez, intenta detectar país.
+  // No reemplaza si el usuario ya cambió manualmente (country !== DEFAULT_COUNTRY).
+  const [geoTried, setGeoTried] = useState(false);
+  useEffect(() => {
+    if (!isOpen || geoTried) return;
+    if (country.code !== DEFAULT_COUNTRY.code) {
+      setGeoTried(true);
+      return;
+    }
+    const controller = new AbortController();
+    detectCountry(controller.signal).then((detected) => {
+      if (detected && country.code === DEFAULT_COUNTRY.code) {
+        setCountry(detected);
+      }
+      setGeoTried(true);
+    });
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const cleanPhone = useMemo(() => sanitizePhone(phone, country.code), [phone, country.code]);
   const isPhoneValid = cleanPhone.length >= 7;
