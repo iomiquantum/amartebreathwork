@@ -204,30 +204,31 @@ export async function createReservation(input: ReservationInput): Promise<Reserv
     return { ok: true, reservationId: "simulated" };
   }
 
-  const { data, error } = await supabase
-    .from("breathwork_reservations")
-    .insert({
-      event_id: input.eventId,
-      name: input.name,
-      email: input.email.trim().toLowerCase(),
-      whatsapp: input.whatsapp,
-      country_code: input.countryCode ?? "593",
-      country_name: input.countryName ?? "Ecuador",
-      amount: input.amount,
-      currency: input.currency,
-      payment_method: input.paymentMethod,
-      payment_status: "pending",
-      user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-    })
-    .select("id")
-    .single();
+  // NOTA: NO usamos .select() porque anon role NO tiene SELECT en breathwork_reservations
+  // (por privacidad). Generamos un tracking code client-side para mostrar al usuario.
+  const trackingCode = `RES-${Date.now().toString(36).toUpperCase()}`;
+
+  const { error } = await supabase.from("breathwork_reservations").insert({
+    event_id: input.eventId,
+    name: input.name,
+    email: input.email.trim().toLowerCase(),
+    whatsapp: input.whatsapp,
+    country_code: input.countryCode ?? "593",
+    country_name: input.countryName ?? "Ecuador",
+    amount: input.amount,
+    currency: input.currency,
+    payment_method: input.paymentMethod,
+    payment_status: "pending",
+    admin_notes: `tracking_code:${trackingCode}`,
+    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+  });
 
   if (error) {
     console.error("[supabase] create reservation failed", error);
     return { ok: false, error: error.message };
   }
 
-  return { ok: true, reservationId: (data as { id: string }).id };
+  return { ok: true, reservationId: trackingCode };
 }
 
 // ============================================
