@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, X, Wind } from "lucide-react";
-import { siteConfig } from "../data/siteConfig";
-import { trackWhatsappClick } from "../lib/tracking";
+import { useWhatsappCTA } from "../lib/whatsapp";
 
 const STORAGE_KEY = "amarte_exit_seen";
 
 export function ExitIntent() {
+  const wa = useWhatsappCTA("hero_secondary");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -82,11 +82,9 @@ export function ExitIntent() {
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <a
-                href={siteConfig.whatsappGroupUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => {
-                  trackWhatsappClick("hero_secondary");
+                {...wa}
+                onClick={(e) => {
+                  wa.onClick(e);
                   close();
                 }}
                 className="group inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-emerald-brand px-6 text-sm font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"

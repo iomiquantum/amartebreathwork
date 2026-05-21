@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { MessageCircle, Menu, X } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
-import { trackWhatsappClick } from "../lib/tracking";
+import { useWhatsappCTA } from "../lib/whatsapp";
 import { scrollToId } from "../lib/utils";
 
 const links = [
@@ -19,6 +19,8 @@ export function Header() {
   const [active, setActive] = useState<string>("");
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 220, damping: 30, mass: 0.4 });
+  const waHeader = useWhatsappCTA("hero_primary");
+  const waMobile = useWhatsappCTA("hero_primary");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -119,10 +121,7 @@ export function Header() {
           {/* CTA */}
           <div className="flex items-center gap-2">
             <a
-              href={siteConfig.whatsappGroupUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackWhatsappClick("hero_primary")}
+              {...waHeader}
               className="hidden h-10 items-center gap-2 rounded-full bg-emerald-brand px-4 text-sm font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong sm:inline-flex"
             >
               <MessageCircle className="size-4" strokeWidth={1.8} />
@@ -167,11 +166,9 @@ export function Header() {
               ))}
               <li>
                 <a
-                  href={siteConfig.whatsappGroupUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => {
-                    trackWhatsappClick("hero_primary");
+                  {...waMobile}
+                  onClick={(e) => {
+                    waMobile.onClick(e);
                     setOpen(false);
                   }}
                   className="mt-2 flex h-12 items-center justify-center gap-2 rounded-full bg-emerald-brand text-sm font-medium text-ink-900 shadow-glow-emerald"

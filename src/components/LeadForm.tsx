@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, MessageCircle } from "luc
 import { submitLead, type LeadIntent } from "../lib/supabase";
 import { siteConfig } from "../data/siteConfig";
 import { trackLeadFormSubmit, trackWhatsappClick } from "../lib/tracking";
+import { useWhatsappGate } from "../lib/whatsappGate";
 
 const intents: { value: LeadIntent; label: string }[] = [
   { value: "soltar_estres", label: "Soltar estrés" },
@@ -17,6 +18,7 @@ const intents: { value: LeadIntent; label: string }[] = [
 const STEP_LABELS = ["Tus datos", "Tu intención", "Confirmar"];
 
 export function LeadForm() {
+  const { markRegistered } = useWhatsappGate();
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -45,6 +47,14 @@ export function LeadForm() {
     if (res.ok) {
       setStatus("success");
       trackLeadFormSubmit(payload);
+      // Marcar como registrado en el gate para que no vuelva a aparecer
+      markRegistered({
+        name: payload.name,
+        whatsapp: payload.whatsapp,
+        countryCode: "593",
+        countryName: "Ecuador",
+        registeredAt: new Date().toISOString(),
+      });
     } else {
       setStatus("error");
       setError(res.error ?? "No pudimos guardar tus datos. Intenta de nuevo.");

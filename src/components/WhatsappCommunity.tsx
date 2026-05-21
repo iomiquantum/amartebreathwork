@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import { MessageCircle, Lock, BellRing } from "lucide-react";
-import { siteConfig } from "../data/siteConfig";
 import { CTAButton } from "./CTAButton";
-import { trackWhatsappClick } from "../lib/tracking";
+import { useWhatsappCTA } from "../lib/whatsapp";
 
 const inside = [
   "Fechas disponibles",
@@ -15,6 +14,7 @@ const inside = [
 ];
 
 export function WhatsappCommunity() {
+  const wa = useWhatsappCTA("whatsapp_community");
   return (
     <section id="comunidad" className="relative overflow-hidden bg-ink-900 py-24 sm:py-32">
       <div className="pointer-events-none absolute inset-0 bg-radial-emerald" />
@@ -49,10 +49,7 @@ export function WhatsappCommunity() {
             </div>
 
             <CTAButton
-              href={siteConfig.whatsappGroupUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackWhatsappClick("whatsapp_community")}
+              {...wa}
               icon={<MessageCircle className="size-5" strokeWidth={1.8} />}
               className="mt-8"
             >

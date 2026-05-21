@@ -7,10 +7,10 @@ import { Countdown } from "./Countdown";
 import { useWhatsappCTA } from "../lib/whatsapp";
 
 const facts = [
-  { icon: CalendarDays, label: "Frecuencia", value: "Cada 15 días" },
-  { icon: Moon, label: "Día", value: "Jueves" },
-  { icon: Clock, label: "Horario", value: "Noche" },
-  { icon: MapPin, label: "Modalidad", value: "Presencial" },
+  { icon: MapPin, label: "Modalidad", value: "Presencial + Online" },
+  { icon: CalendarDays, label: "Disponibilidad", value: "Multi-ciudad EC" },
+  { icon: Moon, label: "Momento", value: "Tarde / Noche" },
+  { icon: Clock, label: "Cuándo", value: "Varias al mes" },
   { icon: Timer, label: "Duración", value: "60–90 min" },
   { icon: Users, label: "Cupos", value: "Limitados" },
 ];
@@ -22,9 +22,9 @@ export function EventFormat() {
       <div className="container-x">
         <SectionHeader
           eyebrow="Formato del evento"
-          title="Cada 15 días,"
-          highlight="jueves en la noche."
-          subtitle="Creamos este espacio como un ritual nocturno para cerrar ciclos, soltar la carga acumulada y regalarle al cuerpo una pausa real."
+          title="Eventos en todo Ecuador"
+          highlight="+ sesiones online."
+          subtitle="Llevamos AMARTE a distintas ciudades del país y también lo transmitimos en vivo para quien quiera vivirlo desde casa. Revisa el calendario abajo para ver fechas confirmadas por ciudad."
         />
 
         <div className="mt-14 grid gap-10 lg:grid-cols-12">

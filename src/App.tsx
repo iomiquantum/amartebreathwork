@@ -11,6 +11,8 @@ import { Splash } from "./components/Splash";
 import { SectionSkeleton } from "./components/SectionSkeleton";
 import { SideRail } from "./components/SideRail";
 import { ToastProvider } from "./lib/toast";
+import { WhatsappGateProvider } from "./lib/whatsappGate";
+import { WhatsappGateModal } from "./components/WhatsappGateModal";
 import { trackPageView } from "./lib/tracking";
 
 // Lazy below-the-fold sections
@@ -62,8 +64,11 @@ const PressStrip = lazy(() =>
 const EventFormat = lazy(() =>
   import("./components/EventFormat").then((m) => ({ default: m.EventFormat }))
 );
-const Schedule = lazy(() =>
-  import("./components/Schedule").then((m) => ({ default: m.Schedule }))
+const EventsCalendar = lazy(() =>
+  import("./components/EventsCalendar").then((m) => ({ default: m.EventsCalendar }))
+);
+const FrequenciesPlayer = lazy(() =>
+  import("./components/FrequenciesPlayer").then((m) => ({ default: m.FrequenciesPlayer }))
 );
 const WhatsappCommunity = lazy(() =>
   import("./components/WhatsappCommunity").then((m) => ({ default: m.WhatsappCommunity }))
@@ -113,6 +118,7 @@ function App() {
 
   return (
     <ToastProvider>
+      <WhatsappGateProvider>
       <Splash />
       <div className="min-h-screen bg-ink text-bone antialiased">
         <StructuredData />
@@ -127,6 +133,7 @@ function App() {
             <HowItWorks />
             <IncludesSection />
             <AudioWavePreview />
+            <FrequenciesPlayer />
             <Gallery />
             <NerveTest />
             <Comparison />
@@ -139,7 +146,7 @@ function App() {
             <Testimonials />
             <PressStrip />
             <EventFormat />
-            <Schedule />
+            <EventsCalendar />
             <WhatsappCommunity />
             <Differentiators />
             <CinematicQuote />
@@ -159,9 +166,11 @@ function App() {
         </Suspense>
         <FloatingWhatsappButton />
         <SideRail />
+        <WhatsappGateModal />
         <Analytics />
         <SpeedInsights />
       </div>
+      </WhatsappGateProvider>
     </ToastProvider>
   );
 }

@@ -20,8 +20,11 @@ export type LeadIntent =
 export interface LeadInput {
   name: string;
   whatsapp: string;
+  countryCode?: string; // ej. "593" (sin +)
+  countryName?: string; // ej. "Ecuador"
   city?: string;
   intent?: LeadIntent;
+  email?: string;
   source?: string;
 }
 
@@ -35,18 +38,66 @@ export async function submitLead(lead: LeadInput) {
   const { error } = await supabase.from("breathwork_leads").insert({
     name: lead.name,
     whatsapp: lead.whatsapp,
+    country_code: lead.countryCode ?? "593",
+    country_name: lead.countryName ?? "Ecuador",
     city: lead.city ?? null,
     intent: lead.intent ?? null,
+    email: lead.email ?? null,
     source: lead.source ?? "landing",
-    user_agent:
-      typeof navigator !== "undefined" ? navigator.userAgent : null,
+    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
   });
 
   if (error) {
     console.error("[supabase] insert lead failed", error);
     return { ok: false, error: error.message };
   }
+
+  // Si dejó email, suscribirlo también al newsletter (best effort, no bloquea)
+  if (lead.email && lead.email.includes("@")) {
+    subscribeNewsletter(lead.email).catch(() => undefined);
+  }
+
   return { ok: true };
+}
+
+// Tipo y función para leer eventos publicados (lo usa la Calendar)
+export interface EventRow {
+  id: string;
+  slug: string | null;
+  title: string;
+  description: string | null;
+  date_iso: string;
+  duration_min: number;
+  format: "presencial" | "online" | "hibrido";
+  city: string | null;
+  venue_name: string | null;
+  venue_address: string | null;
+  online_url: string | null;
+  spots_total: number;
+  spots_available: number;
+  price_amount: number | null;
+  price_currency: string;
+  status: string;
+  is_featured: boolean;
+  cover_image_url: string | null;
+  tags: string[] | null;
+}
+
+export async function fetchUpcomingEvents(limit = 20): Promise<EventRow[]> {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("breathwork_events")
+    .select("*")
+    .in("status", ["published", "sold_out"])
+    .gte("date_iso", new Date().toISOString())
+    .order("date_iso", { ascending: true })
+    .limit(limit);
+
+  if (error) {
+    console.error("[supabase] fetch events failed", error);
+    return [];
+  }
+  return (data as EventRow[]) ?? [];
 }
 
 export async function subscribeNewsletter(email: string) {

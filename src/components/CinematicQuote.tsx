@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { siteConfig } from "../data/siteConfig";
 import { CTAButton } from "./CTAButton";
-import { trackWhatsappClick } from "../lib/tracking";
+import { useWhatsappCTA } from "../lib/whatsapp";
 import { usePrefersReducedMotion } from "../lib/useReducedMotion";
 
 // Patrón 4-4-4 simplificado: inhala, sostén, exhala
@@ -58,6 +57,7 @@ const lines = [
 ];
 
 export function CinematicQuote() {
+  const wa = useWhatsappCTA("cinematic_quote");
   return (
     <section
       id="cinematica"
@@ -118,12 +118,7 @@ export function CinematicQuote() {
           transition={{ duration: 0.8, delay: 1.4 }}
           className="mt-12"
         >
-          <CTAButton
-            href={siteConfig.whatsappGroupUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackWhatsappClick("cinematic_quote")}
-          >
+          <CTAButton {...wa}>
             Quiero vivir la experiencia
           </CTAButton>
         </motion.div>

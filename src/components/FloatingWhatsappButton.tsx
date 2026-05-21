@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
-import { trackWhatsappClick } from "../lib/tracking";
+import { useWhatsappCTA } from "../lib/whatsapp";
 
 export function FloatingWhatsappButton() {
   const [visible, setVisible] = useState(false);
+  const wa = useWhatsappCTA("floating_button");
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 600);
@@ -28,10 +29,7 @@ export function FloatingWhatsappButton() {
           >
             <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/95 to-transparent" />
             <a
-              href={siteConfig.whatsappGroupUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackWhatsappClick("floating_button")}
+              {...wa}
               className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-emerald-brand text-base font-medium text-ink-900 shadow-glow-emerald-strong"
             >
               <MessageCircle className="size-5" strokeWidth={1.8} />
@@ -41,10 +39,7 @@ export function FloatingWhatsappButton() {
 
           {/* Desktop: floating round button bottom-right */}
           <motion.a
-            href={siteConfig.whatsappGroupUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackWhatsappClick("floating_button")}
+            {...wa}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}

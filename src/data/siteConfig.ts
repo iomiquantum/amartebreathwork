@@ -10,7 +10,7 @@ export const siteConfig = {
     "Tu cuerpo no está cansado. Tu sistema nervioso está saturado.",
   heroParagraph:
     "Vive una experiencia presencial de respiración, sonido y frecuencias diseñada para ayudarte a bajar el ruido mental, soltar tensión y volver a ti.",
-  heroSchedule: "Sesiones cada 15 días · Jueves en la noche · Cupos limitados",
+  heroSchedule: "Experiencias presenciales en Ecuador + online · Cupos limitados por ciudad",
 
   // CTAs
   ctaPrimary: "Unirme al grupo de WhatsApp",
@@ -25,12 +25,12 @@ export const siteConfig = {
   whatsappMessageUrl:
     "https://wa.me/593995656078?text=Hola%2C%20quiero%20unirme%20al%20grupo%20para%20recibir%20informaci%C3%B3n%20de%20las%20pr%C3%B3ximas%20experiencias%20inmersivas%20de%20respiraci%C3%B3n%2C%20sonido%20y%20frecuencias.",
 
-  // Próxima experiencia
-  nextDate: "Por anunciar",
-  location: "Quito · Por anunciar",
-  time: "Jueves · 19:30",
+  // Próxima experiencia (placeholder mientras no hay eventos en DB)
+  nextDate: "Revisa el calendario",
+  location: "Ecuador · Multi-ciudad + online",
+  time: "Según ciudad y formato",
   duration: "60 a 90 minutos",
-  capacity: "Cupos limitados",
+  capacity: "Cupos limitados por evento",
   // Cuando tengas la fecha confirmada, llena este ISO (ej: "2026-06-26T19:30:00-05:00").
   // Si lo dejas vacío, el countdown muestra "Por anunciar" con estilo.
   nextDateISO: "",
@@ -48,9 +48,48 @@ export const siteConfig = {
       "Veníamos de años de hacer música. Estudios, sesiones, pantallas, deadlines. Trabajábamos rodeados de sonido — pero el cuerpo no escuchaba.",
       "Empezamos a notarlo en gente cercana: amigos, equipos, parejas. Mentes que no paraban. Hombros que no bajaban. Respiraciones cada vez más cortas.",
       "Combinamos lo que sabemos hacer — diseño sonoro, atmósferas, frecuencias — con lo que el cuerpo necesita: respiración, silencio, presencia.",
-      "Así nació AMARTE. No como una clase. Como un ritual nocturno, cada 15 días, para que tu sistema nervioso pueda volver a casa.",
+      "Así nació AMARTE. No como una clase. Como un ritual sensorial que viaja por Ecuador — presencial y online — para que tu sistema nervioso pueda volver a casa donde estés.",
     ],
   },
+
+  // Frecuencias para preview (FrequenciesPlayer)
+  // Cada una mapea a un "problema" del usuario. 40 segundos de preview.
+  frequencies: [
+    {
+      hz: 174,
+      label: "174 Hz",
+      problem: "Para el estrés acumulado",
+      benefit: "Sensación de base, seguridad y descanso del cuerpo.",
+      color: "emerald",
+    },
+    {
+      hz: 396,
+      label: "396 Hz",
+      problem: "Para soltar lo que cargas",
+      benefit: "Asociada a liberación emocional y peso interno.",
+      color: "gold",
+    },
+    {
+      hz: 528,
+      label: "528 Hz",
+      problem: "Para respirar más profundo",
+      benefit: "Conocida como frecuencia de coherencia cardio-respiratoria.",
+      color: "emerald",
+    },
+    {
+      hz: 741,
+      label: "741 Hz",
+      problem: "Para despejar la mente",
+      benefit: "Vinculada a claridad mental y limpieza de ruido cognitivo.",
+      color: "gold",
+    },
+  ] as Array<{
+    hz: number;
+    label: string;
+    problem: string;
+    benefit: string;
+    color: "emerald" | "gold";
+  }>,
 
   // Contacto
   contactEmail: "breathwork@amarteinc.com",

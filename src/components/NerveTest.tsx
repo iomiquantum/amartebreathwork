@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, RotateCcw, MessageCircle, Activity } from "lucide-react";
-import { siteConfig } from "../data/siteConfig";
-import { trackWhatsappClick } from "../lib/tracking";
+import { useWhatsappCTA } from "../lib/whatsapp";
 
 const QUESTIONS = [
   {
@@ -80,6 +79,7 @@ function classify(score: number): Result {
 }
 
 export function NerveTest() {
+  const wa = useWhatsappCTA("hero_secondary");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const finished = step >= QUESTIONS.length;
@@ -193,10 +193,7 @@ export function NerveTest() {
 
                       <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                         <a
-                          href={siteConfig.whatsappGroupUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => trackWhatsappClick("hero_secondary")}
+                          {...wa}
                           className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-emerald-brand px-6 text-sm font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"
                         >
                           <MessageCircle className="size-4" strokeWidth={1.8} />
