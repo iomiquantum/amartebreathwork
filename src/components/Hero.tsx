@@ -201,22 +201,22 @@ export function Hero() {
                 </div>
               </div>
 
-              {/* Floating chips */}
+              {/* Floating chips — clamp inside frame en mobile (iPhone SE), libera en sm+ */}
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -left-4 top-10 flex items-center gap-2 rounded-full border border-white/10 bg-ink-900/80 px-3 py-1.5 text-xs text-bone backdrop-blur"
+                className="absolute left-2 top-8 flex max-w-[60%] items-center gap-2 rounded-full border border-white/10 bg-ink-900/80 px-3 py-1.5 text-xs text-bone backdrop-blur sm:left-auto sm:-left-4 sm:top-10 sm:max-w-none"
               >
-                <Wind className="size-3.5 text-emerald-brand" />
-                Respiración guiada
+                <Wind className="size-3.5 shrink-0 text-emerald-brand" />
+                <span className="truncate">Respiración guiada</span>
               </motion.div>
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 5, delay: 0.6, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -right-2 bottom-16 flex items-center gap-2 rounded-full border border-white/10 bg-ink-900/80 px-3 py-1.5 text-xs text-bone backdrop-blur"
+                className="absolute right-2 bottom-20 flex max-w-[55%] items-center gap-2 rounded-full border border-white/10 bg-ink-900/80 px-3 py-1.5 text-xs text-bone backdrop-blur sm:right-auto sm:-right-2 sm:bottom-16 sm:max-w-none"
               >
-                <Waves className="size-3.5 text-gold-warm" />
-                Frecuencias
+                <Waves className="size-3.5 shrink-0 text-gold-warm" />
+                <span className="truncate">Frecuencias</span>
               </motion.div>
             </motion.div>
           </div>

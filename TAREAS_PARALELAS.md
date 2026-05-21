@@ -157,11 +157,10 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 
 ### 💎 BAJO IMPACTO — Polish
 
-#### L. Mobile UI refinements [DISPONIBLE]
-- Hero floating chips overflow en iPhone SE
-- Header mobile drawer AnimatePresence wrapper
-- **Tiempo:** 30 min
-- **Archivos modificar:** `src/components/Hero.tsx`, `src/components/Header.tsx`
+#### L. Mobile UI refinements ✅ [DONE — 2026-05-21]
+- **Hero chips fix:** clamp inside frame en mobile (`left-2`/`right-2` + `max-w-[60%]` + `truncate`), liberados a posición original en sm+
+- **Header drawer:** `AnimatePresence` wrapper agregado para que la animación exit (-y 8 + fade) corra correctamente
+- **Archivos:** `src/components/Hero.tsx`, `src/components/Header.tsx`
 
 #### M. Accessibility audit avanzado [DISPONIBLE]
 - aria-labels que falten
@@ -253,6 +252,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | F. Backup auto | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | Q. Email templates | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | N. Bundle optim | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| L. Mobile refinements | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |

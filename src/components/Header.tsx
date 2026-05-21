@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { MessageCircle, Menu, X } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
 import { useWhatsappCTA } from "../lib/whatsapp";
@@ -142,44 +142,47 @@ export function Header() {
         </div>
 
         {/* Mobile drawer */}
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25 }}
-            className="border-t border-white/[0.06] bg-ink-900/95 backdrop-blur-xl lg:hidden"
-          >
-            <ul className="container-x flex flex-col gap-1 py-4">
-              {links.map((l) => (
-                <li key={l.id}>
-                  <button
-                    onClick={() => {
-                      scrollToId(l.id);
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              key="mobile-drawer"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="border-t border-white/[0.06] bg-ink-900/95 backdrop-blur-xl lg:hidden"
+            >
+              <ul className="container-x flex flex-col gap-1 py-4">
+                {links.map((l) => (
+                  <li key={l.id}>
+                    <button
+                      onClick={() => {
+                        scrollToId(l.id);
+                        setOpen(false);
+                      }}
+                      className="w-full rounded-xl px-3 py-3 text-left text-bone/85 transition-colors hover:bg-white/[0.04] hover:text-bone"
+                    >
+                      {l.label}
+                    </button>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    {...waMobile}
+                    onClick={(e) => {
+                      waMobile.onClick(e);
                       setOpen(false);
                     }}
-                    className="w-full rounded-xl px-3 py-3 text-left text-bone/85 transition-colors hover:bg-white/[0.04] hover:text-bone"
+                    className="mt-2 flex h-12 items-center justify-center gap-2 rounded-full bg-emerald-brand text-sm font-medium text-ink-900 shadow-glow-emerald"
                   >
-                    {l.label}
-                  </button>
+                    <MessageCircle className="size-4" />
+                    Unirme al grupo de WhatsApp
+                  </a>
                 </li>
-              ))}
-              <li>
-                <a
-                  {...waMobile}
-                  onClick={(e) => {
-                    waMobile.onClick(e);
-                    setOpen(false);
-                  }}
-                  className="mt-2 flex h-12 items-center justify-center gap-2 rounded-full bg-emerald-brand text-sm font-medium text-ink-900 shadow-glow-emerald"
-                >
-                  <MessageCircle className="size-4" />
-                  Unirme al grupo de WhatsApp
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-        )}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );
