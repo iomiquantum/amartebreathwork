@@ -28,6 +28,9 @@ import { submitCorporateInquiry, isValidEmail } from "../lib/supabase";
 import { trackLeadFormSubmit, trackPageView } from "../lib/tracking";
 import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../data/countries";
 import { siteConfig } from "../data/siteConfig";
+import { CorporateComparison } from "./corporativo/CorporateComparison";
+import { CorporateAfterCare } from "./corporativo/CorporateAfterCare";
+import { CorporatePricing } from "./corporativo/CorporatePricing";
 
 // ============================================
 // CONTENIDO
@@ -160,9 +163,12 @@ export function CorporatePage() {
       <CorporateHero />
       <CorporateStats />
       <CorporateBenefits />
+      <CorporateComparison />
       <CorporateUseCases />
       <CorporateProcess />
       <CorporateLogistics />
+      <CorporateAfterCare />
+      <CorporatePricing />
       <CorporateFAQ />
       <CorporateForm />
       <CorporateFinalCTA />
@@ -244,9 +250,13 @@ function CorporateHero() {
               transition={{ duration: 1, delay: 0.5 }}
               className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-bone/70"
             >
+              <a href="#inversion" className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow">
+                <span className="text-emerald-glow font-medium">Desde $32 USD</span>
+                <span className="text-bone/50">/ persona</span>
+              </a>
               <span className="inline-flex items-center gap-2">
                 <Sparkles className="size-3.5 text-gold-warm" />
-                Cotización personalizada en 24h
+                Cotización en 24h
               </span>
               <span className="inline-flex items-center gap-2">
                 <MapPin className="size-3.5 text-emerald-brand" />
