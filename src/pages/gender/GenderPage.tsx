@@ -1,6 +1,6 @@
 // GenderPage — shell parametrizado de las landings /mujeres y /hombres.
 // Recibe `content: GenderContent` y renderiza todas las secciones.
-// MenPage y WomenPage solo le pasan su content respectivo.
+// La paleta se controla vía content.themeClass (.theme-women / .theme-men).
 
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
@@ -37,10 +37,11 @@ export function GenderPage({ content }: Props) {
   }, [content.seoTitle, content.seoDescription]);
 
   return (
-    <main className="bg-ink text-bone antialiased">
+    <main className={`${content.themeClass} bg-ink text-bone antialiased`}>
       <Hero content={content} />
       <Stats content={content} />
       <Problem content={content} />
+      <Archetypes content={content} />
       <Science content={content} />
       <Experience content={content} />
       <LifeStages content={content} />
@@ -61,8 +62,8 @@ export function GenderPage({ content }: Props) {
 function Hero({ content }: Props) {
   return (
     <section className="relative isolate overflow-hidden bg-ink pb-20 pt-28 sm:pt-32 lg:pb-28">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-50" />
-      <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-30" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-primary opacity-60" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-secondary opacity-40" />
       <div className="pointer-events-none absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
 
       <div className="container-x relative">
@@ -72,7 +73,7 @@ function Hero({ content }: Props) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/30 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-emerald-glow"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary-deep/30 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-primary-glow"
             >
               <Sparkles className="size-3" /> {content.heroEyebrow}
             </motion.span>
@@ -85,7 +86,7 @@ function Hero({ content }: Props) {
             >
               {content.heroTitleLine1}
               <br />
-              <span className="bg-gradient-to-r from-emerald-brand via-emerald-glow to-gold-warm bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary via-primary-glow to-secondary bg-clip-text text-transparent">
                 {content.heroTitleLine2}
               </span>
             </motion.h1>
@@ -107,14 +108,14 @@ function Hero({ content }: Props) {
             >
               <a
                 href="#form"
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-emerald-brand px-8 text-base font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-medium text-ink-900 shadow-glow-primary transition-all hover:bg-primary-glow hover:shadow-glow-primary-strong"
               >
                 {content.heroCtaPrimary}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
                 href="#ciencia"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/15 px-7 text-base text-bone transition-colors hover:border-emerald-brand/60 hover:text-emerald-glow"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/15 px-7 text-base text-bone transition-colors hover:border-primary/60 hover:text-primary-glow"
               >
                 {content.heroCtaSecondary}
               </a>
@@ -127,11 +128,11 @@ function Hero({ content }: Props) {
               className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-bone/70"
             >
               <span className="inline-flex items-center gap-2">
-                <Sparkles className="size-3.5 text-gold-warm" />
+                <Sparkles className="size-3.5 text-secondary" />
                 {content.heroBadgeLeft}
               </span>
               <span className="inline-flex items-center gap-2">
-                <MapPin className="size-3.5 text-emerald-brand" />
+                <MapPin className="size-3.5 text-primary" />
                 {content.heroBadgeRight}
               </span>
             </motion.div>
@@ -144,8 +145,8 @@ function Hero({ content }: Props) {
             transition={{ duration: 1, delay: 0.2 }}
             className="lg:col-span-5"
           >
-            <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-[2rem] gradient-border bg-ink">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-deep/40 via-ink-900 to-ink" />
+            <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-[2rem] gradient-border-primary bg-ink">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-deep/40 via-ink-900 to-ink" />
               <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
 
               <div className="absolute inset-0 grid place-items-center">
@@ -155,23 +156,23 @@ function Hero({ content }: Props) {
                     initial={{ scale: 0.4, opacity: 0 }}
                     animate={{ scale: 1, opacity: 0.4 - ring * 0.05 }}
                     transition={{ duration: 1.2, delay: ring * 0.15 }}
-                    className="absolute aspect-square rounded-full border border-emerald-brand/30 animate-pulse-soft"
+                    className="absolute aspect-square rounded-full border border-primary/30 animate-pulse-soft"
                     style={{
                       width: `${ring * 18}%`,
                       animationDelay: `${ring * 0.4}s`,
                     }}
                   />
                 ))}
-                <span className="size-3 rounded-full bg-emerald-brand shadow-glow-emerald" />
+                <span className="size-3 rounded-full bg-primary shadow-glow-primary" />
               </div>
 
               <div className="absolute left-5 top-5 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/60">
-                <span className="size-1.5 rounded-full bg-emerald-brand animate-pulse" />
+                <span className="size-1.5 rounded-full bg-primary animate-pulse" />
                 Respirando
               </div>
               <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/60">
-                <span>{content.audience === "women" ? "Cíclico" : "Sostenido"}</span>
-                <span className="text-emerald-brand">● en presente</span>
+                <span>{content.heroVisualLabel}</span>
+                <span className="text-primary">● en presente</span>
               </div>
             </div>
           </motion.div>
@@ -199,7 +200,7 @@ function Stats({ content }: Props) {
               transition={{ duration: 0.6, delay: i * 0.08 }}
               className="text-center"
             >
-              <p className="font-display text-4xl tabular-nums text-emerald-glow sm:text-5xl">
+              <p className="font-display text-4xl tabular-nums text-primary-glow sm:text-5xl">
                 {s.value}
               </p>
               <p className="mt-3 text-sm text-bone/85 leading-snug">{s.label}</p>
@@ -221,7 +222,7 @@ function Problem({ content }: Props) {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
             {content.problemEyebrow}
           </span>
           <motion.h2
@@ -232,7 +233,7 @@ function Problem({ content }: Props) {
             className="h-display mt-4 text-4xl sm:text-5xl text-balance"
           >
             {content.problemTitle}{" "}
-            <span className="bg-gradient-to-r from-emerald-brand to-gold-warm bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {content.problemTitleHighlight}
             </span>
           </motion.h2>
@@ -247,7 +248,7 @@ function Problem({ content }: Props) {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 className="flex gap-4 text-base text-bone/80 leading-relaxed sm:text-lg"
               >
-                <span className="mt-3 size-1.5 shrink-0 rounded-full bg-emerald-brand" />
+                <span className="mt-3 size-1.5 shrink-0 rounded-full bg-primary" />
                 <span>{b}</span>
               </motion.li>
             ))}
@@ -269,21 +270,86 @@ function Problem({ content }: Props) {
 }
 
 // ============================================
+// ARCHETYPES — perfiles concretos con stat
+// ============================================
+
+function Archetypes({ content }: Props) {
+  return (
+    <section className="relative bg-ink-900 py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-radial-secondary opacity-30" />
+      <div className="container-x relative">
+        <div className="mx-auto max-w-3xl text-center">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
+            {content.archetypesEyebrow}
+          </span>
+          <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
+            {content.archetypesTitle}{" "}
+            <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
+              {content.archetypesTitleHighlight}
+            </span>
+          </h2>
+          <p className="lede mt-5">{content.archetypesLede}</p>
+        </div>
+
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {content.archetypes.map((a, i) => {
+            const Icon = a.icon;
+            return (
+              <motion.article
+                key={a.name}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.55, delay: i * 0.06 }}
+                className="card-dark group relative flex flex-col p-7 transition-all hover:border-primary/30"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="grid size-11 shrink-0 place-items-center rounded-xl border border-primary/40 bg-primary-deep/40 text-primary-glow">
+                    <Icon className="size-5" strokeWidth={1.6} />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-lg text-bone leading-tight">{a.name}</h3>
+                    <p className="mt-0.5 text-[10px] uppercase tracking-eyebrow text-secondary">
+                      {a.ageRange}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="mt-5 text-sm text-bone/75 leading-relaxed">{a.profile}</p>
+
+                <div className="mt-auto pt-5">
+                  <div className="rounded-2xl border border-white/[0.08] bg-ink/60 p-4">
+                    <p className="text-sm text-bone/80 leading-relaxed">{a.stat}</p>
+                    <p className="mt-2 text-[10px] uppercase tracking-eyebrow text-muted">
+                      {a.source}
+                    </p>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================
 // SCIENCE
 // ============================================
 
 function Science({ content }: Props) {
   return (
-    <section id="ciencia" className="relative bg-ink-900 py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-30" />
+    <section id="ciencia" className="relative bg-ink py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-radial-secondary opacity-25" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-gold-warm">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
             {content.scienceEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
             {content.scienceTitle}{" "}
-            <span className="bg-gradient-to-r from-gold-warm to-emerald-brand bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
               {content.scienceTitleHighlight}
             </span>
           </h2>
@@ -299,9 +365,9 @@ function Science({ content }: Props) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.55, delay: i * 0.06 }}
-                className="card-dark group p-7 transition-all hover:border-emerald-brand/30"
+                className="card-dark group p-7 transition-all hover:border-primary/30"
               >
-                <div className="grid size-12 place-items-center rounded-2xl border border-emerald-brand/40 bg-emerald-deep/40 text-emerald-glow">
+                <div className="grid size-12 place-items-center rounded-2xl border border-primary/40 bg-primary-deep/40 text-primary-glow">
                   <Icon className="size-5" strokeWidth={1.6} />
                 </div>
                 <h3 className="font-display mt-5 text-xl text-bone">{c.title}</h3>
@@ -321,17 +387,17 @@ function Science({ content }: Props) {
 
 function Experience({ content }: Props) {
   return (
-    <section className="relative bg-ink py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-40" />
+    <section className="relative bg-ink-900 py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-radial-primary opacity-40" />
       <div className="container-x relative">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
               {content.experienceEyebrow}
             </span>
             <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
               {content.experienceTitle}{" "}
-              <span className="bg-gradient-to-r from-emerald-brand to-gold-warm bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 {content.experienceTitleHighlight}
               </span>
             </h2>
@@ -346,9 +412,9 @@ function Experience({ content }: Props) {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-ink-900/60 p-4"
+                className="flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-ink/60 p-4"
               >
-                <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-brand" strokeWidth={1.6} />
+                <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-primary" strokeWidth={1.6} />
                 <span className="text-sm text-bone/85 leading-relaxed sm:text-base">{b}</span>
               </motion.li>
             ))}
@@ -365,15 +431,15 @@ function Experience({ content }: Props) {
 
 function LifeStages({ content }: Props) {
   return (
-    <section className="relative bg-ink-900 py-24 sm:py-32">
+    <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-gold-warm">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
             {content.lifeStagesEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
             {content.lifeStagesTitle}{" "}
-            <span className="bg-gradient-to-r from-gold-warm to-emerald-brand bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
               {content.lifeStagesTitleHighlight}
             </span>
           </h2>
@@ -390,13 +456,13 @@ function LifeStages({ content }: Props) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.55, delay: i * 0.07 }}
-                className="card-dark group relative overflow-hidden p-7 transition-all hover:border-gold-warm/30"
+                className="card-dark group relative overflow-hidden p-7 transition-all hover:border-secondary/30"
               >
                 <div className="flex items-center gap-3">
-                  <div className="grid size-11 place-items-center rounded-xl border border-gold-warm/40 bg-gold-warm/10 text-gold-warm">
+                  <div className="grid size-11 place-items-center rounded-xl border border-secondary/40 bg-secondary/10 text-secondary">
                     <Icon className="size-5" strokeWidth={1.6} />
                   </div>
-                  <span className="text-[10px] uppercase tracking-eyebrow text-gold-warm">
+                  <span className="text-[10px] uppercase tracking-eyebrow text-secondary">
                     {stage.badge}
                   </span>
                 </div>
@@ -417,15 +483,15 @@ function LifeStages({ content }: Props) {
 
 function Benefits({ content }: Props) {
   return (
-    <section className="relative bg-ink py-24 sm:py-32">
+    <section className="relative bg-ink-900 py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
             {content.benefitsEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
             {content.benefitsTitle}{" "}
-            <span className="bg-gradient-to-r from-emerald-brand to-gold-warm bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {content.benefitsTitleHighlight}
             </span>
           </h2>
@@ -441,9 +507,9 @@ function Benefits({ content }: Props) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.55, delay: i * 0.06 }}
-                className="card-dark group p-7 transition-all hover:border-emerald-brand/30"
+                className="card-dark group p-7 transition-all hover:border-primary/30"
               >
-                <div className="grid size-12 place-items-center rounded-2xl border border-emerald-brand/40 bg-emerald-deep/40 text-emerald-glow">
+                <div className="grid size-12 place-items-center rounded-2xl border border-primary/40 bg-primary-deep/40 text-primary-glow">
                   <Icon className="size-5" strokeWidth={1.6} />
                 </div>
                 <h3 className="font-display mt-5 text-xl text-bone">{b.title}</h3>
@@ -463,10 +529,10 @@ function Benefits({ content }: Props) {
 
 function Guide({ content }: Props) {
   return (
-    <section className="relative bg-ink-900 py-24 sm:py-32">
+    <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
             {content.guideEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-4xl">{content.guideTitle}</h2>
@@ -476,9 +542,9 @@ function Guide({ content }: Props) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative mt-8 rounded-3xl border border-white/[0.08] bg-ink/60 p-8 sm:p-10"
+            className="relative mt-8 rounded-3xl border border-white/[0.08] bg-ink-900/60 p-8 sm:p-10"
           >
-            <Quote className="absolute -top-4 left-8 size-8 text-gold-warm" strokeWidth={1.4} />
+            <Quote className="absolute -top-4 left-8 size-8 text-secondary" strokeWidth={1.4} />
             <p className="font-display text-xl text-bone leading-relaxed sm:text-2xl">
               "{content.guideQuote}"
             </p>
@@ -500,11 +566,11 @@ function FAQ({ content }: Props) {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="relative bg-ink py-24 sm:py-32">
+    <section className="relative bg-ink-900 py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-gold-warm">
+            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
               {content.faqEyebrow}
             </span>
             <h2 className="h-display mt-4 text-3xl sm:text-5xl">{content.faqTitle}</h2>
@@ -516,7 +582,7 @@ function FAQ({ content }: Props) {
               return (
                 <div
                   key={item.q}
-                  className="overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-900/60 transition-colors hover:border-white/15"
+                  className="overflow-hidden rounded-2xl border border-white/[0.08] bg-ink/60 transition-colors hover:border-white/15"
                 >
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
@@ -524,7 +590,7 @@ function FAQ({ content }: Props) {
                     aria-expanded={isOpen}
                   >
                     <span className="font-display text-base text-bone sm:text-lg">{item.q}</span>
-                    <span className="grid size-7 shrink-0 place-items-center rounded-full border border-emerald-brand/40 text-emerald-glow">
+                    <span className="grid size-7 shrink-0 place-items-center rounded-full border border-primary/40 text-primary-glow">
                       {isOpen ? <Minus className="size-3.5" /> : <Plus className="size-3.5" />}
                     </span>
                   </button>
@@ -621,15 +687,15 @@ function InquiryForm({ content }: Props) {
 
   if (status === "success") {
     return (
-      <section id="form" className="relative bg-ink-900 py-24 sm:py-32">
+      <section id="form" className="relative bg-ink py-24 sm:py-32">
         <div className="container-x">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mx-auto max-w-2xl rounded-3xl border border-emerald-brand/30 bg-emerald-deep/20 p-10 text-center"
+            className="mx-auto max-w-2xl rounded-3xl border border-primary/30 bg-primary-deep/20 p-10 text-center"
           >
-            <div className="mx-auto grid size-14 place-items-center rounded-full bg-emerald-brand text-ink-900">
+            <div className="mx-auto grid size-14 place-items-center rounded-full bg-primary text-ink-900">
               <CheckCircle2 className="size-7" />
             </div>
             <h3 className="h-display mt-6 text-3xl sm:text-4xl">Recibido. Respira.</h3>
@@ -639,7 +705,7 @@ function InquiryForm({ content }: Props) {
             </p>
             <a
               href="/"
-              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/15 px-7 text-sm text-bone transition-colors hover:border-emerald-brand/60 hover:text-emerald-glow"
+              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/15 px-7 text-sm text-bone transition-colors hover:border-primary/60 hover:text-primary-glow"
             >
               Volver al inicio
               <ArrowRight className="size-4" />
@@ -651,17 +717,17 @@ function InquiryForm({ content }: Props) {
   }
 
   return (
-    <section id="form" className="relative bg-ink-900 py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-30" />
+    <section id="form" className="relative bg-ink py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-radial-primary opacity-30" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
               {content.formEyebrow}
             </span>
             <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
               {content.formTitle}{" "}
-              <span className="bg-gradient-to-r from-emerald-brand to-gold-warm bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 {content.formTitleHighlight}
               </span>
             </h2>
@@ -670,7 +736,7 @@ function InquiryForm({ content }: Props) {
 
           <form
             onSubmit={handleSubmit}
-            className="mt-12 grid gap-4 rounded-3xl border border-white/[0.08] bg-ink/60 p-6 sm:p-8"
+            className="mt-12 grid gap-4 rounded-3xl border border-white/[0.08] bg-ink-900/60 p-6 sm:p-8"
           >
             {/* Honeypot anti-bot */}
             <input
@@ -837,7 +903,7 @@ function InquiryForm({ content }: Props) {
             <button
               type="submit"
               disabled={!canSubmit}
-              className="group mt-2 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-emerald-brand px-8 text-base font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong disabled:cursor-not-allowed disabled:opacity-50"
+              className="group mt-2 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-medium text-ink-900 shadow-glow-primary transition-all hover:bg-primary-glow hover:shadow-glow-primary-strong disabled:cursor-not-allowed disabled:opacity-50"
             >
               {status === "submitting" ? (
                 <>
@@ -862,7 +928,7 @@ function InquiryForm({ content }: Props) {
 }
 
 const inputClass =
-  "w-full rounded-2xl border border-white/10 bg-ink-900/80 px-4 py-3 text-sm text-bone placeholder:text-bone/30 transition-colors focus:border-emerald-brand/60 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20";
+  "w-full rounded-2xl border border-white/10 bg-ink/80 px-4 py-3 text-sm text-bone placeholder:text-bone/30 transition-colors focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -882,8 +948,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function FinalCTA({ content }: Props) {
   return (
     <section className="relative overflow-hidden bg-ink py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-50" />
-      <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-20" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-primary opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-secondary opacity-25" />
       <div className="container-x relative text-center">
         <motion.h2
           initial={{ opacity: 0, y: 14 }}
@@ -894,7 +960,7 @@ function FinalCTA({ content }: Props) {
         >
           {content.finalCtaTitle}
           <br />
-          <span className="bg-gradient-to-r from-emerald-brand via-emerald-glow to-gold-warm bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-primary via-primary-glow to-secondary bg-clip-text text-transparent">
             {content.finalCtaSubtitle}
           </span>
         </motion.h2>
@@ -905,7 +971,7 @@ function FinalCTA({ content }: Props) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="group mt-10 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-emerald-brand px-10 text-base font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"
+          className="group mt-10 inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-10 text-base font-medium text-ink-900 shadow-glow-primary transition-all hover:bg-primary-glow hover:shadow-glow-primary-strong"
         >
           {content.finalCtaButton}
           <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />

@@ -23,6 +23,17 @@ export interface LifeStageItem {
   body: string;
 }
 
+// Arquetipos: perfiles concretos para que cada persona se sienta vista.
+// Cada uno incluye un dato estadístico real con su fuente.
+export interface ArchetypeItem {
+  icon: LucideIcon;
+  name: string;
+  ageRange: string;
+  profile: string;
+  stat: string;
+  source: string;
+}
+
 export interface FAQItem {
   q: string;
   a: string;
@@ -52,6 +63,10 @@ export interface GenderContent {
   audience: GenderAudience;
   route: "/mujeres" | "/hombres";
 
+  // Theme — controla la paleta primary/secondary vía CSS vars.
+  // Valor: "theme-women" o "theme-men" (definidos en src/index.css).
+  themeClass: string;
+
   // SEO
   seoTitle: string;
   seoDescription: string;
@@ -65,6 +80,7 @@ export interface GenderContent {
   heroCtaSecondary: string;
   heroBadgeLeft: string;
   heroBadgeRight: string;
+  heroVisualLabel: string; // "Cíclico" / "Sostenido"
 
   // Stats
   stats: StatItem[];
@@ -75,6 +91,13 @@ export interface GenderContent {
   problemTitleHighlight: string;
   problemBullets: string[];
   problemClosing: string;
+
+  // Archetypes — sección clave para que cada persona se reconozca
+  archetypesEyebrow: string;
+  archetypesTitle: string;
+  archetypesTitleHighlight: string;
+  archetypesLede: string;
+  archetypes: ArchetypeItem[];
 
   // Science
   scienceEyebrow: string;

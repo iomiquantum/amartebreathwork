@@ -3,20 +3,27 @@
 
 import {
   Activity,
+  Anchor,
+  Baby,
   BedDouble,
   Brain,
+  Briefcase,
   Compass,
   Dumbbell,
+  EyeOff,
   Flame,
   Flower2,
+  HandHeart,
   Heart,
   HeartHandshake,
   HeartPulse,
   Moon,
   Mountain,
+  Rocket,
   ShieldCheck,
   Sparkles,
   Sun,
+  Sunset,
   Target,
   Waves,
   Wind,
@@ -31,6 +38,7 @@ import type { GenderContent } from "./types";
 export const WOMEN_CONTENT: GenderContent = {
   audience: "women",
   route: "/mujeres",
+  themeClass: "theme-women",
   trackingSource: "women_landing",
 
   seoTitle: "AMARTE Breathwork para mujeres · Respiración cíclica en Ecuador",
@@ -47,13 +55,14 @@ export const WOMEN_CONTENT: GenderContent = {
   heroCtaSecondary: "Ver la ciencia",
   heroBadgeLeft: "Respuesta personalizada en 24h",
   heroBadgeRight: "Ecuador + online",
+  heroVisualLabel: "Cíclico",
 
   // Stats — todos con fuentes reales
   stats: [
     { value: "2×", label: "más ansiedad y depresión en mujeres latinoamericanas que en hombres", source: "Lancet Regional 2025" },
     { value: "55.8 h", label: "trabaja la mujer ecuatoriana por semana entre lo pagado y lo invisible", source: "Banco Mundial" },
     { value: "52%", label: "menos sofocos en menopausia con paced breathing a 6 ciclos por minuto", source: "RCT publicado · PMC" },
-    { value: "33%", label: "de las mujeres en Ecuador son emprendedoras (la tasa más alta de Latinoamérica)", source: "World Bank 2025" },
+    { value: "1 de 3", label: "ha vivido violencia física o sexual a lo largo de su vida", source: "OMS · prevalencia global" },
   ],
 
   // Problem
@@ -65,9 +74,67 @@ export const WOMEN_CONTENT: GenderContent = {
     "El embarazo y el postparto necesitan respiración suave. No Wim Hof. No retenciones largas.",
     "La perimenopausia tiene una respiración. La menopausia también. Y casi nadie habla de eso.",
     "Cargas trabajo pagado + carga mental invisible. Tu sistema nervioso necesita más regulación, no más exigencia.",
+    "Tu cuerpo guarda cosas que tu mente prefiere no nombrar. La respiración llega ahí cuando las palabras no llegan.",
   ],
   problemClosing:
     "Aquí no te decimos que respires más. Te enseñamos a respirar contigo.",
+
+  // ARQUETIPOS — 6 perfiles concretos con datos LATAM
+  archetypesEyebrow: "¿Te identificas?",
+  archetypesTitle: "Seis mujeres distintas.",
+  archetypesTitleHighlight: "Una respiración para cada una.",
+  archetypesLede:
+    "No diseñamos sesiones genéricas. Estos son los perfiles que más llegan a AMARTE — quizás uno te describe mejor que los demás. La sesión se adapta a ti, no al revés.",
+  archetypes: [
+    {
+      icon: Briefcase,
+      name: "La profesional al borde",
+      ageRange: "28 – 40 años",
+      profile: "Jornadas que no terminan, decisiones todo el día, sueño que no se entrega. Decir 'no' se siente imposible. El cuerpo empieza a quejarse antes que la mente.",
+      stat: "46% de los trabajadores en Latinoamérica reportó burnout en 2024 — las mujeres más que los hombres (15% vs 12% en forma frecuente).",
+      source: "Buk · Estudio Burnout Laboral 2025",
+    },
+    {
+      icon: Baby,
+      name: "La mamá agotada",
+      ageRange: "28 – 42 años",
+      profile: "Postparto, lactancia, sueño de 4 horas a pedazos. La expectativa de 'lo tengo todo' pesa como otra carga. Te quieres a tu bebé y a la vez quieres recuperar tu cuerpo.",
+      stat: "13 a 35% de las latinoamericanas vive depresión postparto (media 17.7%). En Ecuador, hasta 34% en algunos estudios.",
+      source: "MGYF revisión sistemática · Hospital IESS Cuenca",
+    },
+    {
+      icon: Sunset,
+      name: "La mujer en transición hormonal",
+      ageRange: "40 – 55 años",
+      profile: "Perimenopausia y menopausia: sofocos, insomnio, ansiedad que aparece sin motivo claro, cuerpo que cambia. 'No me reconozco.' Y casi nadie te explicó que esto venía.",
+      stat: "80% de las mujeres en perimenopausia experimenta síntomas vasomotores; en 50% afecta la calidad de vida diaria.",
+      source: "Harvard Health · PMC menopausia",
+    },
+    {
+      icon: HandHeart,
+      name: "La cuidadora invisible",
+      ageRange: "35 – 60 años",
+      profile: "Hijos, padres mayores, casa, trabajo. Trabajas más horas que tu pareja — la mayoría sin pago. Cuando paras, el cuerpo cobra todo junto.",
+      stat: "Las mujeres en Ecuador trabajan 55.8 horas a la semana — 6 horas más que los hombres, casi todo trabajo no remunerado.",
+      source: "Banco Mundial · INEC Ecuador",
+    },
+    {
+      icon: ShieldCheck,
+      name: "La que carga lo no nombrado",
+      ageRange: "Cualquier edad",
+      profile: "Trauma, violencia, pérdida, abuso silenciado. La terapia ayuda, pero hay capas que solo el cuerpo puede soltar. La respiración llega ahí sin pedirte que cuentes nada.",
+      stat: "1 de cada 3 mujeres ha vivido violencia física o sexual a lo largo de su vida (OMS). En Ecuador supera el 30%.",
+      source: "OMS · CEPAL",
+    },
+    {
+      icon: Compass,
+      name: "La que quiere reconectar",
+      ageRange: "Cualquier edad",
+      profile: "Sin crisis declarada. Solo la sensación de vivir desconectada del cuerpo. Yoga ayudó. La meditación ayudó. Pero falta algo que el cuerpo necesita más directo.",
+      stat: "El consumo de meditación y mindfulness creció 18.9% anual en 2024 — las mujeres representan ~70% del mercado.",
+      source: "McKinsey Future of Wellness",
+    },
+  ],
 
   // Science
   scienceEyebrow: "La evidencia",
@@ -286,6 +353,7 @@ export const WOMEN_CONTENT: GenderContent = {
 export const MEN_CONTENT: GenderContent = {
   audience: "men",
   route: "/hombres",
+  themeClass: "theme-men",
   trackingSource: "men_landing",
 
   seoTitle: "AMARTE Breathwork para hombres · Respiración, fuerza y recuperación en Ecuador",
@@ -302,10 +370,11 @@ export const MEN_CONTENT: GenderContent = {
   heroCtaSecondary: "Ver la ciencia",
   heroBadgeLeft: "Respuesta personalizada en 24h",
   heroBadgeRight: "Ecuador + online",
+  heroVisualLabel: "Sostenido",
 
   // Stats — todos con fuentes reales
   stats: [
-    { value: "3×", label: "más suicidios en hombres que en mujeres en Ecuador (13.2 vs 5.3 por 100K)", source: "PMC · estudio nacional Ecuador" },
+    { value: "3×", label: "más suicidios en hombres que en mujeres en Ecuador (13.2 vs 5.3 por 100K)", source: "Estudio nacional Ecuador" },
     { value: "95%", label: "de los hombres ya considera la salud mental tan importante como la física", source: "Men's Health Survey 2023" },
     { value: "1–2%", label: "baja la testosterona por año después de los 40. El cortisol crónico la baja más", source: "Stony Brook Medicine" },
     { value: "↑ HRV", label: "mejora medible con respiración estilo Wim Hof, ya respaldada peer-reviewed", source: "PLOS One systematic review 2023" },
@@ -319,10 +388,68 @@ export const MEN_CONTENT: GenderContent = {
     "Llevas años respirando con el pecho, hablando con la mandíbula apretada, durmiendo con el teléfono cerca.",
     "El gimnasio ayuda. La terapia ayuda. Pero hay algo que solo se desbloquea cuando el aire vuelve al diafragma.",
     "En Latinoamérica el suicidio masculino sube — y nadie habla. El silencio no es fortaleza, es síntoma.",
+    "El cortisol alto bloquea la testosterona. Si no regulas el estrés, no hay suplemento que compense.",
     "No necesitas otro hack de productividad. Necesitas una herramienta que tu cuerpo recuerde solo.",
   ],
   problemClosing:
     "Aquí no venimos a curarte. Venimos a darte una herramienta — y un lugar donde puedas usarla sin tener que explicarte.",
+
+  // ARQUETIPOS — 6 perfiles concretos con datos LATAM
+  archetypesEyebrow: "¿Te identificas?",
+  archetypesTitle: "Seis hombres distintos.",
+  archetypesTitleHighlight: "Una respiración para cada uno.",
+  archetypesLede:
+    "No diseñamos sesiones genéricas. Estos son los perfiles que más llegan a AMARTE — quizás uno te describe mejor que los demás. La sesión se adapta a ti, no al revés.",
+  archetypes: [
+    {
+      icon: Briefcase,
+      name: "El ejecutivo bajo presión",
+      ageRange: "32 – 50 años",
+      profile: "Decisiones difíciles todo el día. Sueño pobre. Mandíbula apretada. Hijos chicos en casa. El cuerpo empieza a quejarse antes de que te des cuenta.",
+      stat: "17% de la gerencia media en LATAM sufre burnout frecuente — la cifra más alta del mercado laboral regional.",
+      source: "Buk · Estudio Burnout 2025",
+    },
+    {
+      icon: Rocket,
+      name: "El emprendedor que no para",
+      ageRange: "28 – 48 años",
+      profile: "Cargas todo. Soledad de la silla del fundador. Sin vacaciones reales en años. Cortisol es tu combustible y tu sabotaje a la vez.",
+      stat: "65% de los altos directivos en Latinoamérica prioriza beneficios de bienestar sobre aumento salarial.",
+      source: "La Nota Económica · LATAM",
+    },
+    {
+      icon: Baby,
+      name: "El papá joven",
+      ageRange: "28 – 42 años",
+      profile: "Familia, trabajo, identidad nueva. Llegas a casa sin batería para tu hijo o tu pareja. Quieres estar presente — pero el cuerpo dice que ya no puede más.",
+      stat: "1 de cada 10 padres reporta síntomas de depresión postparto paterna — y la gran mayoría nunca se diagnostica.",
+      source: "JAMA Pediatrics · estudios paternal PPD",
+    },
+    {
+      icon: Dumbbell,
+      name: "El atleta amateur",
+      ageRange: "25 – 45 años",
+      profile: "Crossfit, running, triatlón, ciclismo. Buscas HRV, recovery medible, performance real. Tu wearable ya te dice que falta algo.",
+      stat: "Breathwork tipo Wim Hof mejora HRV y respuesta al estrés con evidencia peer-reviewed publicada.",
+      source: "PLOS One · systematic review 2023",
+    },
+    {
+      icon: EyeOff,
+      name: "El hombre en silencio",
+      ageRange: "Cualquier edad",
+      profile: "No hablas. Pones buena cara. Cargas sin nombrar. La descarga al volver a casa, al volante o adentro tuyo. Y nadie se entera hasta que algo se rompe.",
+      stat: "Los hombres se suicidan 3× más que las mujeres en Ecuador. El silencio no es fortaleza — es síntoma.",
+      source: "Estudio nacional Ecuador · PMC",
+    },
+    {
+      icon: Anchor,
+      name: "El hombre 45+",
+      ageRange: "45 – 65 años",
+      profile: "Andropausia silenciosa. Testosterona baja, sueño se rompe, energía falla, cuerpo cambia. Identidad también. Nadie te preparó para esto.",
+      stat: "La testosterona baja 1 a 2% por año desde los 40. El cortisol crónico acelera el descenso. La respiración baja cortisol.",
+      source: "Stony Brook Medicine",
+    },
+  ],
 
   // Science
   scienceEyebrow: "La evidencia",

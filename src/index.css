@@ -78,6 +78,9 @@
   .lede {
     @apply text-base sm:text-lg text-bone/80 leading-relaxed;
   }
+  .input {
+    @apply w-full rounded-xl border border-bone/15 bg-ink/60 px-4 py-3 text-sm text-bone placeholder:text-bone/40 transition-colors focus:border-bone/40 focus:outline-none focus:ring-2 focus:ring-bone/10;
+  }
   .card-dark {
     @apply rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm;
   }
@@ -86,6 +89,45 @@
       linear-gradient(#0B0F0D, #0B0F0D) padding-box,
       linear-gradient(135deg, rgba(0,200,150,0.5), rgba(212,175,55,0.25), rgba(0,200,150,0.1)) border-box;
     border: 1px solid transparent;
+  }
+  /* Borde gradiente dinámico que sigue --color-primary y --color-secondary.
+     Usado por las landings /mujeres y /hombres en el visual del hero. */
+  .gradient-border-primary {
+    background:
+      linear-gradient(#0B0F0D, #0B0F0D) padding-box,
+      linear-gradient(
+        135deg,
+        rgb(var(--color-primary, 0 200 150) / 0.55),
+        rgb(var(--color-secondary, 212 175 55) / 0.3),
+        rgb(var(--color-primary, 0 200 150) / 0.12)
+      ) border-box;
+    border: 1px solid transparent;
+  }
+
+  /* ============================================
+     Paletas dinámicas por landing /mujeres /hombres.
+     Cada theme define color-primary (principal) y color-secondary (acento).
+     RGB sin paréntesis para usar con rgb(var() / <alpha>).
+     ============================================ */
+
+  /* Mujeres — terracota cálido + ámbar dorado.
+     Evoca tierra, ciclo, calidez. Sin caer en rosa cliché. */
+  .theme-women {
+    --color-primary: 199 91 76;        /* #C75B4C terracota brand */
+    --color-primary-glow: 232 168 124; /* #E8A87C ámbar peach */
+    --color-primary-deep: 61 31 26;    /* #3D1F1A marrón rojizo profundo */
+    --color-secondary: 212 165 116;    /* #D4A574 ámbar dorado */
+    --color-secondary-soft: 240 212 156; /* #F0D49C ámbar claro */
+  }
+
+  /* Hombres — cobalto profundo + acero plateado.
+     Evoca técnica, fuerza interior, agua profunda. Sin caer en azul cliché. */
+  .theme-men {
+    --color-primary: 58 124 165;       /* #3A7CA5 cobalto medio */
+    --color-primary-glow: 123 180 214; /* #7BB4D6 azul plateado */
+    --color-primary-deep: 15 41 64;    /* #0F2940 navy profundo */
+    --color-secondary: 92 123 149;     /* #5C7B95 acero */
+    --color-secondary-soft: 168 189 208; /* #A8BDD0 acero claro */
   }
 }
 
