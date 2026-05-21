@@ -1,12 +1,14 @@
 # 🌿 AMARTE Breathwork — Estado del Proyecto
 
-> **Última actualización:** 2026-05-21 (sesión 1 completa)
-> **Estado:** EN PRODUCCIÓN — sistema operativo end-to-end
+> **Última actualización:** 2026-05-21 (sesión 3 — Backend + Security + UX hardening)
+> **Estado:** EN PRODUCCIÓN — sistema operativo end-to-end, hardened
 > **URL:** https://breathwork.amarteinc.com
 > **Repo:** https://github.com/iomiquantum/amartebreathwork
 > **Stack:** Vite + React 19 + TS + Tailwind + Supabase + Vercel
 
 Este documento es la **fuente única de verdad** del proyecto. Si cierras la sesión, abre este archivo primero al regresar y tendrás todo el contexto.
+
+> **📋 Inventario completo del backend:** ver [INVENTARIO_BACKEND.md](./INVENTARIO_BACKEND.md) — listado exhaustivo de tablas, triggers, funciones, edge functions, cron jobs, rutas, headers de seguridad y funcionalidades activas.
 
 ---
 
@@ -15,22 +17,36 @@ Este documento es la **fuente única de verdad** del proyecto. Si cierras la ses
 **Lo que tienes hoy:**
 - 🟢 Landing pública con SSL: https://breathwork.amarteinc.com
 - 🟢 Captura de leads con gate WhatsApp (modal con selector país)
+- 🟢 **Geolocalización auto** — pre-selecciona país por IP (ipapi.co + cache 24h)
 - 🟢 Backend de eventos multi-ciudad + online (Ecuador)
+- 🟢 **Per-event pages SEO-friendly** en `/evento/:slug` con Schema.org Event JSON-LD
+- 🟢 **Sitemap dinámico** — regenerado en cada build, incluye todos los eventos
+- 🟢 **Auto-slug en DB** — trigger genera slug desde título, resuelve colisiones
 - 🟢 Sistema de reservas con depósito ($20 USD default)
 - 🟢 2 métodos de pago: PayPhone (placeholder) + Transferencia bancaria (full flow)
 - 🟢 4 frecuencias en vivo con Web Audio API (174, 396, 528, 741 Hz)
-- 🟢 Calendario de eventos con filtros (ciudad + formato)
-- 🟢 Bot protection: honeypot + dedup 3-max + sanitización phone + email regex
-- 🟢 Pixels infrastructure: Meta + GA4 + TikTok (esperando IDs)
+- 🟢 Calendario de eventos con filtros (ciudad + formato) que linkean a páginas dedicadas
+- 🟢 **Bot protection multi-capa:** honeypot client+server, dedup 3-max, sanitización, **rate limit DB (5 leads/IP/h, 3 reservas/IP/h)**
+- 🟢 **Validación server-side** — CHECK constraints en DB (no bypaseable client-side)
+- 🟢 **Admin Dashboard `/admin`** — magic link auth, KPIs, gráficas SVG, undo cancel, CSV export
+- 🟢 **Backup automático diario** — Edge Function + pg_cron 04:00 UTC + Storage retention 30d
+- 🟢 **PWA installable** — Service Worker con offline fallback
+- 🟢 **CSP headers estrictos** — whitelist completa + HSTS 2y preload + Permissions-Policy
+- 🟢 **Cookie consent GDPR/LGPD** — pixels solo cargan si el usuario acepta
+- 🟢 **404 page friendly** con próximos eventos como CTA
+- 🟢 **Loading skeletons** — UX percibida más rápida que spinners
+- 🟢 Pixels infrastructure: Meta + GA4 + TikTok + Clarity (esperando IDs)
 - 🟢 FAQs sincronizadas entre UI y Schema.org
+- 🟢 Bundle main 15.66 KB gzipped (88% reducción) + vendor chunks cacheables
 
 **Lo que falta para "todo listo para pautar":**
-1. Auto-WhatsApp con Meta Cloud API (próxima sesión, ~2h)
-2. PayPhone integración real (necesita credenciales)
-3. Email transaccional con Resend (~1h, free tier 3000 emails/mes)
-4. Datos bancarios reales en `amarte_bank_config`
-5. Meta Pixel ID (cuando lo tengas)
-6. Foto real de Miguel
+1. Auto-WhatsApp con Meta Cloud API (en otra sesión)
+2. PayPhone integración real (necesita credenciales merchant)
+3. Email transaccional con Resend (necesita API key + dominio DNS)
+4. Sentry error tracking (necesita DSN)
+5. Datos bancarios reales en `amarte_bank_config`
+6. Meta Pixel ID (cuando lo tengas)
+7. **Configurar redirect URLs en Supabase Auth** para que magic link admin funcione
 
 ---
 
@@ -291,6 +307,81 @@ amartebreathwork/
 - Production validado: HTTP, bundle, lazy chunks, DB schema, RLS, security advisors
 
 **Commits sesión 2:** 6955d4d, 2cfdf2e, de98145, f64cf39, + final commit
+
+---
+
+### Sesión 3 (2026-05-21) — BACKEND + SECURITY + UX HARDENING
+
+**Resumen:** 21 mejoras en backend, infra, seguridad, SEO y anti-fricción. Ver [INVENTARIO_BACKEND.md](./INVENTARIO_BACKEND.md) para el detalle completo.
+
+#### Fase 3A — Infraestructura (primera ronda)
+1. **Backup automático DB** — Edge Function `daily-backup` + pg_cron 04:00 UTC + Storage bucket privado con retention 30d. Vault secret entre cron y función.
+2. **Email templates** — 7 emails welcome sequence en `docs/EMAIL_TEMPLATES.md` + módulo TS `supabase/functions/_shared/email-templates.ts` listo para Resend.
+3. **Bundle optimization** — Manual chunks en `vite.config.ts` separando vendors (react, motion, supabase, icons, utils). Main `index.js` de **131KB → 15.66KB gzip (-88%)**.
+4. **Mobile UI refinements** — Hero chips clamp en iPhone SE + Header drawer con `AnimatePresence`.
+5. **A11y audit** — `aria-current` en nav + ESC handler + body scroll lock en modals + Cookie banner role/aria-live.
+6. **Geolocalización país** — `src/lib/geolocation.ts` con `detectCountry()` vía `ipapi.co` + cache sessionStorage 24h.
+7. **Admin Dashboard `/admin`** — magic link Supabase Auth + allowlist 3 emails + Dashboard/Events/Reservations/Leads + CSV export.
+8. **Per-event pages `/evento/:slug`** — SEO meta dinámico + ReservationModal directo + 404 friendly.
+9. **PWA / Service Worker** — `public/sw.js` con offline fallback + cache-first static + network-first HTML.
+
+#### Fase 3B — Backend / Security / UX hardening (12 mejoras encadenadas)
+1. **#1 Schema.org Event** — JSON-LD inline en EventPage (Google Events ready) con startDate, endDate, location, offers, organizer, capacity.
+2. **#2 Sitemap dinámico** — `scripts/generate-sitemap.mjs` corre en `prebuild`, lee Supabase ANON, genera `public/sitemap.xml` con todas las URLs incluyendo `/evento/:slug`. Auto-carga `.env.local`. Fallback estático si Supabase falla.
+3. **#9 Slug auto-generado** — DB trigger con `slugify()` (remueve acentos, colapsa guiones, resuelve colisiones con sufijo numérico). No se puede crear evento sin slug.
+4. **#12 404 page** — `src/pages/NotFoundPage.tsx` con CTA al home + grupo WhatsApp + lista próximos eventos. Marca `<meta name="robots" content="noindex">`.
+5. **#6 Server-side validation** — CHECK constraints en `breathwork_leads` y `breathwork_reservations` (name length, email regex, whatsapp format, amount > 0) + trigger anti-honeypot + normalización (trim/lowercase).
+6. **#3 Rate limiting server-side** — Triggers DB: max 5 leads/IP/60min + max 3 reservas/IP/60min. Index parcial en (ip_address, created_at desc). No bypaseable client-side.
+7. **#4 CSP headers refinados** — Agregado `ipapi.co`, `worker-src 'self'`, `manifest-src 'self'`, `frame-src https://*.payphone.app`, `form-action 'self'`. Headers específicos para `/sw.js` (no-cache) y `/sitemap.xml` (xml content-type).
+8. **#5 Cookie consent real** — `src/lib/consent.ts` con `getConsent/setConsent/onConsentChange` custom event. Pixels skip si `hasMarketingConsent() === false`. Cumple GDPR/LGPD.
+9. **#11 Loading skeletons** — `src/components/Skeleton.tsx` reutilizable + aplicado a EventPage (hero+cover+4 detail cards) + AdminDashboard + AdminLeads. UX percibida más rápida.
+10. **#10 Mobile audit** — `text-base` en inputs admin (evita iOS Safari zoom) + touch-targets >= 44px en mobile (`h-11 min-h-[44px]` con responsive `sm:h-9`).
+11. **#8 Soft delete con undo** — AdminReservations: banner ámbar con countdown 10s tras cancelar reserva, click "Deshacer" restaura `payment_status` previo.
+12. **#7 Dashboard analytics** — AdminDashboard con KPI conversión global (% confirmed/leads) + gráfica SVG inline de leads/día últimos 30d (bar chart) + donut SVG de reservas por método (payphone/transferencia/efectivo). Sin librería externa.
+
+#### Bugs fixed durante la sesión
+- `breathwork_corporate_inquiries` agregada al backup TABLES array (sesión paralela había creado la tabla pero quedaba sin backup)
+- Conflictos de merge con sesión paralela `/mujeres` `/hombres` resueltos preservando ambas features
+- `tracking-code` en reservations: client-side generation (anon no tiene SELECT)
+
+#### Migraciones DB nuevas
+- `20260521170000_daily_backup_infra.sql`
+- `20260521180000_auto_slug_on_events.sql`
+- `20260521190000_server_side_validation.sql`
+- `20260521200000_rate_limit_by_ip.sql`
+
+#### Archivos nuevos
+```
+scripts/generate-sitemap.mjs
+supabase/functions/daily-backup/index.ts
+supabase/functions/daily-backup/README.md
+supabase/functions/_shared/email-templates.ts
+src/components/Skeleton.tsx
+src/lib/auth.ts
+src/lib/consent.ts
+src/lib/geolocation.ts
+src/lib/pwa.ts
+src/pages/EventPage.tsx
+src/pages/NotFoundPage.tsx
+src/pages/admin/AdminLayout.tsx
+src/pages/admin/AdminLogin.tsx
+src/pages/admin/AdminDashboard.tsx
+src/pages/admin/AdminEvents.tsx
+src/pages/admin/AdminReservations.tsx
+src/pages/admin/AdminLeads.tsx
+public/sw.js
+docs/EMAIL_TEMPLATES.md
+INVENTARIO_BACKEND.md
+```
+
+#### Verificación E2E final
+- 17/17 rutas en producción HTTP 200
+- 8 triggers activos, 8 CHECK constraints, cron `0 4 * * *` activo
+- Edge Function v2 ACTIVE, 2 backups en Storage
+- 3/3 events con slug auto-generado
+- Sitemap en prod servido con 7 URLs
+- CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy todos activos
+- Build limpio: `✓ built in 1.91s` sin warnings
 
 ---
 
