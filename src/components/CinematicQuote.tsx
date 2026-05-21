@@ -64,7 +64,12 @@ export function CinematicQuote() {
       className="relative isolate overflow-hidden bg-ink py-32 sm:py-40"
     >
       {/* Layered atmosphere */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink via-ink-900 to-ink" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+        style={{ backgroundImage: "url(/hero/cascada-bg.jpg)" }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink via-ink-900/95 to-ink" />
       <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-70" />
       <div className="pointer-events-none absolute inset-0 bg-noise opacity-40 mix-blend-overlay" />
 
