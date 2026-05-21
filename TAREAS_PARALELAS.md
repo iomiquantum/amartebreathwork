@@ -170,11 +170,11 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 - **Tiempo:** 1h
 - **Tool:** axe DevTools / Lighthouse
 
-#### N. Per-component bundle optimization [DISPONIBLE]
-- Identificar si algún componente lazy es demasiado grande
-- Code splitting más granular
-- **Tiempo:** 1h
-- **Tool:** `npm run build` + analizar dist/
+#### N. Per-component bundle optimization ✅ [DONE — 2026-05-21]
+- **Implementado:** manualChunks function en `vite.config.ts` separando vendors (react, framer-motion, supabase, lucide, utils)
+- **Resultado:** main `index.js` de 131KB gzip → **15.66KB gzip** (-88%). Vendor chunks ahora cacheables por separado entre deploys.
+- **Build time:** 16.7s → 5.48s
+- **Archivos:** `vite.config.ts`
 
 #### O. PWA support / Service Worker [DISPONIBLE]
 - Ya tienes manifest.webmanifest, solo falta SW
@@ -252,6 +252,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | E. Recordatorio 24h | Bloqueada (espera WhatsApp) | — | — | — |
 | F. Backup auto | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | Q. Email templates | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| N. Bundle optim | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |
