@@ -11,6 +11,7 @@ const TABLES = [
   "breathwork_subscribers",
   "breathwork_events",
   "breathwork_reservations",
+  "breathwork_corporate_inquiries",
   "amarte_bank_config",
 ];
 
