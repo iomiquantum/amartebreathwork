@@ -83,43 +83,36 @@ export function ExperienceSection() {
             className="relative lg:col-span-5"
           >
             <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-[2rem] gradient-border bg-ink">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-deep/50 via-ink to-ink-900" />
-              <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
+              <img
+                src="/sections/experience.jpg"
+                alt="Sesión presencial AMARTE con personas en sillas, audífonos verdes brillando en penumbra cinematográfica"
+                width={1200}
+                height={800}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 size-full object-cover"
+              />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-tr from-ink via-ink/40 to-transparent" />
+              <div aria-hidden className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
 
-              {/* Concentric grid */}
-              <svg className="absolute inset-0 size-full" viewBox="0 0 400 400" aria-hidden>
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <circle
-                    key={i}
-                    cx="200"
-                    cy="200"
-                    r={20 + i * 18}
-                    fill="none"
-                    stroke="#00C896"
-                    strokeOpacity={0.08 + i * 0.015}
-                    strokeWidth="1"
-                  />
-                ))}
-              </svg>
-
-              {/* Center */}
-              <div className="absolute inset-0 grid place-items-center">
-                <div className="flex flex-col items-center gap-6">
-                  <div className="grid grid-cols-3 gap-3">
+              {/* Floating icon stack */}
+              <div className="absolute inset-x-0 bottom-0 grid place-items-center pb-6">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="grid grid-cols-3 gap-2.5">
                     {[Wind, Waves, Headphones].map((Icon, i) => (
                       <div
                         key={i}
-                        className="grid size-14 place-items-center rounded-2xl border border-white/10 bg-ink-900/80 backdrop-blur"
+                        className="grid size-11 place-items-center rounded-xl border border-white/10 bg-ink-900/80 backdrop-blur"
                       >
-                        <Icon className="size-6 text-emerald-glow" strokeWidth={1.5} />
+                        <Icon className="size-5 text-emerald-glow" strokeWidth={1.5} />
                       </div>
                     ))}
                   </div>
                   <div className="text-center">
-                    <p className="font-display text-xs uppercase tracking-eyebrow text-bone/60">
+                    <p className="font-display text-[10px] uppercase tracking-eyebrow text-bone/70">
                       Secuencia
                     </p>
-                    <p className="mt-1 font-display text-lg text-bone">
+                    <p className="mt-0.5 font-display text-base text-bone drop-shadow-lg">
                       Respira · Escucha · Suelta
                     </p>
                   </div>

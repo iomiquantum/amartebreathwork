@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Headphones, Waves, Wind, Sparkles } from "lucide-react";
+import { Waves, Wind, Sparkles } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
 import { CTAButton } from "./CTAButton";
 import { trackWhatsappClick } from "../lib/tracking";
@@ -151,53 +151,43 @@ export function Hero() {
               transition={{ duration: 1, delay: 0.2 }}
               className="relative mx-auto aspect-[4/5] w-full max-w-md"
             >
-              {/* Frame */}
+              {/* Frame with REAL photo */}
               <div className="absolute inset-0 rounded-[2rem] gradient-border bg-ink-900 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-deep/40 via-ink-900 to-ink" />
-                <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
+                <img
+                  src="/hero/hero-portrait.jpg"
+                  alt="Persona en sesión inmersiva AMARTE con audífonos brillando en verde, manos en las sienes en gesto de respiración"
+                  width={800}
+                  height={1000}
+                  fetchPriority="high"
+                  decoding="async"
+                  className="absolute inset-0 size-full object-cover"
+                />
+                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
+                <div aria-hidden className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
 
-                {/* Pulsing rings = headphone wearer abstract */}
-                <div className="absolute inset-0 grid place-items-center">
-                  <div className="relative">
-                    {[0, 1, 2, 3].map((i) => (
+                {/* Subtle pulsing ring overlay */}
+                {!reduced && (
+                  <div className="pointer-events-none absolute inset-0 grid place-items-center">
+                    {[0, 1, 2].map((i) => (
                       <motion.div
                         key={i}
-                        initial={{ scale: 0.6, opacity: 0 }}
-                        animate={
-                          reduced
-                            ? { scale: 1, opacity: 0.3 }
-                            : { scale: [0.6, 1.6], opacity: [0.5, 0] }
-                        }
-                        transition={
-                          reduced
-                            ? { duration: 0 }
-                            : { duration: 4, delay: i * 1, repeat: Infinity, ease: "easeOut" }
-                        }
-                        className="absolute inset-0 size-44 rounded-full border border-emerald-brand/40"
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: [0.8, 1.4], opacity: [0.35, 0] }}
+                        transition={{ duration: 5, delay: i * 1.5, repeat: Infinity, ease: "easeOut" }}
+                        className="absolute size-32 rounded-full border border-emerald-glow/30"
                       />
                     ))}
-                    <motion.div
-                      animate={reduced ? { y: 0 } : { y: [0, -6, 0] }}
-                      transition={
-                        reduced
-                          ? { duration: 0 }
-                          : { duration: 5, repeat: Infinity, ease: "easeInOut" }
-                      }
-                      className="relative grid size-44 place-items-center rounded-full bg-gradient-to-br from-emerald-deep to-ink shadow-glow-emerald"
-                    >
-                      <Headphones className="size-16 text-emerald-glow" strokeWidth={1.4} />
-                    </motion.div>
                   </div>
-                </div>
+                )}
 
                 {/* Corner labels */}
-                <div className="absolute left-5 top-5 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/60">
+                <div className="absolute left-5 top-5 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/80 drop-shadow-lg">
                   <Sparkles className="size-3 text-gold-warm" />
                   Sesión inmersiva
                 </div>
-                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/60">
+                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/80 drop-shadow-lg">
                   <span>Quito · Ec</span>
-                  <span className="text-emerald-brand">● en preparación</span>
+                  <span className="text-emerald-brand"><span className="inline-block size-1.5 rounded-full bg-emerald-brand mr-1 animate-pulse-soft" />en preparación</span>
                 </div>
               </div>
 

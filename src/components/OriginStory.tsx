@@ -25,10 +25,22 @@ export function OriginStory() {
               {o.title}
             </h2>
 
-            {/* Vertical timeline accent */}
-            <div className="mt-8 flex items-center gap-3 text-xs uppercase tracking-eyebrow text-muted">
-              <span className="size-1.5 rounded-full bg-emerald-brand animate-pulse-soft" />
-              Una historia honesta
+            {/* Real photo */}
+            <div className="relative mt-8 aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl gradient-border bg-ink-900">
+              <img
+                src="/sections/origin.jpg"
+                alt="Grupo en sesión AMARTE con sillones reclinables, audífonos verdes brillando en ambiente cálido"
+                width={800}
+                height={1000}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 size-full object-cover"
+              />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/85 drop-shadow-lg">
+                <span className="size-1.5 rounded-full bg-emerald-brand animate-pulse-soft" />
+                Una historia honesta
+              </div>
             </div>
           </motion.div>
 

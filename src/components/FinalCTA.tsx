@@ -11,8 +11,16 @@ export function FinalCTA() {
       id="final-cta"
       className="relative isolate overflow-hidden bg-ink py-24 sm:py-32"
     >
-      <div className="pointer-events-none absolute inset-0 bg-radial-emerald" />
-      <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-50" />
+      {/* Real photo background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+        style={{ backgroundImage: "url(/sections/final-cta-bg.jpg)" }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/70 to-ink" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-80" />
+      <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-40" />
+      <div className="pointer-events-none absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
 
       <div className="container-tight relative text-center">
         <motion.span
