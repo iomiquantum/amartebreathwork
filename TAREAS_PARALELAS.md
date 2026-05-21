@@ -191,10 +191,11 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 - Hashtags strategy
 - **Archivos nuevos:** `docs/CONTENIDO_REDES.md`
 
-#### Q. Email templates (welcome sequence) [DISPONIBLE]
-- 7 emails de bienvenida
-- Tono cálido y profundo
-- **Archivos nuevos:** `docs/EMAIL_TEMPLATES.md` o templates HTML directamente
+#### Q. Email templates (welcome sequence) ✅ [DONE — 2026-05-21]
+- **Implementado:** 7 emails de bienvenida con tono AMARTE (cálido, profundo)
+- **Archivos:** `docs/EMAIL_TEMPLATES.md` (spec + cronograma) + `supabase/functions/_shared/email-templates.ts` (TypeScript module con `EmailTemplate[]`, `renderEmail()`, HTML estilizado mobile-first)
+- **Cronograma:** día 0, +1, +3, +5, +7, +10, +14
+- **Listo para conectar:** cuando llegue API key Resend (Tarea 10), las funciones de envío ya tienen los templates importables
 
 #### R. Plan Meta Ads completo [DISPONIBLE]
 - Audiencias custom
@@ -250,6 +251,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | D. Admin dashboard | Disponible | — | — | — |
 | E. Recordatorio 24h | Bloqueada (espera WhatsApp) | — | — | — |
 | F. Backup auto | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| Q. Email templates | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |
