@@ -32,7 +32,7 @@ export async function submitLead(lead: LeadInput) {
     return { ok: true, simulated: true };
   }
 
-  const { error } = await supabase.from("leads").insert({
+  const { error } = await supabase.from("breathwork_leads").insert({
     name: lead.name,
     whatsapp: lead.whatsapp,
     city: lead.city ?? null,
@@ -58,7 +58,7 @@ export async function subscribeNewsletter(email: string) {
     return { ok: true, simulated: true };
   }
 
-  const { error } = await supabase.from("subscribers").insert({
+  const { error } = await supabase.from("breathwork_subscribers").insert({
     email: email.trim().toLowerCase(),
     source: "landing",
   });
@@ -73,39 +73,25 @@ export async function subscribeNewsletter(email: string) {
 }
 
 /*
-SQL para crear las tablas en Supabase (ejecutar en SQL Editor):
+Tablas en Supabase (proyecto amarteinc, ya aplicadas vía migration).
+Convención: prefijo breathwork_ porque el proyecto Supabase es 'amarteinc' (umbrella)
+y comparte espacio con futuras tablas de app_, retiros_, etc.
 
-create table public.leads (
+create table public.breathwork_leads (
   id           uuid primary key default gen_random_uuid(),
   created_at   timestamptz not null default now(),
   name         text not null,
   whatsapp     text not null,
   city         text,
   intent       text,
-  source       text,
+  source       text default 'landing',
   user_agent   text
 );
 
-alter table public.leads enable row level security;
-
-create policy "anon insert leads"
-  on public.leads
-  for insert
-  to anon
-  with check (true);
-
-create table public.subscribers (
+create table public.breathwork_subscribers (
   id          uuid primary key default gen_random_uuid(),
   created_at  timestamptz not null default now(),
   email       text not null unique,
-  source      text
+  source      text default 'landing'
 );
-
-alter table public.subscribers enable row level security;
-
-create policy "anon insert subscribers"
-  on public.subscribers
-  for insert
-  to anon
-  with check (true);
 */
