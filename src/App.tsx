@@ -31,6 +31,11 @@ const MenPage = lazy(() =>
   import("./pages/MenPage").then((m) => ({ default: m.MenPage }))
 );
 
+// Lazy: NotFoundPage para rutas no reconocidas
+const NotFoundPage = lazy(() =>
+  import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage }))
+);
+
 // Lazy: admin bundle (todo /admin/* en un solo chunk)
 const AdminLogin = lazy(() =>
   import("./pages/admin/AdminLogin").then((m) => ({ default: m.AdminLogin }))
@@ -138,7 +143,14 @@ function App() {
                 </Suspense>
               }
             />
-            <Route path="*" element={<HomePage />} />
+            <Route
+              path="*"
+              element={
+                <Suspense fallback={<div className="min-h-screen bg-ink" />}>
+                  <NotFoundPage />
+                </Suspense>
+              }
+            />
           </Routes>
           <Suspense fallback={null}>
             <Footer />

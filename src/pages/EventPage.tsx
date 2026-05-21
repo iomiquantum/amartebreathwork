@@ -71,6 +71,93 @@ export function EventPage() {
     };
   }, [event]);
 
+  // Schema.org JSON-LD para Google Events
+  useEffect(() => {
+    if (!event) return;
+    const startDate = event.date_iso;
+    const endDate = new Date(
+      new Date(event.date_iso).getTime() + event.duration_min * 60 * 1000,
+    ).toISOString();
+
+    const location =
+      event.format === "online"
+        ? {
+            "@type": "VirtualLocation",
+            url: event.online_url ?? `${siteConfig.siteUrl}/evento/${event.slug}`,
+          }
+        : {
+            "@type": "Place",
+            name: event.venue_name ?? `AMARTE — ${event.city ?? "Ecuador"}`,
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: event.venue_address ?? "",
+              addressLocality: event.city ?? "",
+              addressCountry: "EC",
+            },
+          };
+
+    const offers =
+      event.price_amount != null
+        ? {
+            "@type": "Offer",
+            price: event.price_amount,
+            priceCurrency: event.price_currency,
+            availability:
+              event.spots_available > 0
+                ? "https://schema.org/InStock"
+                : "https://schema.org/SoldOut",
+            url: `${siteConfig.siteUrl}/evento/${event.slug}`,
+            validFrom: new Date().toISOString(),
+          }
+        : undefined;
+
+    const jsonLd: Record<string, unknown> = {
+      "@context": "https://schema.org",
+      "@type": event.format === "online" ? "OnlineEventAttendanceMode" : "Event",
+      name: event.title,
+      description: event.description ?? siteConfig.seoDescription,
+      startDate,
+      endDate,
+      eventAttendanceMode:
+        event.format === "online"
+          ? "https://schema.org/OnlineEventAttendanceMode"
+          : "https://schema.org/OfflineEventAttendanceMode",
+      eventStatus:
+        event.status === "cancelled"
+          ? "https://schema.org/EventCancelled"
+          : "https://schema.org/EventScheduled",
+      location,
+      image: event.cover_image_url ? [event.cover_image_url] : undefined,
+      organizer: {
+        "@type": "Organization",
+        name: siteConfig.brandName,
+        url: siteConfig.siteUrl,
+      },
+      offers,
+      maximumAttendeeCapacity: event.spots_total,
+      remainingAttendeeCapacity: event.spots_available,
+    };
+    // Limpiar undefined del JSON-LD
+    Object.keys(jsonLd).forEach((k) => jsonLd[k] === undefined && delete jsonLd[k]);
+    // OnlineEventAttendanceMode no es un @type valido — corregir
+    if (event.format === "online") jsonLd["@type"] = "Event";
+
+    const scriptId = "event-jsonld";
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.type = "application/ld+json";
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(jsonLd);
+
+    return () => {
+      const existing = document.getElementById(scriptId);
+      if (existing) existing.remove();
+    };
+  }, [event]);
+
   if (loading) {
     return (
       <div className="grid min-h-screen place-items-center bg-ink text-bone">
