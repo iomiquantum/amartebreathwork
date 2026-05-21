@@ -162,12 +162,12 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 - **Header drawer:** `AnimatePresence` wrapper agregado para que la animación exit (-y 8 + fade) corra correctamente
 - **Archivos:** `src/components/Hero.tsx`, `src/components/Header.tsx`
 
-#### M. Accessibility audit avanzado [DISPONIBLE]
-- aria-labels que falten
-- Contraste de colores text-bone/60 sobre fondos oscuros
-- Keyboard navigation
-- **Tiempo:** 1h
-- **Tool:** axe DevTools / Lighthouse
+#### M. Accessibility audit avanzado ✅ [DONE — 2026-05-21]
+- **Header nav:** `aria-current="true"` en item activo + focus-visible ring consistente
+- **CookieBanner:** cambiado de `role="dialog"` (no era blocking) a `role="region"` + `aria-live="polite"`
+- **WhatsappGateModal + ReservationModal:** ESC key handler + body scroll lock cuando abiertos
+- **Baseline previo verificado:** modals con `aria-modal/labelledby`, `aria-expanded` en FAQ, `aria-live` en NerveTest, `role="alert"` en errores, htmlFor/id en forms — todo OK
+- **Archivos:** `src/components/Header.tsx`, `src/components/CookieBanner.tsx`, `src/components/WhatsappGateModal.tsx`, `src/components/ReservationModal.tsx`
 
 #### N. Per-component bundle optimization ✅ [DONE — 2026-05-21]
 - **Implementado:** manualChunks function en `vite.config.ts` separando vendors (react, framer-motion, supabase, lucide, utils)
@@ -253,6 +253,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | Q. Email templates | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | N. Bundle optim | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | L. Mobile refinements | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| M. A11y audit | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |

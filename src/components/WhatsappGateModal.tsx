@@ -47,6 +47,21 @@ export function WhatsappGateModal() {
     }
   }, [isOpen, status]);
 
+  // ESC para cerrar + body scroll lock cuando está abierto (a11y)
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeGate();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen, closeGate]);
+
   const cleanPhone = useMemo(() => sanitizePhone(phone, country.code), [phone, country.code]);
   const isPhoneValid = cleanPhone.length >= 7;
   const isEmailValid = !email || isValidEmail(email);

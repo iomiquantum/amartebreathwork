@@ -78,6 +78,21 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
     }
   }, [isOpen]);
 
+  // ESC para cerrar + body scroll lock (a11y)
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen, onClose]);
+
   // Cargar datos bancarios al abrir + track InitiateCheckout
   useEffect(() => {
     if (isOpen && event) {

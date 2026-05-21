@@ -31,8 +31,9 @@ export function CookieBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          role="dialog"
+          role="region"
           aria-label="Aviso de cookies"
+          aria-live="polite"
           className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-3xl sm:inset-x-auto sm:left-4 sm:right-4"
         >
           <div className="card-dark flex flex-col items-start gap-4 rounded-2xl border-emerald-brand/20 bg-ink-900/95 p-4 backdrop-blur-xl sm:flex-row sm:items-center sm:p-5">

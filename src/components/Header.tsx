@@ -101,7 +101,8 @@ export function Header() {
                 <button
                   key={l.id}
                   onClick={() => scrollToId(l.id)}
-                  className={`relative text-sm transition-colors ${
+                  aria-current={isActive ? "true" : undefined}
+                  className={`relative text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-ink rounded ${
                     isActive ? "text-emerald-glow" : "text-bone/70 hover:text-bone"
                   }`}
                 >
