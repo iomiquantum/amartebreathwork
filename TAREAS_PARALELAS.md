@@ -172,11 +172,15 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 - **Build time:** 16.7s → 5.48s
 - **Archivos:** `vite.config.ts`
 
-#### O. PWA support / Service Worker [DISPONIBLE]
-- Ya tienes manifest.webmanifest, solo falta SW
-- Permite "Add to Home Screen" en móviles
-- **Tiempo:** 1h
-- **Archivos nuevos:** `public/sw.js`, `src/lib/pwa.ts`
+#### O. PWA support / Service Worker ✅ [DONE — 2026-05-21]
+- **Implementado:** `public/sw.js` con estrategia híbrida:
+  - HTML navigate: network-first + cache fallback (offline básico)
+  - Static (CSS/JS/fonts/images): cache-first + stale-while-revalidate
+  - `/admin/*` excluido (siempre fresco, datos sensibles)
+  - Cross-origin (Supabase, ipapi) no interceptado
+- **`src/lib/pwa.ts`:** registra el SW solo en producción (skip en `import.meta.env.DEV`)
+- **Versionado:** `VERSION = "v1-2026-05-21"` permite invalidar caches viejos al deploy
+- **Archivos:** `public/sw.js`, `src/lib/pwa.ts`, `src/main.tsx`
 
 ### 📋 CONTENIDO
 
@@ -254,6 +258,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | G. Geolocation | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | D. Admin Dashboard | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | A. Per-event pages | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
+| O. PWA / SW | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |
