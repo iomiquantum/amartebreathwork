@@ -13,13 +13,13 @@ import {
   Users,
   Clock,
   Sparkles,
-  Loader2,
   CheckCircle2,
 } from "lucide-react";
 import { fetchEventBySlug, type EventRow } from "../lib/supabase";
 import { siteConfig } from "../data/siteConfig";
 import { ReservationModal } from "../components/ReservationModal";
 import { CTAButton } from "../components/CTAButton";
+import { Skeleton, SkeletonCard, SkeletonText, ScreenReaderLoading } from "../components/Skeleton";
 
 export function EventPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -160,8 +160,28 @@ export function EventPage() {
 
   if (loading) {
     return (
-      <div className="grid min-h-screen place-items-center bg-ink text-bone">
-        <Loader2 className="size-6 animate-spin text-emerald-glow" />
+      <div className="min-h-screen bg-ink text-bone">
+        <ScreenReaderLoading label="Cargando evento…" />
+        <article className="mx-auto max-w-3xl px-4 pb-20 pt-24 sm:px-6 sm:pt-32">
+          <Skeleton className="h-3 w-32" />
+          <div className="mt-6">
+            <Skeleton className="mb-3 h-4 w-40" />
+            <Skeleton className="mb-2 h-10 w-5/6" />
+            <Skeleton className="mb-2 h-10 w-3/4" />
+            <SkeletonText lines={3} className="mt-5" />
+          </div>
+          <Skeleton className="mt-8 aspect-[16/9] w-full rounded-3xl" />
+          <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+          <SkeletonCard>
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="mt-4 h-12 w-full rounded-full" />
+          </SkeletonCard>
+        </article>
       </div>
     );
   }

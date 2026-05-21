@@ -1,8 +1,9 @@
 // Lista de leads con filtro por búsqueda + export CSV.
 
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, Download, Search, Phone, Mail, MapPin } from "lucide-react";
+import { Download, Search, Phone, Mail, MapPin } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { Skeleton, ScreenReaderLoading } from "../../components/Skeleton";
 
 type Lead = {
   id: string;
@@ -94,14 +95,19 @@ export function AdminLeads() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar por nombre, email, WhatsApp, ciudad…"
-          className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.025] pl-10 pr-4 text-sm text-bone placeholder:text-muted/70 focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20"
+          className="h-12 w-full rounded-xl border border-white/10 bg-white/[0.025] pl-10 pr-4 text-base text-bone placeholder:text-muted/70 focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20 sm:h-11 sm:text-sm"
         />
       </div>
 
       {loading ? (
-        <div className="mt-8 flex items-center gap-2 text-sm text-muted">
-          <Loader2 className="size-4 animate-spin" /> Cargando leads…
-        </div>
+        <>
+          <ScreenReaderLoading label="Cargando leads…" />
+          <div className="mt-4 space-y-2">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} className="h-14 rounded-xl" />
+            ))}
+          </div>
+        </>
       ) : (
         <div className="mt-4 overflow-x-auto rounded-2xl border border-white/[0.06] bg-white/[0.02]">
           <table className="w-full text-sm">

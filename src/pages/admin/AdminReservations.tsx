@@ -1,6 +1,6 @@
 // Reservas: confirmar / cancelar con un click. El trigger DB auto-decrementa spots al confirmar.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Loader2,
   CheckCircle2,
@@ -10,8 +10,20 @@ import {
   CreditCard,
   Building2,
   Filter,
+  Undo2,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+
+const UNDO_WINDOW_MS = 10_000;
+
+type PendingUndo = {
+  reservationId: string;
+  reservationName: string;
+  previousStatus: string;
+  newStatus: string;
+  expiresAt: number;
+  timer: ReturnType<typeof setTimeout>;
+};
 
 type Reservation = {
   id: string;
@@ -43,6 +55,28 @@ export function AdminReservations() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("pending");
   const [updating, setUpdating] = useState<string | null>(null);
+  const [pendingUndo, setPendingUndo] = useState<PendingUndo | null>(null);
+  const [undoSecondsLeft, setUndoSecondsLeft] = useState(0);
+  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!pendingUndo) {
+      if (tickRef.current) clearInterval(tickRef.current);
+      setUndoSecondsLeft(0);
+      return;
+    }
+    setUndoSecondsLeft(Math.ceil((pendingUndo.expiresAt - Date.now()) / 1000));
+    tickRef.current = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((pendingUndo.expiresAt - Date.now()) / 1000));
+      setUndoSecondsLeft(remaining);
+      if (remaining <= 0 && tickRef.current) {
+        clearInterval(tickRef.current);
+      }
+    }, 250);
+    return () => {
+      if (tickRef.current) clearInterval(tickRef.current);
+    };
+  }, [pendingUndo]);
 
   async function load() {
     if (!supabase) return;
@@ -85,9 +119,42 @@ export function AdminReservations() {
 
   async function cancel(id: string) {
     if (!supabase) return;
+    const target = reservations.find((r) => r.id === id);
+    if (!target) return;
     setUpdating(id);
     await supabase.from("breathwork_reservations").update({ payment_status: "cancelled" }).eq("id", id);
     setUpdating(null);
+
+    // Limpiar undo previo si existía
+    if (pendingUndo?.timer) clearTimeout(pendingUndo.timer);
+
+    const expiresAt = Date.now() + UNDO_WINDOW_MS;
+    const timer = setTimeout(() => {
+      setPendingUndo(null);
+    }, UNDO_WINDOW_MS);
+    setPendingUndo({
+      reservationId: id,
+      reservationName: target.name,
+      previousStatus: target.payment_status,
+      newStatus: "cancelled",
+      expiresAt,
+      timer,
+    });
+
+    load();
+  }
+
+  async function undoCancel() {
+    if (!supabase || !pendingUndo) return;
+    clearTimeout(pendingUndo.timer);
+    const { reservationId, previousStatus } = pendingUndo;
+    setUpdating(reservationId);
+    await supabase
+      .from("breathwork_reservations")
+      .update({ payment_status: previousStatus })
+      .eq("id", reservationId);
+    setUpdating(null);
+    setPendingUndo(null);
     load();
   }
 
@@ -113,6 +180,27 @@ export function AdminReservations() {
           ))}
         </div>
       </div>
+
+      {pendingUndo && undoSecondsLeft > 0 && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100"
+        >
+          <span>
+            Reserva de <strong>{pendingUndo.reservationName}</strong> cancelada.
+            <span className="ml-2 text-amber-200/70">Deshacer en {undoSecondsLeft}s</span>
+          </span>
+          <button
+            type="button"
+            onClick={undoCancel}
+            disabled={updating === pendingUndo.reservationId}
+            className="inline-flex items-center gap-1.5 rounded-full bg-amber-300 px-3 py-1.5 text-xs font-medium text-ink-900 hover:bg-amber-200 disabled:opacity-60"
+          >
+            <Undo2 className="size-3.5" /> Deshacer
+          </button>
+        </div>
+      )}
 
       {loading ? (
         <div className="mt-8 flex items-center gap-2 text-sm text-muted">

@@ -104,7 +104,7 @@ export function AdminEvents() {
                     value={ev.status}
                     disabled={updating === ev.id}
                     onChange={(e) => updateStatus(ev.id, e.target.value)}
-                    className="h-9 rounded-lg border border-white/10 bg-ink-900 px-3 text-xs text-bone focus:border-emerald-brand/50 focus:outline-none"
+                    className="h-11 min-h-[44px] rounded-lg border border-white/10 bg-ink-900 px-3 text-base text-bone focus:border-emerald-brand/50 focus:outline-none sm:h-9 sm:min-h-0 sm:text-xs"
                   >
                     {STATUSES.map((s) => (
                       <option key={s} value={s}>
