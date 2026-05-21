@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../data/countries";
 import { siteConfig } from "../data/siteConfig";
-import { submitLead } from "../lib/supabase";
+import { submitLead, sanitizePhone, isValidEmail } from "../lib/supabase";
 import { useWhatsappGate } from "../lib/whatsappGate";
 import {
   trackLeadFormSubmit,
@@ -30,6 +30,7 @@ export function WhatsappGateModal() {
   const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // Trap para bots
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
 
@@ -46,9 +47,9 @@ export function WhatsappGateModal() {
     }
   }, [isOpen, status]);
 
-  const cleanPhone = useMemo(() => phone.replace(/\D/g, ""), [phone]);
+  const cleanPhone = useMemo(() => sanitizePhone(phone, country.code), [phone, country.code]);
   const isPhoneValid = cleanPhone.length >= 7;
-  const isEmailValid = !email || email.includes("@");
+  const isEmailValid = !email || isValidEmail(email);
   const canSubmit = name.trim().length > 1 && isPhoneValid && isEmailValid && status !== "loading";
 
   async function handleSubmit(e: React.FormEvent) {
@@ -68,6 +69,7 @@ export function WhatsappGateModal() {
       countryName: country.name,
       email: cleanEmail || undefined,
       source: `whatsapp_gate:${source}`,
+      honeypot, // si bot llenó campo trampa, será rechazado server-side
     });
 
     if (res.ok) {
@@ -155,6 +157,22 @@ export function WhatsappGateModal() {
 
                   {/* Form */}
                   <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                    {/* Honeypot trap — invisible para humanos, bots llenan campos */}
+                    <div className="absolute opacity-0 pointer-events-none" aria-hidden style={{ position: 'absolute', left: '-9999px' }}>
+                      <label htmlFor="amarte_website">
+                        Website (deja en blanco)
+                        <input
+                          type="text"
+                          id="amarte_website"
+                          name="website"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={honeypot}
+                          onChange={(e) => setHoneypot(e.target.value)}
+                        />
+                      </label>
+                    </div>
+
                     {/* Nombre */}
                     <div>
                       <label htmlFor="gate-name" className="text-xs uppercase tracking-eyebrow text-bone/60">

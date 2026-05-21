@@ -16,12 +16,14 @@ import {
   Sparkles,
   CalendarPlus,
   MessageCircle,
+  CreditCard,
 } from "lucide-react";
 import { fetchUpcomingEvents, type EventRow } from "../lib/supabase";
 import { useWhatsappCTA } from "../lib/whatsapp";
 import { SectionHeader } from "./SectionHeader";
 import { downloadICS } from "../lib/calendar";
 import { siteConfig } from "../data/siteConfig";
+import { ReservationModal } from "./ReservationModal";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("es-EC", {
@@ -63,6 +65,7 @@ export function EventsCalendar() {
   const [loading, setLoading] = useState(true);
   const [filterFormat, setFilterFormat] = useState<"all" | EventRow["format"]>("all");
   const [filterCity, setFilterCity] = useState<string>("all");
+  const [selectedEvent, setSelectedEvent] = useState<EventRow | null>(null);
   const wa = useWhatsappCTA("event_format");
 
   useEffect(() => {
@@ -271,13 +274,15 @@ export function EventsCalendar() {
 
                           {/* Actions */}
                           <div className="flex flex-row gap-2 sm:flex-col sm:gap-2.5">
-                            <a
-                              {...wa}
-                              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-emerald-brand px-5 text-xs font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong"
+                            <button
+                              type="button"
+                              disabled={e.status === "sold_out" || e.spots_available <= 0}
+                              onClick={() => setSelectedEvent(e)}
+                              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-emerald-brand px-5 text-xs font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                              <MessageCircle className="size-3.5" strokeWidth={1.8} />
-                              Reservar
-                            </a>
+                              <CreditCard className="size-3.5" strokeWidth={1.8} />
+                              {e.status === "sold_out" || e.spots_available <= 0 ? "Agotado" : "Reservar"}
+                            </button>
                             <button
                               type="button"
                               onClick={() =>
@@ -305,6 +310,13 @@ export function EventsCalendar() {
           </>
         )}
       </div>
+
+      {/* Modal de reserva */}
+      <ReservationModal
+        event={selectedEvent}
+        isOpen={selectedEvent !== null}
+        onClose={() => setSelectedEvent(null)}
+      />
     </section>
   );
 }
