@@ -432,6 +432,105 @@ export async function submitGenderInquiry(
   return { ok: true };
 }
 
+// ============================================
+// YOUTH INQUIRIES (/jovenes)
+// ============================================
+
+export type YouthInquiryType = "parent" | "school" | "other";
+
+export interface YouthInquiryInput {
+  inquiryType: YouthInquiryType;
+  // PARENT (B2C familia)
+  parentName?: string;
+  parentEmail?: string;
+  parentWhatsapp?: string;
+  parentCountryCode?: string;
+  parentCountryName?: string;
+  childAge?: number;
+  childCount?: number;
+  childConcerns?: string;
+  // SCHOOL (B2B colegio)
+  institutionName?: string;
+  institutionType?: string;
+  contactRole?: string;
+  contactName?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  studentCountTotal?: number;
+  targetGrades?: string;
+  formatInterest?: string;
+  estimatedDate?: string;
+  // COMÚN
+  message?: string;
+  city?: string;
+  honeypot?: string;
+}
+
+export async function submitYouthInquiry(
+  input: YouthInquiryInput
+): Promise<{ ok: boolean; error?: string; blocked?: "bot" }> {
+  if (input.honeypot && input.honeypot.length > 0) {
+    return { ok: false, error: "Bot detectado", blocked: "bot" };
+  }
+  const emailToCheck = input.inquiryType === "school" ? input.contactEmail : input.parentEmail;
+  if (emailToCheck && !isValidEmail(emailToCheck)) {
+    return { ok: false, error: "Email inválido" };
+  }
+  if (!supabase) {
+    console.log("[youth inquiry]", input);
+    return { ok: true };
+  }
+
+  const utm = typeof window !== "undefined"
+    ? {
+        utm_source: sessionStorage.getItem("amarte_utm_source"),
+        utm_medium: sessionStorage.getItem("amarte_utm_medium"),
+        utm_campaign: sessionStorage.getItem("amarte_utm_campaign"),
+      }
+    : { utm_source: null, utm_medium: null, utm_campaign: null };
+
+  const { error } = await supabase.from("breathwork_youth_inquiries").insert({
+    inquiry_type: input.inquiryType,
+    parent_name: input.parentName ?? null,
+    parent_email: input.parentEmail ? input.parentEmail.trim().toLowerCase() : null,
+    parent_whatsapp: input.parentWhatsapp ?? null,
+    parent_country_code: input.parentCountryCode ?? "593",
+    parent_country_name: input.parentCountryName ?? "Ecuador",
+    child_age: input.childAge ?? null,
+    child_count: input.childCount ?? 1,
+    child_concerns: input.childConcerns ?? null,
+    institution_name: input.institutionName ?? null,
+    institution_type: input.institutionType ?? null,
+    contact_role: input.contactRole ?? null,
+    contact_name: input.contactName ?? null,
+    contact_email: input.contactEmail ? input.contactEmail.trim().toLowerCase() : null,
+    contact_phone: input.contactPhone ?? null,
+    student_count_total: input.studentCountTotal ?? null,
+    target_grades: input.targetGrades ?? null,
+    format_interest: input.formatInterest ?? null,
+    estimated_date: input.estimatedDate ?? null,
+    message: input.message ?? null,
+    city: input.city ?? null,
+    utm_source: utm.utm_source,
+    utm_medium: utm.utm_medium,
+    utm_campaign: utm.utm_campaign,
+    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+  });
+
+  if (error) {
+    console.error("[supabase] youth inquiry failed", error);
+    return { ok: false, error: error.message };
+  }
+
+  // Auto-suscribir al newsletter si dio email válido
+  const emailForNewsletter = input.inquiryType === "school" ? input.contactEmail : input.parentEmail;
+  if (emailForNewsletter && isValidEmail(emailForNewsletter)) {
+    subscribeNewsletter(emailForNewsletter).catch(() => undefined);
+  }
+
+  return { ok: true };
+}
+
 export async function subscribeNewsletter(email: string) {
   if (!isValidEmail(email)) return { ok: false, error: "Email inválido" };
 

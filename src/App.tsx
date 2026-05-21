@@ -31,6 +31,11 @@ const MenPage = lazy(() =>
   import("./pages/MenPage").then((m) => ({ default: m.MenPage }))
 );
 
+// Lazy: vertical jóvenes/colegios
+const YouthPage = lazy(() =>
+  import("./pages/YouthPage").then((m) => ({ default: m.YouthPage }))
+);
+
 // Lazy: NotFoundPage para rutas no reconocidas
 const NotFoundPage = lazy(() =>
   import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage }))
@@ -155,6 +160,14 @@ function App() {
               element={
                 <Suspense fallback={<div className="min-h-screen" />}>
                   <MenPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/jovenes"
+              element={
+                <Suspense fallback={<div className="min-h-screen" />}>
+                  <YouthPage />
                 </Suspense>
               }
             />
