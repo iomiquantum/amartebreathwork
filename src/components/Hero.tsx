@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Waves, Wind, Sparkles } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
 import { CTAButton } from "./CTAButton";
@@ -9,6 +10,94 @@ import { HookRotator } from "./HookRotator";
 import { CursorGlow } from "./CursorGlow";
 import { Aurora } from "./Aurora";
 import { useWhatsappCTA } from "../lib/whatsapp";
+
+// Narrativa visual: problema → decisión → inmersión → transformación
+const HERO_SLIDES = [
+  {
+    src: "/hero/slide-01.jpg",
+    alt: "Mujer con manos en las sienes, expresión de tensión y agotamiento",
+    caption: "Llegas cargado.",
+  },
+  {
+    src: "/hero/slide-02.jpg",
+    alt: "Persona con mano sobre el pecho durante sesión inmersiva AMARTE",
+    caption: "Te sientas. Respiras.",
+  },
+  {
+    src: "/hero/slide-03.jpg",
+    alt: "Grupo en sillones reclinables en sesión AMARTE con audífonos verdes brillando",
+    caption: "El sonido te envuelve.",
+  },
+  {
+    src: "/hero/slide-04.jpg",
+    alt: "Mujer joven con audífonos AMARTE mirando hacia arriba, expresión luminosa de transformación",
+    caption: "Vuelves a ti.",
+  },
+];
+
+function HeroSlider({ reduced }: { reduced: boolean }) {
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    if (reduced) return;
+    const t = setInterval(() => setIdx((i) => (i + 1) % HERO_SLIDES.length), 4500);
+    return () => clearInterval(t);
+  }, [reduced]);
+
+  const slide = HERO_SLIDES[idx];
+
+  return (
+    <>
+      <AnimatePresence mode="sync">
+        <motion.img
+          key={slide.src}
+          src={slide.src}
+          alt={slide.alt}
+          width={800}
+          height={1000}
+          fetchPriority={idx === 0 ? "high" : "low"}
+          decoding="async"
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 1.6, ease: [0.4, 0, 0.2, 1] }}
+          className="absolute inset-0 size-full object-cover"
+        />
+      </AnimatePresence>
+
+      {/* Caption rotating bottom-center */}
+      <div className="absolute inset-x-0 bottom-16 z-10 flex justify-center px-4">
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={slide.caption}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.6 }}
+            className="rounded-full border border-white/15 bg-ink-900/70 px-4 py-1.5 font-display text-sm text-bone backdrop-blur-md drop-shadow-lg sm:text-base"
+          >
+            {slide.caption}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+
+      {/* Dots indicators */}
+      <div className="absolute inset-x-0 -bottom-7 z-10 flex justify-center gap-2">
+        {HERO_SLIDES.map((s, i) => (
+          <button
+            key={s.src}
+            type="button"
+            onClick={() => setIdx(i)}
+            aria-label={`Ver imagen ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all duration-500 ${
+              i === idx ? "w-8 bg-emerald-brand" : "w-1.5 bg-bone/30 hover:bg-bone/50"
+            }`}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
 
 export function Hero() {
   const reduced = usePrefersReducedMotion();
@@ -151,41 +240,20 @@ export function Hero() {
               transition={{ duration: 1, delay: 0.2 }}
               className="relative mx-auto aspect-[4/5] w-full max-w-md"
             >
-              {/* Frame with REAL photo */}
+              {/* Frame with REAL slider */}
               <div className="absolute inset-0 rounded-[2rem] gradient-border bg-ink-900 overflow-hidden">
-                <img
-                  src="/hero/hero-portrait.jpg"
-                  alt="Persona en sesión inmersiva AMARTE con audífonos brillando en verde, manos en las sienes en gesto de respiración"
-                  width={800}
-                  height={1000}
-                  fetchPriority="high"
-                  decoding="async"
-                  className="absolute inset-0 size-full object-cover"
-                />
-                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
-                <div aria-hidden className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
+                <HeroSlider reduced={reduced} />
 
-                {/* Subtle pulsing ring overlay */}
-                {!reduced && (
-                  <div className="pointer-events-none absolute inset-0 grid place-items-center">
-                    {[0, 1, 2].map((i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: [0.8, 1.4], opacity: [0.35, 0] }}
-                        transition={{ duration: 5, delay: i * 1.5, repeat: Infinity, ease: "easeOut" }}
-                        className="absolute size-32 rounded-full border border-emerald-glow/30"
-                      />
-                    ))}
-                  </div>
-                )}
+                {/* Gradient overlays for legibility (above images, below labels) */}
+                <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
+                <div aria-hidden className="pointer-events-none absolute inset-0 bg-noise opacity-15 mix-blend-overlay" />
 
-                {/* Corner labels */}
-                <div className="absolute left-5 top-5 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/80 drop-shadow-lg">
+                {/* Corner labels — constant */}
+                <div className="absolute left-5 top-5 z-10 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/85 drop-shadow-lg">
                   <Sparkles className="size-3 text-gold-warm" />
                   Sesión inmersiva
                 </div>
-                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/80 drop-shadow-lg">
+                <div className="absolute bottom-5 left-5 right-5 z-10 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/80 drop-shadow-lg">
                   <span>Quito · Ec</span>
                   <span className="text-emerald-brand"><span className="inline-block size-1.5 rounded-full bg-emerald-brand mr-1 animate-pulse-soft" />en preparación</span>
                 </div>
