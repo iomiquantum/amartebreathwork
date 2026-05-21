@@ -74,36 +74,32 @@ export const siteConfig = {
     "Cuando el ruido externo baja, puedes escucharte otra vez.",
   ],
 
-  // Testimonios (placeholders editables — reemplaza con voces reales después de la primera sesión)
-  testimonials: [
-    {
-      quote:
-        "Llegué con la cabeza llena. Salí sintiendo el cuerpo otra vez. No esperaba que algo tan simple me moviera tanto.",
-      name: "María José",
-      role: "Diseñadora · Quito",
-      rating: 5,
-    },
-    {
-      quote:
-        "No es respirar y ya. Es bajar el volumen de todo lo que estás cargando. Dormí como hace meses no dormía.",
-      name: "Andrés",
-      role: "Founder · Quito",
-      rating: 5,
-    },
-    {
-      quote:
-        "Me reconcilié con mi propia respiración. Es la pausa que no sabía que necesitaba.",
-      name: "Camila",
-      role: "Periodista · Quito",
-      rating: 5,
-    },
-  ] as Array<{ quote: string; name: string; role: string; rating: number }>,
+  // Testimonios — vacíos por ahora. Se llenan después de las primeras sesiones reales.
+  // Soporta texto (quote) y/o video (videoUrl + videoPoster).
+  // Si videoUrl está presente, el card muestra el video con thumbnail.
+  // Ejemplo con video:
+  //   { name: "Andrés", role: "Founder · Quito", rating: 5,
+  //     quote: "Salí distinto.",
+  //     videoUrl: "https://amarteinc.com/videos/andres.mp4",
+  //     videoPoster: "https://amarteinc.com/videos/andres-poster.jpg" }
+  testimonials: [] as Array<{
+    quote: string;
+    name: string;
+    role: string;
+    rating?: number;
+    videoUrl?: string;
+    videoPoster?: string;
+  }>,
 
   // Guía / facilitador
   guide: {
     name: "Miguel Valencia",
     role: "Fundador y guía",
     bio: "Diseña experiencias auditivas inmersivas combinando respiración consciente, sonido y frecuencias. Trabaja desde el cruce entre música, neurociencia aplicada y bienestar moderno para crear espacios donde el sistema nervioso pueda volver a casa.",
+    // Foto del guía. Placeholder de Unsplash mientras tienes foto real.
+    // Cuando la tengas: sube a /public/guide.jpg y cambia photo a "/guide.jpg"
+    photo:
+      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=800&h=1000&fit=crop&crop=faces&q=85",
     credentials: [
       "Experiencia diseñando rituales sensoriales",
       "Investigación aplicada en regulación a través del sonido",
@@ -125,8 +121,15 @@ export const siteConfig = {
     ],
   },
 
-  // Lugares donde fuiste mencionado (placeholders — reemplaza por logos reales)
-  press: ["Revista Mundo", "Podcast Ec", "Diario El Comercio", "El Universo"],
+  // Lugares donde fuiste mencionado. Vacío hasta tener menciones reales.
+  // Ejemplos cuando tengas: ["Diario El Comercio", "Podcast Bienestar Hoy", ...]
+  press: [] as string[],
+
+  // IDs de pixels y analytics. Cuando los tengas, pégalos aquí y se activan automáticamente.
+  // Dejar vacío para no cargar tracking (útil en desarrollo).
+  metaPixelId: "", // Ej: "1234567890123456" (de business.facebook.com → Events Manager)
+  gaMeasurementId: "", // Ej: "G-XXXXXXXXXX" (de analytics.google.com)
+  tiktokPixelId: "", // Ej: "C..." (de TikTok Ads Manager)
 
   // Newsletter (Supabase tabla `subscribers` opcional)
   newsletter: {

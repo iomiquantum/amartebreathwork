@@ -10,12 +10,12 @@ export function Splash() {
   const [show, setShow] = useState(() => {
     if (typeof window === "undefined") return false;
     if (reduced) return false;
-    return sessionStorage.getItem(STORAGE_KEY) !== "1";
+    return localStorage.getItem(STORAGE_KEY) !== "1";
   });
 
   useEffect(() => {
     if (!show) return;
-    sessionStorage.setItem(STORAGE_KEY, "1");
+    localStorage.setItem(STORAGE_KEY, "1");
     document.body.style.overflow = "hidden";
     const t = setTimeout(() => setShow(false), 1400);
     return () => {

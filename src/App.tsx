@@ -106,6 +106,8 @@ const WaveDivider = lazy(() =>
 
 function App() {
   useEffect(() => {
+    // Inicializa Meta Pixel + GA4 + TikTok Pixel si tienen IDs en siteConfig
+    import("./lib/pixels").then(({ initPixels }) => initPixels());
     trackPageView();
   }, []);
 

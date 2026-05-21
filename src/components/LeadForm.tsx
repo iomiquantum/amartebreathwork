@@ -212,9 +212,30 @@ export function LeadForm() {
                         />
                       )}
                     </dl>
-                    <p className="mt-4 text-xs text-muted">
-                      Al confirmar aceptas que te escribamos con información de las experiencias.
-                    </p>
+                    <div className="mt-5 rounded-xl border border-emerald-brand/20 bg-emerald-deep/20 p-4 text-xs leading-relaxed text-bone/80">
+                      <p className="font-medium text-bone/95">
+                        Al confirmar y enviar aceptas:
+                      </p>
+                      <ul className="mt-2 space-y-1.5">
+                        <li className="flex items-start gap-2">
+                          <span className="mt-1.5 size-1 flex-shrink-0 rounded-full bg-emerald-brand" />
+                          <span>
+                            Recibir un <strong className="text-bone">WhatsApp inmediato</strong> con el link
+                            al grupo privado.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="mt-1.5 size-1 flex-shrink-0 rounded-full bg-emerald-brand" />
+                          <span>
+                            Recibir información de las próximas experiencias por WhatsApp y/o email.
+                          </span>
+                        </li>
+                      </ul>
+                      <p className="mt-3 text-muted">
+                        Puedes darte de baja en cualquier momento. Tus datos no se comparten con terceros.
+                        Ver <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="underline decoration-emerald-brand/40 hover:text-emerald-glow">privacidad</a>.
+                      </p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

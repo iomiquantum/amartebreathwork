@@ -39,7 +39,7 @@ export function GuideSection() {
             )}
           </motion.div>
 
-          {/* Portrait placeholder */}
+          {/* Portrait */}
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -48,37 +48,55 @@ export function GuideSection() {
             className="lg:col-span-5"
           >
             <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-[2rem] gradient-border bg-ink">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-deep/60 via-ink-900 to-ink" />
-              <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
+              {/* Si hay photo, mostrar imagen real; si no, fallback al monograma */}
+              {guide.photo ? (
+                <>
+                  <img
+                    src={guide.photo}
+                    alt={`${guide.name} — ${guide.role}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 size-full object-cover"
+                  />
+                  {/* Gradient overlay para legibilidad de labels */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink via-ink/60 to-transparent" />
+                </>
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-deep/60 via-ink-900 to-ink" />
+                  <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
+                  <div className="absolute inset-0 grid place-items-center">
+                    <div className="text-center">
+                      <p className="font-display text-[7rem] leading-none text-emerald-brand/20">
+                        {guide.name
+                          .split(" ")
+                          .map((p) => p[0])
+                          .join("")}
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
 
-              {/* Initials monogram */}
-              <div className="absolute inset-0 grid place-items-center">
-                <div className="text-center">
-                  <p className="font-display text-[7rem] leading-none text-emerald-brand/20">
-                    {guide.name
-                      .split(" ")
-                      .map((p) => p[0])
-                      .join("")}
-                  </p>
-                  <p className="mt-4 text-xs uppercase tracking-eyebrow text-bone/60">
-                    Foto · Por subir
-                  </p>
-                </div>
-              </div>
-
-              {/* Soft frequency lines */}
+              {/* Soft frequency lines decorativas */}
               <svg className="absolute inset-x-0 bottom-0 w-full" viewBox="0 0 400 80" aria-hidden>
                 {Array.from({ length: 4 }).map((_, i) => (
                   <path
                     key={i}
                     d={`M0 ${40 + i * 4} Q100 ${20 + i * 6} 200 ${40 + i * 4} T400 ${40 + i * 4}`}
                     stroke="#00C896"
-                    strokeOpacity={0.18 - i * 0.03}
+                    strokeOpacity={0.28 - i * 0.04}
                     strokeWidth="1"
                     fill="none"
                   />
                 ))}
               </svg>
+
+              {/* Label inferior */}
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/80">
+                <span>{guide.name}</span>
+                <span className="text-emerald-glow">● Guía AMARTE</span>
+              </div>
             </div>
           </motion.div>
         </div>
