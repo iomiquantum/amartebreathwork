@@ -1,0 +1,301 @@
+# 🚦 Coordinación de Sesiones Paralelas — AMARTE
+
+> **Propósito:** Permitir que múltiples sesiones de Claude trabajen en paralelo en este proyecto sin pisarse (sin merge conflicts ni duplicación de trabajo).
+> **Última actualización:** 2026-05-22
+
+---
+
+## 📖 SI ERES UNA SESIÓN NUEVA, LEE ESTO PRIMERO
+
+### Paso 1: Lee los documentos obligatorios EN ESTE ORDEN
+1. `ESTADO_PROYECTO.md` — fuente de verdad del proyecto (700+ líneas con todo)
+2. `TAREAS_PARALELAS.md` (este archivo) — qué hacer y qué NO tocar
+3. (Opcional según tu tarea):
+   - `PLAN_WHATSAPP_AUTOMATION.md` — si te toca WhatsApp Cloud API
+   - `AUDITORIA_SEGURIDAD.md` — si te toca anything de seguridad
+   - `AUDITORIA_LANDING.md` — si te toca UX/UI
+
+Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md --jq '.content' | base64 -d`
+
+### Paso 2: Verifica MCP de Supabase
+- Llama `list_organizations` → debe ver `Amarte Inc`
+- Llama `list_projects` → debe ver `amarteinc` ACTIVE_HEALTHY
+- Si no → pídele al usuario re-autorizar
+
+### Paso 3: Elige tu tarea de "Carriles libres" (ver abajo)
+- Anuncia en chat: "Voy a tomar tarea X (zona Y, archivos Z)"
+- Trabaja SOLO en los archivos que indica esa tarea
+- NO toques los archivos de "Carriles ocupados"
+
+---
+
+## 🚦 CARRILES OCUPADOS (NO TOQUES estos archivos)
+
+### Sesión Principal (tracking + pixels)
+**Archivos que NO debes modificar:**
+- `src/data/siteConfig.ts`
+- `src/lib/tracking.ts`
+- `src/lib/pixels.ts`
+- `src/App.tsx` (eventualmente; pregunta primero)
+- `index.html`
+- `vercel.json` (eventualmente)
+
+### Sesión WhatsApp Cloud API (si está activa)
+**Archivos que NO debes modificar:**
+- `supabase/functions/whatsapp-welcome/` (cuando la creen)
+- Database webhooks de breathwork_leads
+- Meta Pixel/WhatsApp Business config (lado externo)
+
+---
+
+## ✅ CARRILES LIBRES — Tareas disponibles para tomar
+
+> **Reglas:** Toma UNA tarea a la vez. Trabaja SOLO en los archivos que indica. Commit con mensaje claro `feat(zone-X): ...`. Cuando termines, marca aquí como `[DONE]` y commit.
+
+### 🎯 ALTO IMPACTO — Backend
+
+#### A. Páginas por evento `/evento/{slug}` [DISPONIBLE]
+- **Por qué:** SEO + ads segmentadas pueden apuntar a evento específico
+- **Tiempo:** 2 horas
+- **Archivos nuevos:**
+  - `src/components/EventPage.tsx`
+  - `src/lib/router.tsx` (instalar react-router-dom)
+- **Archivos modificar (con cuidado):**
+  - `src/main.tsx` (wrap con Router)
+  - `src/App.tsx` (Routes) — ⚠️ CONFIRMAR PRIMERO con sesión principal
+- **DB:** ya existe campo `slug` en `breathwork_events`
+- **Dependencias:** `npm install react-router-dom`
+
+#### B. PayPhone integración real [DISPONIBLE]
+- **Por qué:** sustituir el placeholder en ReservationModal con flujo real
+- **Tiempo:** 1-2 horas (depende de docs PayPhone)
+- **Necesita del usuario:** credenciales merchant PayPhone (Login token + token API)
+- **Archivos nuevos:**
+  - `supabase/functions/payphone-create-transaction/`
+  - `supabase/functions/payphone-callback/`
+  - `src/lib/payphone.ts`
+- **Archivos modificar:**
+  - `src/components/ReservationModal.tsx` (step payphone_placeholder → flujo real)
+  - `src/lib/supabase.ts` (helper para actualizar transaction_id en reserva)
+
+#### C. Resend email transaccional [DISPONIBLE]
+- **Por qué:** confirmar reservas + recordatorios + newsletter
+- **Tiempo:** 1 hora
+- **Necesita del usuario:** API key de resend.com (free tier 3000 emails/mes)
+- **Archivos nuevos:**
+  - `supabase/functions/send-reservation-email/`
+  - `supabase/functions/send-newsletter/`
+  - `supabase/functions/_shared/email-templates.ts`
+- **Webhooks:** crear webhook en breathwork_reservations al cambiar status='confirmed'
+
+#### D. Admin Dashboard `/admin` [DISPONIBLE]
+- **Por qué:** gestionar eventos, leads, reservas sin entrar a Supabase Studio
+- **Tiempo:** 2-3 horas
+- **Auth:** magic link de Supabase Auth (free)
+- **Archivos nuevos:**
+  - `src/pages/admin/Login.tsx`
+  - `src/pages/admin/Dashboard.tsx`
+  - `src/pages/admin/Events.tsx`
+  - `src/pages/admin/Reservations.tsx`
+  - `src/pages/admin/Leads.tsx`
+- **Modificar:** `src/App.tsx` (rutas /admin/*) — ⚠️ COORDINAR
+- **DB:** authenticated role ya tiene acceso completo, no necesita más policies
+
+#### E. Recordatorio 24h antes del evento [DISPONIBLE — pero después de WhatsApp Cloud API]
+- **Depende:** WhatsApp Cloud API debe estar funcionando primero
+- **Tiempo:** 45 min
+- **Archivos nuevos:**
+  - `supabase/functions/event-reminder-cron/`
+- **Cron:** Supabase pg_cron o Vercel Cron Jobs
+- **Logic:** SELECT reservations confirmed con event_date BETWEEN now() AND now() + interval '24 hours'
+
+#### F. Backup automático de DB [DISPONIBLE]
+- **Por qué:** Supabase Free NO incluye backups automáticos
+- **Tiempo:** 30 min
+- **Solución:** Supabase Edge Function que ejecuta pg_dump y guarda en Storage o envía a email
+- **Archivos nuevos:**
+  - `supabase/functions/daily-backup/`
+- **Cron:** diario 4am
+
+### 🎨 MEDIO IMPACTO — Frontend / UX
+
+#### G. Geolocalización país automática [DISPONIBLE — COORDINAR con sesión principal]
+- **Por qué:** pre-seleccionar país del usuario en WhatsappGateModal
+- **Tiempo:** 30 min
+- **Archivos nuevos:**
+  - `src/lib/geolocation.ts`
+- **Modificar (LIGHT):** `src/components/WhatsappGateModal.tsx` — agregar useEffect
+  - ⚠️ Si la sesión principal está editando WhatsappGateModal, esperar
+- **Método:** Vercel Edge header `x-vercel-ip-country` o `https://ipapi.co/json/`
+
+#### H. Sentry integration [DISPONIBLE]
+- **Por qué:** error tracking en producción
+- **Tiempo:** 15 min
+- **Necesita del usuario:** Sentry DSN (free tier)
+- **Archivos nuevos:** `src/lib/sentry.ts`
+- **Modificar (LIGHT):** `src/main.tsx` (init Sentry) — ⚠️ COORDINAR
+
+#### I. Logo gráfico AMARTE [DISPONIBLE — diseño]
+- **Por qué:** hoy el "logo" es solo un punto verde
+- **Tiempo:** 1-2h (con tool de diseño)
+- **Archivos nuevos:**
+  - `public/logo.svg`
+  - `public/logo-dark.svg`
+- **Modificar:** `src/components/Header.tsx` (reemplazar el punto verde)
+- **Inspiración:** símbolo de respiración, onda sonora, círculo zen
+
+#### J. og-image.png profesional [DISPONIBLE — diseño]
+- **Por qué:** WhatsApp no renderiza bien el SVG actual al compartir
+- **Tiempo:** 30 min con tool de diseño
+- **Archivos nuevos:** `public/og-image.png` (1200×630)
+- **Modificar:** `index.html` (meta og:image)
+
+#### K. Real gallery photos [DISPONIBLE — requiere fotos]
+- **Por qué:** la galería ahora son íconos placeholder
+- **Tiempo:** 30 min (después de tener fotos)
+- **Archivos nuevos:** `public/gallery/1.jpg`, `2.jpg`, etc.
+- **Modificar:** `src/components/Gallery.tsx` (renderizar imágenes en vez de íconos)
+
+### 💎 BAJO IMPACTO — Polish
+
+#### L. Mobile UI refinements [DISPONIBLE]
+- Hero floating chips overflow en iPhone SE
+- Header mobile drawer AnimatePresence wrapper
+- **Tiempo:** 30 min
+- **Archivos modificar:** `src/components/Hero.tsx`, `src/components/Header.tsx`
+
+#### M. Accessibility audit avanzado [DISPONIBLE]
+- aria-labels que falten
+- Contraste de colores text-bone/60 sobre fondos oscuros
+- Keyboard navigation
+- **Tiempo:** 1h
+- **Tool:** axe DevTools / Lighthouse
+
+#### N. Per-component bundle optimization [DISPONIBLE]
+- Identificar si algún componente lazy es demasiado grande
+- Code splitting más granular
+- **Tiempo:** 1h
+- **Tool:** `npm run build` + analizar dist/
+
+#### O. PWA support / Service Worker [DISPONIBLE]
+- Ya tienes manifest.webmanifest, solo falta SW
+- Permite "Add to Home Screen" en móviles
+- **Tiempo:** 1h
+- **Archivos nuevos:** `public/sw.js`, `src/lib/pwa.ts`
+
+### 📋 CONTENIDO
+
+#### P. Plan editorial Instagram/TikTok 30 días [DISPONIBLE]
+- Calendario de posts
+- Ideas de Reels
+- Carruseles educativos
+- Hashtags strategy
+- **Archivos nuevos:** `docs/CONTENIDO_REDES.md`
+
+#### Q. Email templates (welcome sequence) [DISPONIBLE]
+- 7 emails de bienvenida
+- Tono cálido y profundo
+- **Archivos nuevos:** `docs/EMAIL_TEMPLATES.md` o templates HTML directamente
+
+#### R. Plan Meta Ads completo [DISPONIBLE]
+- Audiencias custom
+- Copy de 5-10 anuncios
+- Budget plan
+- KPIs
+- **Archivos nuevos:** `docs/PLAN_META_ADS.md`
+
+---
+
+## 🛡️ REGLAS CRÍTICAS (RESPECT THESE)
+
+### 1. UN archivo = UNA sesión a la vez
+Si vas a editar un archivo que sospechas que otra sesión esté usando, **pregunta al usuario primero**. Es mejor esperar 30 segundos que tener un merge conflict.
+
+### 2. Tareas que toquen src/App.tsx COORDINAR
+App.tsx es el orquestador. Múltiples sesiones podrían querer agregar Suspense, providers, rutas. **Antes de modificar App.tsx, pregunta al usuario qué otras sesiones están activas.**
+
+### 3. NUNCA modifiques migraciones Supabase aplicadas
+Las migraciones aplicadas (visibles en `list_migrations`) son inmutables. Si necesitas cambiar schema, crea NUEVA migration.
+
+### 4. NUNCA toques siteConfig.ts si la sesión principal está activa
+Esta sesión la edita frecuentemente para integrar IDs de pixels.
+
+### 5. Commits descriptivos
+- Formato: `<tipo>(<zona>): <descripción>`
+- Tipos: `feat`, `fix`, `docs`, `style`, `refactor`, `chore`, `security`
+- Ejemplo: `feat(payphone): integrar SDK PayPhone Web Box`
+- Incluye `Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>`
+
+### 6. Build verification antes de push
+- Siempre `npm run build` antes de commit
+- Si hay TS errors → arreglar antes de push
+- Bundle no debe crecer > 50KB sin razón clara
+
+### 7. Test antes de cantar victoria
+- Si tocas backend (Supabase function) → invocala con datos de prueba
+- Si tocas frontend → mira el sitio en producción tras Vercel deploy (~1 min)
+
+### 8. Si encuentras un bug NO relacionado
+- Si encuentras un bug que no es de tu zona, **avísale al usuario** pero no lo arregles a menos que sea trivial
+- Documéntalo aquí en una sección "Bugs encontrados pendientes"
+
+---
+
+## 📊 ESTADO DE TAREAS (actualizar al tomar / terminar)
+
+| Tarea | Estado | Sesión asignada | Iniciado | Terminado |
+|---|---|---|---|---|
+| A. Per-event pages | Disponible | — | — | — |
+| B. PayPhone | Disponible | — | — | — |
+| C. Resend email | Disponible | — | — | — |
+| D. Admin dashboard | Disponible | — | — | — |
+| E. Recordatorio 24h | Bloqueada (espera WhatsApp) | — | — | — |
+| F. Backup auto | Disponible | — | — | — |
+| G. Geolocation | Disponible | — | — | — |
+| H. Sentry | Disponible | — | — | — |
+| I. Logo gráfico | Disponible | — | — | — |
+| J. og-image PNG | Disponible | — | — | — |
+| K. Gallery photos | Bloqueada (espera fotos) | — | — | — |
+| L. Mobile refinements | Disponible | — | — | — |
+| M. A11y audit | Disponible | — | — | — |
+| N. Bundle optim | Disponible | — | — | — |
+| O. PWA / SW | Disponible | — | — | — |
+| P. Plan editorial redes | Disponible | — | — | — |
+| Q. Email templates | Disponible | — | — | — |
+| R. Plan Meta Ads | Disponible | — | — | — |
+
+---
+
+## 🚨 PROTOCOLO DE EMERGENCIA
+
+### Si hay merge conflict
+1. NO hagas force push
+2. Pull primero: `git pull origin main --rebase`
+3. Resolver conflicto manualmente (preserva los cambios de ambas sesiones si posible)
+4. Re-push
+
+### Si rompes algo en producción
+1. Git revert al último commit que funcionaba
+2. Push
+3. Diagnostica el problema
+4. Avísale al usuario QUÉ se rompió y qué hiciste para revertir
+
+### Si Supabase deja de responder
+1. Verifica MCP: `list_projects` debe retornar
+2. Si no → pide al usuario verificar en supabase.com que el proyecto siga activo
+3. Si está pausado → pide unpause
+
+---
+
+## 📝 BUGS ENCONTRADOS PENDIENTES (cualquier sesión puede registrar)
+
+(Ninguno reportado al momento. Si encuentras uno, agrégalo aquí con: archivo, línea, severidad, descripción.)
+
+---
+
+## 🌿 Documento vivo
+
+Este archivo se actualiza por cualquier sesión que tome o termine una tarea. Si haces cambio de estado, **commit con mensaje** `chore(parallel): actualizar estado tarea X`.
+
+**Generado:** 2026-05-22
+**Mantenido por:** todas las sesiones Claude activas en el proyecto
