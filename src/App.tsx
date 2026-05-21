@@ -13,7 +13,7 @@ import { SideRail } from "./components/SideRail";
 import { ToastProvider } from "./lib/toast";
 import { WhatsappGateProvider } from "./lib/whatsappGate";
 import { WhatsappGateModal } from "./components/WhatsappGateModal";
-import { trackPageView } from "./lib/tracking";
+import { trackPageView, initEngagementTracking, captureUtmParams } from "./lib/tracking";
 
 // Lazy below-the-fold sections
 const ExperienceSection = lazy(() =>
@@ -111,9 +111,15 @@ const WaveDivider = lazy(() =>
 
 function App() {
   useEffect(() => {
-    // Inicializa Meta Pixel + GA4 + TikTok Pixel si tienen IDs en siteConfig
+    // 1. Cargar Meta + GA4 + TikTok + Clarity (si tienen IDs en siteConfig)
     import("./lib/pixels").then(({ initPixels }) => initPixels());
+    // 2. Track PageView inicial
     trackPageView();
+    // 3. Capturar UTM params si vienen en la URL (para tracking de campañas)
+    captureUtmParams();
+    // 4. Iniciar tracking de scroll depth + time on page
+    const cleanup = initEngagementTracking();
+    return cleanup;
   }, []);
 
   return (

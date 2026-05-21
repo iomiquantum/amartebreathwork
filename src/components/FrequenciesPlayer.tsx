@@ -12,6 +12,7 @@ import { Play, Pause, Headphones, Volume2, Info } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
 import { SectionHeader } from "./SectionHeader";
 import { usePrefersReducedMotion } from "../lib/useReducedMotion";
+import { trackFrequencyPlay } from "../lib/tracking";
 
 const DURATION_SEC = 40;
 const FADE_SEC = 1.5;
@@ -115,6 +116,9 @@ export function FrequenciesPlayer() {
     gainRef.current = gain;
     setActiveHz(hz);
     setRemaining(DURATION_SEC);
+
+    // Track engagement (señal de alta intención)
+    trackFrequencyPlay(hz);
 
     // Tick countdown
     let secsLeft = DURATION_SEC;

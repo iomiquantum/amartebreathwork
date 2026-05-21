@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { fetchUpcomingEvents, type EventRow } from "../lib/supabase";
 import { useWhatsappCTA } from "../lib/whatsapp";
+import { trackAddToCart, trackViewContent } from "../lib/tracking";
 import { SectionHeader } from "./SectionHeader";
 import { downloadICS } from "../lib/calendar";
 import { siteConfig } from "../data/siteConfig";
@@ -277,7 +278,11 @@ export function EventsCalendar() {
                             <button
                               type="button"
                               disabled={e.status === "sold_out" || e.spots_available <= 0}
-                              onClick={() => setSelectedEvent(e)}
+                              onClick={() => {
+                                trackAddToCart(e.title, e.deposit_amount ?? 20, e.id);
+                                trackViewContent(e.title, e.id);
+                                setSelectedEvent(e);
+                              }}
                               className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-emerald-brand px-5 text-xs font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               <CreditCard className="size-3.5" strokeWidth={1.8} />

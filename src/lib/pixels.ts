@@ -1,11 +1,12 @@
 // Inicialización de pixels de marketing.
-// Cuando llenes los IDs en siteConfig.ts (metaPixelId, gaMeasurementId, tiktokPixelId),
-// estos scripts se cargan automáticamente. Si están vacíos, no se carga nada.
+// Cuando llenes los IDs en siteConfig.ts, estos scripts se cargan automáticamente.
+// Si están vacíos, no se carga nada (útil en dev).
 //
 // IDs necesarios:
 // - Meta Pixel: business.facebook.com → Events Manager → tu pixel → Settings
 // - Google Analytics 4: analytics.google.com → Admin → Data Streams → Web → Measurement ID
 // - TikTok Pixel: ads.tiktok.com → Events → Web Events → Pixel ID
+// - Microsoft Clarity: clarity.microsoft.com → Project Settings → Setup → Project ID
 
 import { siteConfig } from "../data/siteConfig";
 
@@ -15,7 +16,7 @@ export function initPixels() {
   if (initialized || typeof window === "undefined") return;
   initialized = true;
 
-  const { metaPixelId, gaMeasurementId, tiktokPixelId } = siteConfig;
+  const { metaPixelId, gaMeasurementId, tiktokPixelId, clarityProjectId } = siteConfig;
 
   // ── Meta Pixel (Facebook + Instagram Ads) ──────────────────────────
   if (metaPixelId) {
@@ -111,6 +112,23 @@ export function initPixels() {
       ttq.load(tiktokPixelId);
       ttq.page();
     })(window, document, "ttq");
+    /* eslint-enable */
+  }
+
+  // ── Microsoft Clarity (heatmaps + session recordings) ──────────────
+  // Free, ilimitado, GDPR-compliant. Game-changer para entender UX.
+  if (clarityProjectId) {
+    /* eslint-disable */
+    (function (c: any, l: any, a: any, r: any, i: any) {
+      c[a] = c[a] || function () {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      const t = l.createElement(r);
+      t.async = 1;
+      t.src = "https://www.clarity.ms/tag/" + i;
+      const y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", clarityProjectId);
     /* eslint-enable */
   }
 }

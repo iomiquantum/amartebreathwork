@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, X, Wind } from "lucide-react";
 import { useWhatsappCTA } from "../lib/whatsapp";
+import { trackExitIntent } from "../lib/tracking";
 
 const STORAGE_KEY = "amarte_exit_seen";
 
@@ -24,6 +25,7 @@ export function ExitIntent() {
       if (e.relatedTarget) return;
       sessionStorage.setItem(STORAGE_KEY, "1");
       setOpen(true);
+      trackExitIntent();
     };
 
     document.documentElement.addEventListener("mouseleave", onLeave);

@@ -42,7 +42,7 @@ import {
   type PaymentMethod,
 } from "../lib/supabase";
 import { siteConfig } from "../data/siteConfig";
-import { trackLeadFormSubmit } from "../lib/tracking";
+import { trackLeadFormSubmit, trackInitiateCheckout, trackCompleteRegistration } from "../lib/tracking";
 
 interface Props {
   event: EventRow | null;
@@ -78,12 +78,14 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
     }
   }, [isOpen]);
 
-  // Cargar datos bancarios al abrir
+  // Cargar datos bancarios al abrir + track InitiateCheckout
   useEffect(() => {
-    if (isOpen && !bank) {
-      fetchBankConfig().then(setBank);
+    if (isOpen && event) {
+      if (!bank) fetchBankConfig().then(setBank);
+      trackInitiateCheckout(event.title, depositAmount, event.id);
     }
-  }, [isOpen, bank]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, event?.id]);
 
   const cleanPhone = useMemo(() => sanitizePhone(phone, country.code), [phone, country.code]);
   const phoneFull = `+${country.code}${cleanPhone}`;
@@ -124,6 +126,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
       event_id: event.id,
       amount: depositAmount,
     });
+    trackCompleteRegistration(`reservation_${method}`);
     setStatus("idle");
 
     if (method === "transferencia") {

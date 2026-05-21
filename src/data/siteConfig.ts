@@ -169,6 +169,7 @@ export const siteConfig = {
   metaPixelId: "", // Ej: "1234567890123456" (de business.facebook.com → Events Manager)
   gaMeasurementId: "", // Ej: "G-XXXXXXXXXX" (de analytics.google.com)
   tiktokPixelId: "", // Ej: "C..." (de TikTok Ads Manager)
+  clarityProjectId: "", // Ej: "abcd1234ef" (de clarity.microsoft.com → Setup)
 
   // Newsletter (Supabase tabla `subscribers` opcional)
   newsletter: {
