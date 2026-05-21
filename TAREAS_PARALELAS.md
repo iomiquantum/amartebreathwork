@@ -109,13 +109,12 @@ Comando: `gh api repos/iomiquantum/amartebreathwork/contents/ESTADO_PROYECTO.md 
 - **Cron:** Supabase pg_cron o Vercel Cron Jobs
 - **Logic:** SELECT reservations confirmed con event_date BETWEEN now() AND now() + interval '24 hours'
 
-#### F. Backup automático de DB [DISPONIBLE]
-- **Por qué:** Supabase Free NO incluye backups automáticos
-- **Tiempo:** 30 min
-- **Solución:** Supabase Edge Function que ejecuta pg_dump y guarda en Storage o envía a email
-- **Archivos nuevos:**
-  - `supabase/functions/daily-backup/`
-- **Cron:** diario 4am
+#### F. Backup automático de DB ✅ [DONE — 2026-05-21]
+- **Implementado:** Edge Function `daily-backup` deployed + `pg_cron` job `daily-backup-amarte` a 04:00 UTC (23:00 Ecuador)
+- **Storage:** bucket privado `backups`, retention 30 días, ruta `YYYY-MM-DD/backup-{ISO}.json`
+- **Auth:** shared secret en `vault.secrets` (name='backup_secret'), expuesto vía RPC `get_backup_secret()` restringido a service_role
+- **Test E2E:** ejecutado con status 200, 5 tablas dumpeadas, 4.6KB, 530ms
+- **Archivos:** `supabase/functions/daily-backup/index.ts`, `supabase/functions/daily-backup/README.md`, `supabase/migrations/20260521170000_daily_backup_infra.sql`
 
 ### 🎨 MEDIO IMPACTO — Frontend / UX
 
@@ -250,7 +249,7 @@ Esta sesión la edita frecuentemente para integrar IDs de pixels.
 | C. Resend email | Disponible | — | — | — |
 | D. Admin dashboard | Disponible | — | — | — |
 | E. Recordatorio 24h | Bloqueada (espera WhatsApp) | — | — | — |
-| F. Backup auto | Disponible | — | — | — |
+| F. Backup auto | **[DONE]** | claude-opus-4-7 (paralela) | 2026-05-21 | 2026-05-21 |
 | G. Geolocation | Disponible | — | — | — |
 | H. Sentry | Disponible | — | — | — |
 | I. Logo gráfico | Disponible | — | — | — |
