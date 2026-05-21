@@ -69,13 +69,28 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    // 1. Cargar Meta + GA4 + TikTok + Clarity (si tienen IDs en siteConfig)
+    // 1. Cargar Meta + GA4 + TikTok + Clarity SOLO si el usuario ya aceptó cookies.
+    //    Si aún no decidió (unset) o declinó, no cargamos pixels.
+    //    Si después acepta vía CookieBanner, escuchamos el evento y cargamos.
     import("./lib/pixels").then(({ initPixels }) => initPixels());
+
+    let unsubConsent: (() => void) | undefined;
+    import("./lib/consent").then(({ onConsentChange }) => {
+      unsubConsent = onConsentChange((state) => {
+        if (state === "accepted") {
+          import("./lib/pixels").then(({ initPixels }) => initPixels());
+        }
+      });
+    });
+
     // 2. Capturar UTM params si vienen en la URL (para tracking de campañas)
     captureUtmParams();
-    // 3. Iniciar tracking de scroll depth + time on page
+    // 3. Iniciar tracking de scroll depth + time on page (no requiere consent)
     const cleanup = initEngagementTracking();
-    return cleanup;
+    return () => {
+      cleanup?.();
+      unsubConsent?.();
+    };
   }, []);
 
   // Track PageView en cada cambio de ruta

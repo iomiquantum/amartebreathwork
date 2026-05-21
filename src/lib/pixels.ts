@@ -9,11 +9,14 @@
 // - Microsoft Clarity: clarity.microsoft.com → Project Settings → Setup → Project ID
 
 import { siteConfig } from "../data/siteConfig";
+import { hasMarketingConsent } from "./consent";
 
 let initialized = false;
 
 export function initPixels() {
   if (initialized || typeof window === "undefined") return;
+  // GDPR/LGPD: no cargar pixels de marketing hasta que el usuario acepte cookies.
+  if (!hasMarketingConsent()) return;
   initialized = true;
 
   const { metaPixelId, gaMeasurementId, tiktokPixelId, clarityProjectId } = siteConfig;

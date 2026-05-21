@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cookie } from "lucide-react";
-
-const KEY = "amarte_cookie_consent";
+import { getConsent, setConsent } from "../lib/consent";
 
 export function CookieBanner() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (localStorage.getItem(KEY)) return;
+    if (getConsent() !== "unset") return;
     const t = setTimeout(() => setShow(true), 1500);
     return () => clearTimeout(t);
   }, []);
 
   const accept = () => {
-    localStorage.setItem(KEY, "accepted");
+    setConsent("accepted");
     setShow(false);
   };
   const decline = () => {
-    localStorage.setItem(KEY, "declined");
+    setConsent("declined");
     setShow(false);
   };
 
