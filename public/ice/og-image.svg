@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="60%">
+      <stop offset="0%" stop-color="#0F2438"/>
+      <stop offset="55%" stop-color="#06131F"/>
+      <stop offset="100%" stop-color="#050505"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7DD3FC" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#22D3EE" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="word" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EAFBFF"/>
+      <stop offset="50%" stop-color="#7DD3FC"/>
+      <stop offset="100%" stop-color="#5EEAD4"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7DD3FC" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#22D3EE" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#5EEAD4" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Frequency lines -->
+  <g opacity="0.6">
+    <path d="M0 200 Q 300 175 600 200 T 1200 200" stroke="url(#line)" stroke-width="1" fill="none"/>
+    <path d="M0 230 Q 300 205 600 235 T 1200 230" stroke="url(#line)" stroke-width="1" fill="none"/>
+    <path d="M0 270 Q 300 245 600 275 T 1200 270" stroke="url(#line)" stroke-width="1" fill="none"/>
+    <path d="M0 320 Q 300 295 600 325 T 1200 320" stroke="url(#line)" stroke-width="1" fill="none"/>
+    <path d="M0 380 Q 300 360 600 390 T 1200 380" stroke="url(#line)" stroke-width="1" fill="none"/>
+    <path d="M0 440 Q 300 420 600 450 T 1200 440" stroke="url(#line)" stroke-width="1" fill="none"/>
+  </g>
+
+  <!-- Center glow -->
+  <circle cx="600" cy="315" r="320" fill="url(#glow)"/>
+
+  <!-- Concentric rings -->
+  <g stroke="#7DD3FC" fill="none">
+    <circle cx="600" cy="315" r="260" stroke-opacity="0.10"/>
+    <circle cx="600" cy="315" r="200" stroke-opacity="0.18"/>
+    <circle cx="600" cy="315" r="140" stroke-opacity="0.32"/>
+  </g>
+
+  <!-- Mark / breath core -->
+  <g transform="translate(600 315)">
+    <circle r="60" fill="#7DD3FC" fill-opacity="0.18"/>
+    <circle r="38" fill="#EAFBFF" fill-opacity="0.95"/>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="600" y="100" text-anchor="middle"
+        font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+        font-size="18" font-weight="600"
+        letter-spacing="6" fill="#7DD3FC">
+    EXPERIENCIAS INMERSIVAS DE HIELO
+  </text>
+
+  <!-- Title -->
+  <text x="600" y="510" text-anchor="middle"
+        font-family="'Sora', system-ui, sans-serif"
+        font-size="62" font-weight="800" fill="#EAFBFF">
+    No es solo entrar al hielo.
+  </text>
+  <text x="600" y="572" text-anchor="middle"
+        font-family="'Sora', system-ui, sans-serif"
+        font-size="62" font-weight="800" fill="url(#word)">
+    Es aprender a respirar dentro del frío.
+  </text>
+</svg>

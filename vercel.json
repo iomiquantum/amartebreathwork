@@ -2,7 +2,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "rewrites": [
+    { "source": "/be-on", "destination": "https://amarte-be-on-web.vercel.app/be-on" },
+    { "source": "/be-on/:path*", "destination": "https://amarte-be-on-web.vercel.app/be-on/:path*" },
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
