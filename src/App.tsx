@@ -47,6 +47,11 @@ const TestPage = lazy(() =>
   import("./pages/TestPage").then((m) => ({ default: m.TestPage }))
 );
 
+// Lazy: hub presentaciones
+const PresentacionesPage = lazy(() =>
+  import("./pages/PresentacionesPage").then((m) => ({ default: m.PresentacionesPage }))
+);
+
 // Lazy: NotFoundPage para rutas no reconocidas
 const NotFoundPage = lazy(() =>
   import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage }))
@@ -74,9 +79,7 @@ const AdminLeads = lazy(() =>
 
 // Lazy: globales footer-zone
 const Footer = lazy(() => import("./components/Footer").then((m) => ({ default: m.Footer })));
-const ExitIntent = lazy(() =>
-  import("./components/ExitIntent").then((m) => ({ default: m.ExitIntent }))
-);
+// ExitIntent desactivado a pedido: el popup de salida interrumpía la navegación
 const CookieBanner = lazy(() =>
   import("./components/CookieBanner").then((m) => ({ default: m.CookieBanner }))
 );
@@ -207,6 +210,14 @@ function App() {
               }
             />
             <Route
+              path="/presentaciones"
+              element={
+                <Suspense fallback={<div className="min-h-screen" />}>
+                  <PresentacionesPage />
+                </Suspense>
+              }
+            />
+            <Route
               path="*"
               element={
                 <Suspense fallback={<div className="min-h-screen bg-ink" />}>
@@ -217,7 +228,6 @@ function App() {
           </Routes>
           <Suspense fallback={null}>
             <Footer />
-            <ExitIntent />
             <CookieBanner />
           </Suspense>
           <FloatingWhatsappButton />
