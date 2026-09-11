@@ -40,6 +40,9 @@ const STATIC_ROUTES = [
   { loc: `${SITE_URL}/mujeres`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE_URL}/hombres`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE_URL}/jovenes`, priority: "0.9", changefreq: "weekly" },
+  { loc: `${SITE_URL}/presentaciones`, priority: "0.9", changefreq: "weekly" },
+  { loc: `${SITE_URL}/proceso`, priority: "0.7", changefreq: "monthly" },
+  { loc: `${SITE_URL}/sobre-amarte`, priority: "0.7", changefreq: "monthly" },
 ];
 
 function escapeXml(str) {
