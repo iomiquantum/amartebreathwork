@@ -31,14 +31,29 @@ const vercel = JSON.parse(
   readFileSync(join(root, "vercel.json"), "utf8"),
 );
 const rewrites = vercel.rewrites ?? [];
+const BACKEND = "https://amarte-be-on-web.vercel.app";
 check(
   rewrites.some(
     (r) =>
       r.source === "/be-on/:path*" &&
-      String(r.destination).includes("/be-on/:path*"),
+      r.destination === `${BACKEND}/:path*`,
   ),
-  "vercel.json proxea /be-on/:path* al backend",
+  "vercel.json proxea /be-on/:path* al backend (sin prefijo)",
 );
+check(
+  rewrites.some(
+    (r) =>
+      r.source === "/_next/:path*" &&
+      r.destination === `${BACKEND}/_next/:path*`,
+  ),
+  "vercel.json proxea /_next/* al backend",
+);
+for (const route of ["/comunidad", "/respira", "/manifiesto", "/gracias"]) {
+  check(
+    rewrites.some((r) => r.source === route),
+    `vercel.json proxea ${route} al backend`,
+  );
+}
 
 const hub = readFileSync(
   join(root, "src", "pages", "PresentacionesPage.tsx"),
