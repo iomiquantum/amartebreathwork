@@ -95,7 +95,7 @@ export function CorporateSection() {
                 </div>
               </div>
 
-              <div className="absolute bottom-5 left-5 right-5 text-[10px] uppercase tracking-eyebrow text-bone/60">
+              <div className="absolute bottom-5 left-5 right-5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/60">
                 <span className="text-emerald-brand">●</span> Sesión privada · Equipo completo
               </div>
             </div>

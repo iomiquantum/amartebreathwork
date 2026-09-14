@@ -11,12 +11,25 @@ export function FinalCTA() {
       id="final-cta"
       className="relative isolate overflow-hidden bg-ink py-24 sm:py-32"
     >
-      {/* Real photo background */}
-      <div
+      {/* Real photo background — decorativa (aria-hidden): <picture> con
+          AVIF/WebP + fallback JPG en lugar de CSS background para ahorrar bytes.
+          Bajo el fold: loading lazy. */}
+      <picture
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-        style={{ backgroundImage: "url(/sections/final-cta-bg.jpg)" }}
-      />
+        className="pointer-events-none absolute inset-0 opacity-30"
+      >
+        <source type="image/avif" srcSet="/sections/final-cta-bg.avif" />
+        <source type="image/webp" srcSet="/sections/final-cta-bg.webp" />
+        <img
+          src="/sections/final-cta-bg.jpg"
+          alt=""
+          width={1600}
+          height={900}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 size-full object-cover object-center"
+        />
+      </picture>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/70 to-ink" />
       <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-80" />
       <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-40" />

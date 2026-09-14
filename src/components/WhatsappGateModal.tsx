@@ -4,7 +4,7 @@
 //
 // Una vez completado, queda en localStorage → próximas veces directo al grupo (sin form).
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   MessageCircle,
@@ -16,7 +16,10 @@ import {
 } from "lucide-react";
 import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../data/countries";
 import { siteConfig } from "../data/siteConfig";
-import { submitLead, sanitizePhone, isValidEmail } from "../lib/supabase";
+// NOTA lazy: sanitizePhone/isValidEmail son funciones puras sin dependencias
+// pesadas (import estático barato). submitLead se carga con import() dinámico
+// al enviar, para no meter el chunk @supabase (~196KB) en el primer pintado.
+import { sanitizePhone, isValidEmail } from "../lib/supabase";
 import { useWhatsappGate } from "../lib/whatsappGate";
 import { detectCountry } from "../lib/geolocation";
 import {
@@ -65,11 +68,13 @@ export function WhatsappGateModal() {
 
   // Geolocation: solo cuando el modal abre por primera vez, intenta detectar país.
   // No reemplaza si el usuario ya cambió manualmente (country !== DEFAULT_COUNTRY).
-  const [geoTried, setGeoTried] = useState(false);
+  // ref (no estado): solo la lee este efecto, nunca el render → evita
+  // setState-in-effect y un re-render sin cambio visible.
+  const geoTriedRef = useRef(false);
   useEffect(() => {
-    if (!isOpen || geoTried) return;
+    if (!isOpen || geoTriedRef.current) return;
     if (country.code !== DEFAULT_COUNTRY.code) {
-      setGeoTried(true);
+      geoTriedRef.current = true;
       return;
     }
     const controller = new AbortController();
@@ -77,7 +82,7 @@ export function WhatsappGateModal() {
       if (detected && country.code === DEFAULT_COUNTRY.code) {
         setCountry(detected);
       }
-      setGeoTried(true);
+      geoTriedRef.current = true;
     });
     return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,36 +103,48 @@ export function WhatsappGateModal() {
     const whatsappFull = `+${country.code}${cleanPhone}`;
     const cleanEmail = email.trim().toLowerCase();
 
-    const res = await submitLead({
-      name: name.trim(),
-      whatsapp: whatsappFull,
-      countryCode: country.code,
-      countryName: country.name,
-      email: cleanEmail || undefined,
-      source: `whatsapp_gate:${source}`,
-      honeypot, // si bot llenó campo trampa, será rechazado server-side
-    });
+    try {
+      // Import dinámico: el chunk @supabase se descarga al enviar, no antes.
+      const { submitLead, toFriendlySupabaseError } = await import("../lib/supabase");
+      let res: { ok: boolean; error?: string };
+      try {
+        res = await submitLead({
+          name: name.trim(),
+          whatsapp: whatsappFull,
+          countryCode: country.code,
+          countryName: country.name,
+          email: cleanEmail || undefined,
+          source: `whatsapp_gate:${source}`,
+          honeypot, // si bot llenó campo trampa, será rechazado server-side
+        });
+      } catch (submitErr) {
+        res = { ok: false, error: toFriendlySupabaseError(submitErr) };
+      }
 
-    if (res.ok) {
-      setStatus("success");
-      trackLeadFormSubmit({
-        source: `whatsapp_gate:${source}`,
-        country: country.code,
-        has_email: Boolean(cleanEmail),
-      });
+      if (res.ok) {
+        setStatus("success");
+        trackLeadFormSubmit({
+          source: `whatsapp_gate:${source}`,
+          country: country.code,
+          has_email: Boolean(cleanEmail),
+        });
 
-      // Guardar lead en context + localStorage
-      markRegistered({
-        name: name.trim(),
-        whatsapp: whatsappFull,
-        countryCode: country.code,
-        countryName: country.name,
-        email: cleanEmail || undefined,
-        registeredAt: new Date().toISOString(),
-      });
-    } else {
+        // Guardar lead en context + localStorage
+        markRegistered({
+          name: name.trim(),
+          whatsapp: whatsappFull,
+          countryCode: country.code,
+          countryName: country.name,
+          email: cleanEmail || undefined,
+          registeredAt: new Date().toISOString(),
+        });
+      } else {
+        setStatus("error");
+        setError(res.error ?? "No pudimos guardar tus datos. Intenta de nuevo.");
+      }
+    } catch {
       setStatus("error");
-      setError(res.error ?? "No pudimos guardar tus datos. Intenta de nuevo.");
+      setError("No pudimos cargar el registro. Revisa tu internet e inténtalo de nuevo.");
     }
   }
 
@@ -163,7 +180,7 @@ export function WhatsappGateModal() {
             <button
               onClick={closeGate}
               aria-label="Cerrar"
-              className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-white/10 bg-ink/60 text-bone/70 backdrop-blur transition-colors hover:border-bone/30 hover:text-bone"
+              className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-white/10 bg-ink/60 text-bone/70 backdrop-blur transition-colors hover:border-bone/30 hover:text-bone relative before:absolute before:-inset-2 before:content-['']"
             >
               <X className="size-4" />
             </button>
@@ -177,7 +194,7 @@ export function WhatsappGateModal() {
                       <Lock className="size-4 text-emerald-glow" strokeWidth={1.6} />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+                      <p className="text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-brand">
                         Grupo privado
                       </p>
                       <h3 id="gate-title" className="font-display text-xl text-bone">
@@ -258,7 +275,7 @@ export function WhatsappGateModal() {
                           className="h-11 flex-1 rounded-xl border border-white/10 bg-white/[0.025] px-4 text-sm text-bone placeholder:text-muted/70 focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20"
                         />
                       </div>
-                      <p className="mt-1.5 text-[11px] text-muted">
+                      <p className="mt-1.5 text-xs sm:text-[11px] text-muted">
                         País: <span className="text-bone/80">{country.name}</span> · Cambia si tu WhatsApp es de otro país
                       </p>
                     </div>
@@ -279,23 +296,23 @@ export function WhatsappGateModal() {
                           className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.025] pl-10 pr-4 text-sm text-bone placeholder:text-muted/70 focus:border-emerald-brand/50 focus:outline-none focus:ring-2 focus:ring-emerald-brand/20"
                         />
                       </div>
-                      <p className="mt-1.5 text-[11px] text-muted">
+                      <p className="mt-1.5 text-xs sm:text-[11px] text-muted">
                         Recibe 1 email mensual con todos los eventos del mes. Sin spam.
                       </p>
                     </div>
 
                     {/* Consent */}
-                    <div className="rounded-xl border border-emerald-brand/15 bg-emerald-deep/15 p-3 text-[11px] leading-relaxed text-bone/75">
+                    <div className="rounded-xl border border-emerald-brand/15 bg-emerald-deep/15 p-3 text-xs sm:text-[11px] leading-relaxed text-bone/75">
                       Al continuar aceptas recibir información de AMARTE por WhatsApp.
                       Puedes salirte cuando quieras.{" "}
-                      <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="underline decoration-emerald-brand/40 hover:text-emerald-glow">
+                      <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="py-0.5 underline decoration-emerald-brand/40 hover:text-emerald-glow">
                         Privacidad
                       </a>
                       .
                     </div>
 
                     {error && (
-                      <p className="text-sm text-red-400" role="alert">
+                      <p className="text-base text-red-300" role="alert">
                         {error}
                       </p>
                     )}

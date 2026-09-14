@@ -66,7 +66,7 @@ export function Countdown({ compact = false }: Props) {
           <p className="font-display text-2xl tabular-nums text-bone sm:text-3xl">
             {String(c.value).padStart(2, "0")}
           </p>
-          <p className="mt-1 text-[10px] uppercase tracking-eyebrow text-muted">
+          <p className="mt-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">
             {c.label}
           </p>
         </motion.div>

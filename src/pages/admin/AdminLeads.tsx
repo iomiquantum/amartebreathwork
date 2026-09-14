@@ -111,7 +111,7 @@ export function AdminLeads() {
       ) : (
         <div className="mt-4 overflow-x-auto rounded-2xl border border-white/[0.06] bg-white/[0.02]">
           <table className="w-full text-sm">
-            <thead className="border-b border-white/[0.06] text-[10px] uppercase tracking-eyebrow text-bone/50">
+            <thead className="border-b border-white/[0.06] text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/50">
               <tr>
                 <th className="px-4 py-3 text-left">Fecha</th>
                 <th className="px-4 py-3 text-left">Nombre</th>
@@ -163,7 +163,7 @@ export function AdminLeads() {
                   <td className="px-4 py-3 text-xs">
                     <div className="flex flex-col gap-0.5">
                       <span className="text-bone/80">{l.intent ?? "—"}</span>
-                      <span className="text-[10px] text-bone/40">{l.source ?? "—"}</span>
+                      <span className="text-xs sm:text-[10px] text-bone/40">{l.source ?? "—"}</span>
                     </div>
                   </td>
                 </tr>

@@ -83,15 +83,20 @@ export function ExperienceSection() {
             className="relative lg:col-span-5"
           >
             <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-[2rem] gradient-border bg-ink">
-              <img
-                src="/sections/experience.jpg"
-                alt="Sesión presencial AMARTE con personas en sillas, audífonos verdes brillando en penumbra cinematográfica"
-                width={1200}
-                height={800}
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 size-full object-cover"
-              />
+              {/* Bajo el fold: loading lazy + <picture> con fallback JPG */}
+              <picture className="absolute inset-0 size-full">
+                <source type="image/avif" srcSet="/sections/experience.avif" />
+                <source type="image/webp" srcSet="/sections/experience.webp" />
+                <img
+                  src="/sections/experience.jpg"
+                  alt="Sesión presencial AMARTE con personas en sillas, audífonos verdes brillando en penumbra cinematográfica"
+                  width={1200}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 size-full object-cover"
+                />
+              </picture>
               <div aria-hidden className="absolute inset-0 bg-gradient-to-tr from-ink via-ink/40 to-transparent" />
               <div aria-hidden className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
 
@@ -109,7 +114,7 @@ export function ExperienceSection() {
                     ))}
                   </div>
                   <div className="text-center">
-                    <p className="font-display text-[10px] uppercase tracking-eyebrow text-bone/70">
+                    <p className="font-display text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/70">
                       Secuencia
                     </p>
                     <p className="mt-0.5 font-display text-base text-bone drop-shadow-lg">

@@ -92,7 +92,7 @@ function Hero({ content }: Props) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary-deep/30 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-primary-glow"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary-deep/30 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-primary-glow"
             >
               <Sparkles className="size-3" /> {content.heroEyebrow}
             </motion.span>
@@ -185,11 +185,11 @@ function Hero({ content }: Props) {
                 <span className="size-3 rounded-full bg-primary shadow-glow-primary" />
               </div>
 
-              <div className="absolute left-5 top-5 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/60">
+              <div className="absolute left-5 top-5 flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/60">
                 <span className="size-1.5 rounded-full bg-primary animate-pulse" />
                 Respirando
               </div>
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/60">
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/60">
                 <span>{content.heroVisualLabel}</span>
                 <span className="text-primary">● en presente</span>
               </div>
@@ -223,7 +223,7 @@ function Stats({ content }: Props) {
                 {s.value}
               </p>
               <p className="mt-3 text-sm text-bone/85 leading-snug">{s.label}</p>
-              <p className="mt-1 text-[10px] uppercase tracking-eyebrow text-muted">{s.source}</p>
+              <p className="mt-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">{s.source}</p>
             </motion.div>
           ))}
         </div>
@@ -241,7 +241,7 @@ function Problem({ content }: Props) {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-primary">
             {content.problemEyebrow}
           </span>
           <motion.h2
@@ -298,7 +298,7 @@ function Archetypes({ content }: Props) {
       <div className="pointer-events-none absolute inset-0 bg-radial-secondary opacity-30" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-secondary">
             {content.archetypesEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -328,7 +328,7 @@ function Archetypes({ content }: Props) {
                   </div>
                   <div>
                     <h3 className="font-display text-lg text-bone leading-tight">{a.name}</h3>
-                    <p className="mt-0.5 text-[10px] uppercase tracking-eyebrow text-secondary">
+                    <p className="mt-0.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-secondary">
                       {a.ageRange}
                     </p>
                   </div>
@@ -339,7 +339,7 @@ function Archetypes({ content }: Props) {
                 <div className="mt-auto pt-5">
                   <div className="rounded-2xl border border-white/[0.08] bg-ink/60 p-4">
                     <p className="text-sm text-bone/80 leading-relaxed">{a.stat}</p>
-                    <p className="mt-2 text-[10px] uppercase tracking-eyebrow text-muted">
+                    <p className="mt-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">
                       {a.source}
                     </p>
                   </div>
@@ -363,7 +363,7 @@ function Science({ content }: Props) {
       <div className="pointer-events-none absolute inset-0 bg-radial-secondary opacity-25" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-secondary">
             {content.scienceEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -411,7 +411,7 @@ function Experience({ content }: Props) {
       <div className="container-x relative">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
+            <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-primary">
               {content.experienceEyebrow}
             </span>
             <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
@@ -453,7 +453,7 @@ function LifeStages({ content }: Props) {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-secondary">
             {content.lifeStagesEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -481,7 +481,7 @@ function LifeStages({ content }: Props) {
                   <div className="grid size-11 place-items-center rounded-xl border border-secondary/40 bg-secondary/10 text-secondary">
                     <Icon className="size-5" strokeWidth={1.6} />
                   </div>
-                  <span className="text-[10px] uppercase tracking-eyebrow text-secondary">
+                  <span className="text-xs sm:text-[10px] uppercase tracking-eyebrow text-secondary">
                     {stage.badge}
                   </span>
                 </div>
@@ -505,7 +505,7 @@ function Benefits({ content }: Props) {
     <section className="relative bg-ink-900 py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-primary">
             {content.benefitsEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -551,7 +551,7 @@ function Guide({ content }: Props) {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-primary">
             {content.guideEyebrow}
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-4xl">{content.guideTitle}</h2>
@@ -589,7 +589,7 @@ function FAQ({ content }: Props) {
       <div className="container-x">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-secondary">
+            <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-secondary">
               {content.faqEyebrow}
             </span>
             <h2 className="h-display mt-4 text-3xl sm:text-5xl">{content.faqTitle}</h2>
@@ -741,7 +741,7 @@ function InquiryForm({ content }: Props) {
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-primary">
+            <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-primary">
               {content.formEyebrow}
             </span>
             <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -952,7 +952,7 @@ const inputClass =
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[11px] uppercase tracking-eyebrow text-bone/60">
+      <span className="mb-1.5 block text-xs sm:text-[11px] uppercase tracking-eyebrow text-bone/60">
         {label}
       </span>
       {children}

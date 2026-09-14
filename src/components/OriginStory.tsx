@@ -27,17 +27,22 @@ export function OriginStory() {
 
             {/* Real photo */}
             <div className="relative mt-8 aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl gradient-border bg-ink-900">
-              <img
-                src="/sections/origin.jpg"
-                alt="Grupo en sesión AMARTE con sillones reclinables, audífonos verdes brillando en ambiente cálido"
-                width={800}
-                height={1000}
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 size-full object-cover"
-              />
+              {/* Bajo el fold: loading lazy + <picture> con fallback JPG */}
+              <picture className="absolute inset-0 size-full">
+                <source type="image/avif" srcSet="/sections/origin.avif" />
+                <source type="image/webp" srcSet="/sections/origin.webp" />
+                <img
+                  src="/sections/origin.jpg"
+                  alt="Grupo en sesión AMARTE con sillones reclinables, audífonos verdes brillando en ambiente cálido"
+                  width={800}
+                  height={1000}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 size-full object-cover"
+                />
+              </picture>
               <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/85 drop-shadow-lg">
+              <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/85 drop-shadow-lg">
                 <span className="size-1.5 rounded-full bg-emerald-brand animate-pulse-soft" />
                 Una historia honesta
               </div>
@@ -56,7 +61,7 @@ export function OriginStory() {
                   transition={{ duration: 0.6, delay: i * 0.08 }}
                   className="relative"
                 >
-                  <span className="absolute -left-[2.1rem] top-1 grid size-7 place-items-center rounded-full border border-emerald-brand/40 bg-ink-900 font-display text-[10px] text-emerald-glow">
+                  <span className="absolute -left-[2.1rem] top-1 grid size-7 place-items-center rounded-full border border-emerald-brand/40 bg-ink-900 font-display text-xs sm:text-[10px] text-emerald-glow">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <p className="text-lg leading-relaxed text-bone/90 sm:text-xl text-balance">

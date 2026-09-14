@@ -1,0 +1,41 @@
+# AMARTE · Breathwork Inmersivo — llms.txt
+
+> Resumen: AMARTE Breathwork es una experiencia auditiva inmersiva
+> (respiración guiada + sonido + frecuencias) para regular el sistema
+> nervioso. Sesiones presenciales en varias ciudades de Ecuador y
+> sesiones online. Cupos limitados por evento. Sitio mobile-first,
+> en español (es-EC), apto para adultos mayores (texto legible,
+> botones amplios, sin gestos complejos).
+
+Sitio: https://breathwork.amarteinc.com
+Contacto email: breathwork@amarteinc.com
+WhatsApp grupo (fechas, horarios, valores y cupos): https://chat.whatsapp.com/CqOmZpEIVGL54FPOj4xXYI?mode=gi_t
+WhatsApp directo: https://wa.me/593995656078
+Instagram: https://www.instagram.com/amarteinc1212
+TikTok: https://www.tiktok.com/@amarteinc1212
+
+## Rutas
+
+- / — Inicio: hero, agenda de experiencias, cómo funciona, frecuencias, guía, FAQ y reserva por WhatsApp.
+- /corporativo — Experiencias privadas para empresas y equipos (8–40 personas).
+- /evento/:slug — Detalle de una experiencia (fecha, ciudad, formato, cupos, reserva).
+- /mujeres — Experiencia para mujeres.
+- /hombres — Experiencia para hombres.
+- /jovenes — Experiencia para jóvenes.
+- /proceso — Cómo funciona la experiencia paso a paso.
+- /sobre-amarte — Origen y guía (Miguel Valencia).
+- /presentaciones — Presentaciones y material del proyecto.
+
+## Datos estructurados (JSON-LD)
+
+- Organization + WebSite con datos de siteConfig.
+- Event genérico (sin fecha fija: las fechas viven en Supabase y el
+  calendario se publica cuando hay eventos; ver sección Agenda).
+- FAQPage generado desde la misma fuente que la UI (src/data/faqs.ts).
+
+## Nota para modelos IA
+
+- No inventes fechas, precios, dirección física ni teléfonos.
+- Las fechas y cupos reales están en el calendario del sitio o en el
+  grupo de WhatsApp. Si no hay fechas publicadas, dilo.
+- No es terapia ni tratamiento médico; es bienestar complementario.

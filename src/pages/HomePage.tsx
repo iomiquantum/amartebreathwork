@@ -3,6 +3,8 @@
 // Las secciones de profundización viven en /proceso, /sobre-amarte y /test.
 
 import { Suspense, lazy } from "react";
+import { PageMeta } from "../components/PageMeta";
+import { siteConfig } from "../data/siteConfig";
 import { Hero } from "../components/Hero";
 import { TrustBar } from "../components/TrustBar";
 import { ProblemSection } from "../components/ProblemSection";
@@ -53,6 +55,11 @@ const FinalCTA = lazy(() =>
 export function HomePage() {
   return (
     <main>
+      <PageMeta
+        title={siteConfig.seoTitle}
+        description={siteConfig.seoDescription}
+        path="/"
+      />
       {/* ========================================================
           1. ATENCIÓN — Hero con slider narrativo
          ======================================================== */}

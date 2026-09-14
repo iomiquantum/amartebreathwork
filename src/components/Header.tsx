@@ -123,7 +123,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <a
               {...waHeader}
-              className="hidden h-10 items-center gap-2 rounded-full bg-emerald-brand px-4 text-sm font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong sm:inline-flex"
+              className="hidden h-10 relative before:absolute before:-inset-1 before:content-[''] items-center gap-2 rounded-full bg-emerald-brand px-4 text-sm font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow hover:shadow-glow-emerald-strong sm:inline-flex"
             >
               <MessageCircle className="size-4" strokeWidth={1.8} />
               <span className="hidden md:inline">WhatsApp</span>
@@ -135,7 +135,7 @@ export function Header() {
               onClick={() => setOpen((v) => !v)}
               aria-label="Menú"
               aria-expanded={open}
-              className="grid size-10 place-items-center rounded-full border border-white/10 text-bone/80 transition-colors hover:text-emerald-glow lg:hidden"
+              className="grid size-11 place-items-center rounded-full border border-white/10 text-bone/80 transition-colors hover:text-emerald-glow lg:hidden"
             >
               {open ? <X className="size-4" /> : <Menu className="size-4" />}
             </button>

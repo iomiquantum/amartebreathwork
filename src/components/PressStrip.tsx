@@ -11,7 +11,7 @@ export function PressStrip() {
       className="relative border-y border-white/[0.04] bg-ink py-8"
     >
       <div className="container-x">
-        <p className="text-center text-[10px] uppercase tracking-eyebrow text-muted">
+        <p className="text-center text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">
           Mencionados en
         </p>
         <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 sm:gap-x-14">

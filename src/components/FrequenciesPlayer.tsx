@@ -217,7 +217,7 @@ export function FrequenciesPlayer() {
                       >
                         {f.hz}
                       </p>
-                      <p className="mt-1.5 text-[10px] uppercase tracking-eyebrow text-muted">
+                      <p className="mt-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">
                         Hertz
                       </p>
                     </div>

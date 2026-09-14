@@ -41,18 +41,121 @@ declare global {
 }
 
 // ============================================
+// DIETA DE TRACKERS: guardas DNT/adblock + carga diferida
+// ============================================
+// GTM+GA+Facebook+TikTok+Clarity NUNCA deben bloquear el arranque ni
+// correr antes de la primera interacción o del consentimiento.
+// La página funciona idéntica sin ellos: cada llamada es no-op
+// si el vendor no cargó (adblock), si el usuario activó DNT, o si
+// no hay consentimiento. Sin gestos complejos ni cambios visuales
+// (mobile-first, apto adultos mayores: este módulo no toca el DOM).
+
+/** true si el usuario activó Do Not Track en su navegador. */
+export function isDoNotTrackEnabled(): boolean {
+  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
+  const dnt =
+    (navigator as Navigator & { doNotTrack?: string | null }).doNotTrack ??
+    (window as Window & { doNotTrack?: string | null }).doNotTrack;
+  return dnt === "1" || dnt === "yes";
+}
+
+/**
+ * true si está permitido emitir eventos a vendors externos.
+ * Sin consentimiento aceptado, con DNT, o sin window → no-op.
+ * (El consentimiento vive en localStorage `amarte_cookie_consent`.)
+ */
+export function isMarketingAllowed(): boolean {
+  if (typeof window === "undefined") return false;
+  if (isDoNotTrackEnabled()) return false;
+  try {
+    return window.localStorage.getItem("amarte_cookie_consent") === "accepted";
+  } catch {
+    // localStorage bloqueado (modo incógnito estricto/adblock): sin tracking.
+    return false;
+  }
+}
+
+/**
+ * Carga diferida de GTM+GA+Facebook+TikTok+Clarity.
+ * Espera a la PRIMERA interacción del usuario (pointerdown/keydown/
+ * touchstart/scroll/click, listeners pasivos de un solo disparo) o al
+ * evento de consentimiento `amarte:consent-changed`, lo que ocurra
+ * primero; como red de seguridad, un timeout idle de 8s tras el cual
+ * igual se intenta (solo con consentimiento + sin DNT).
+ * Si el adblocker tumba la importación o los scripts, se silencia y la
+ * página sigue idéntica. Idempotente: llamar N veces carga como máximo 1.
+ *
+ * PARCHE A APLICAR EN src/App.tsx (NO aplicado: archivo compartido):
+ * sustituir el bloque `import("./lib/pixels").then(initPixels)` + el
+ * `import("./lib/consent").then(onConsentChange...)` por:
+ *   import { initDeferredMarketing } from "./lib/tracking";
+ *   const cancelDeferred = initDeferredMarketing();
+ *   ...y en el cleanup del efecto: cancelDeferred?.();
+ */
+export function initDeferredMarketing(fallbackDelayMs = 8000): () => void {
+  if (typeof window === "undefined" || typeof document === "undefined") return () => {};
+  let settled = false;
+  let timer = 0;
+
+  const load = () => {
+    if (settled) return;
+    settled = true;
+    cleanup();
+    if (!isMarketingAllowed()) return;
+    import("./pixels")
+      .then(({ initPixels }) => initPixels())
+      .catch(() => {
+        // Adblock / red bloqueada: la página funciona idéntica sin pixels.
+      });
+  };
+
+  const onConsent = (e: Event) => {
+    if ((e as CustomEvent<string>).detail === "accepted") load();
+  };
+
+  const opts: AddEventListenerOptions = { passive: true, once: true, capture: true };
+  const events = ["pointerdown", "keydown", "touchstart", "scroll", "click"] as const;
+  const onFirstInteraction = () => load();
+
+  const cleanup = () => {
+    events.forEach((ev) => window.removeEventListener(ev, onFirstInteraction, opts));
+    window.removeEventListener("amarte:consent-changed", onConsent);
+    if (timer) window.clearTimeout(timer);
+  };
+
+  events.forEach((ev) => window.addEventListener(ev, onFirstInteraction, opts));
+  window.addEventListener("amarte:consent-changed", onConsent);
+  // Red de seguridad idle: no bloquea el arranque (timeout, no await).
+  timer = window.setTimeout(load, fallbackDelayMs);
+
+  return cleanup;
+}
+
+/** Ejecuta `fn` cuando el navegador esté idle (sin bloquear el arranque). */
+function runWhenIdle(fn: () => void): void {
+  const w = window as Window & {
+    requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+  };
+  if (typeof w.requestIdleCallback === "function") {
+    w.requestIdleCallback(fn, { timeout: 3000 });
+  } else {
+    window.setTimeout(fn, 1);
+  }
+}
+
+// ============================================
 // EVENTOS ESTÁNDAR META
 // ============================================
 
 export function trackPageView() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.fbq?.("track", "PageView");
   window.gtag?.("event", "page_view");
   window.dataLayer?.push({ event: "page_view" });
 }
 
 export function trackViewContent(eventTitle: string, eventId?: string) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   const data = { content_name: eventTitle, content_ids: eventId ? [eventId] : [], content_type: "event" };
   window.fbq?.("track", "ViewContent", data);
   window.gtag?.("event", "view_item", data);
@@ -60,7 +163,7 @@ export function trackViewContent(eventTitle: string, eventId?: string) {
 }
 
 export function trackAddToCart(eventTitle: string, amount: number, eventId?: string) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   const data = {
     content_name: eventTitle,
     content_ids: eventId ? [eventId] : [],
@@ -74,7 +177,7 @@ export function trackAddToCart(eventTitle: string, amount: number, eventId?: str
 }
 
 export function trackInitiateCheckout(eventTitle: string, amount: number, eventId?: string) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   const data = {
     content_name: eventTitle,
     content_ids: eventId ? [eventId] : [],
@@ -88,7 +191,7 @@ export function trackInitiateCheckout(eventTitle: string, amount: number, eventI
 }
 
 export function trackCompleteRegistration(method: string) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   const data = { content_name: method, status: "completed" };
   window.fbq?.("track", "CompleteRegistration", data);
   window.gtag?.("event", "sign_up", { method });
@@ -97,7 +200,7 @@ export function trackCompleteRegistration(method: string) {
 }
 
 export function trackPurchase(amount: number, currency: string, eventId?: string) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   const data = {
     value: amount,
     currency,
@@ -115,7 +218,7 @@ export function trackPurchase(amount: number, currency: string, eventId?: string
 // ============================================
 
 export function trackWhatsappClick(source: LeadSource) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.fbq?.("track", "Lead", { content_name: source });
   window.ttq?.track("ClickButton", { content_name: source });
   window.gtag?.("event", "whatsapp_click", { source });
@@ -132,7 +235,7 @@ export function trackFinalCTA() {
 }
 
 export function trackLeadFormSubmit(payload: Record<string, unknown>) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.fbq?.("track", "Lead", payload);
   window.ttq?.track("SubmitForm", payload);
   window.gtag?.("event", "generate_lead", payload);
@@ -143,14 +246,14 @@ export function trackLeadFormSubmit(payload: Record<string, unknown>) {
 }
 
 export function trackFAQOpen(question: string) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.gtag?.("event", "faq_open", { question });
   window.dataLayer?.push({ event: "faq_open", question });
   window.clarity?.("event", "faq_open");
 }
 
 export function trackFrequencyPlay(hz: number) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.fbq?.("trackCustom", "FrequencyPlay", { hz });
   window.gtag?.("event", "frequency_play", { hz });
   window.dataLayer?.push({ event: "frequency_play", hz });
@@ -160,7 +263,7 @@ export function trackFrequencyPlay(hz: number) {
 }
 
 export function trackExitIntent() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.fbq?.("trackCustom", "ExitIntent");
   window.gtag?.("event", "exit_intent");
   window.dataLayer?.push({ event: "exit_intent" });
@@ -177,6 +280,22 @@ let pageStartTime = 0;
 
 export function initEngagementTracking() {
   if (typeof window === "undefined") return;
+  // Dieta de arranque: el scroll-listener + el intervalo de 5s NO se montan
+  // en el arranque; se difieren a idle para no bloquear el primer paint.
+  // Misma firma y mismo cleanup que antes (App.tsx no necesita cambios).
+  let detach: (() => void) | undefined;
+  let cancelled = false;
+  runWhenIdle(() => {
+    if (cancelled) return;
+    detach = startEngagementTracking();
+  });
+  return () => {
+    cancelled = true;
+    detach?.();
+  };
+}
+
+function startEngagementTracking() {
   pageStartTime = Date.now();
   scrollDepthTracked = {};
   timeTracked = {};
@@ -218,7 +337,7 @@ export function initEngagementTracking() {
 }
 
 export function trackScrollDepth(percent: number) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.gtag?.("event", "scroll_depth", { percent });
   window.dataLayer?.push({ event: "scroll_depth", percent });
   // Solo enviar a Meta el 75% y 100% (eventos de alta calidad de engagement)
@@ -232,7 +351,7 @@ export function trackScrollDepth(percent: number) {
 }
 
 export function trackTimeOnPage(seconds: number) {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || !isMarketingAllowed()) return;
   window.gtag?.("event", "time_on_page", { seconds });
   window.dataLayer?.push({ event: "time_on_page", seconds });
   if (seconds >= 60) {
@@ -268,7 +387,7 @@ export function captureUtmParams(): UtmParams {
     }
   });
 
-  if (Object.keys(utm).length > 0) {
+  if (Object.keys(utm).length > 0 && isMarketingAllowed()) {
     window.dataLayer?.push({ event: "utm_captured", ...utm });
     // Tag Clarity con la fuente
     if (utm.utm_source) window.clarity?.("set", "utm_source", utm.utm_source);

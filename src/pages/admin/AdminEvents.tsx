@@ -79,7 +79,7 @@ export function AdminEvents() {
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+                  <div className="flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-brand">
                     {ev.format === "online" ? <Video className="size-3" /> : <MapPin className="size-3" />}
                     {ev.format}
                     {ev.city && ` · ${ev.city}`}
@@ -95,7 +95,7 @@ export function AdminEvents() {
                       <Users className="size-3" />
                       {ev.spots_available}/{ev.spots_total} disponibles
                     </span>
-                    <span className="text-[10px] text-bone/40">slug: {ev.slug}</span>
+                    <span className="text-xs sm:text-[10px] text-bone/40">slug: {ev.slug}</span>
                   </div>
                 </div>
 

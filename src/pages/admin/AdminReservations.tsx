@@ -222,7 +222,7 @@ export function AdminReservations() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow">
+                    <div className="flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow">
                       <span
                         className={
                           r.payment_status === "confirmed"
@@ -265,7 +265,7 @@ export function AdminReservations() {
                         ${r.amount} {r.currency}
                       </span>
                     </div>
-                    <p className="mt-1 text-[10px] text-bone/40">
+                    <p className="mt-1 text-xs sm:text-[10px] text-bone/40">
                       Creada: {new Date(r.created_at).toLocaleString("es-EC", { dateStyle: "short", timeStyle: "short" })}
                     </p>
                   </div>
@@ -276,7 +276,7 @@ export function AdminReservations() {
                         type="button"
                         onClick={() => confirm(r.id)}
                         disabled={updating === r.id}
-                        className="inline-flex h-9 items-center gap-1.5 rounded-full bg-emerald-brand px-3 text-xs font-medium text-ink-900 hover:bg-emerald-glow disabled:opacity-60"
+                        className="relative inline-flex h-9 items-center gap-1.5 rounded-full bg-emerald-brand px-3 text-xs font-medium text-ink-900 hover:bg-emerald-glow disabled:opacity-60 before:absolute before:-inset-1 before:content-['']"
                       >
                         {updating === r.id ? (
                           <Loader2 className="size-3 animate-spin" />
@@ -289,7 +289,7 @@ export function AdminReservations() {
                         type="button"
                         onClick={() => cancel(r.id)}
                         disabled={updating === r.id}
-                        className="inline-flex h-9 items-center gap-1.5 rounded-full border border-red-500/30 px-3 text-xs text-red-300 hover:bg-red-500/10 disabled:opacity-60"
+                        className="relative inline-flex h-9 items-center gap-1.5 rounded-full border border-red-500/30 px-3 text-xs text-red-300 hover:bg-red-500/10 disabled:opacity-60 before:absolute before:-inset-1 before:content-['']"
                       >
                         <XCircle className="size-3.5" />
                         Cancelar

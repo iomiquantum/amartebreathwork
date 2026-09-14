@@ -12,24 +12,26 @@ import { Aurora } from "./Aurora";
 import { useWhatsappCTA } from "../lib/whatsapp";
 
 // Narrativa visual: problema → decisión → inmersión → transformación
+// `base` sin extensión: cada slide tiene variantes .avif / .webp / .jpg
+// (JPG como fallback universal). Alts originales conservados.
 const HERO_SLIDES = [
   {
-    src: "/hero/slide-01.jpg",
+    base: "/hero/slide-01",
     alt: "Mujer con manos en las sienes, expresión de tensión y agotamiento",
     caption: "Llegas cargado.",
   },
   {
-    src: "/hero/slide-02.jpg",
+    base: "/hero/slide-02",
     alt: "Persona con mano sobre el pecho durante sesión inmersiva AMARTE",
     caption: "Te sientas. Respiras.",
   },
   {
-    src: "/hero/slide-03.jpg",
+    base: "/hero/slide-03",
     alt: "Grupo en sillones reclinables en sesión AMARTE con audífonos verdes brillando",
     caption: "El sonido te envuelve.",
   },
   {
-    src: "/hero/slide-04.jpg",
+    base: "/hero/slide-04",
     alt: "Mujer joven con audífonos AMARTE mirando hacia arriba, expresión luminosa de transformación",
     caption: "Vuelves a ti.",
   },
@@ -49,20 +51,29 @@ function HeroSlider({ reduced }: { reduced: boolean }) {
   return (
     <>
       <AnimatePresence mode="sync">
-        <motion.img
-          key={slide.src}
-          src={slide.src}
-          alt={slide.alt}
-          width={800}
-          height={1000}
-          fetchPriority={idx === 0 ? "high" : "low"}
-          decoding="async"
+        {/* LCP: primer slide con fetchpriority high + dimensiones explícitas;
+            el resto carga diferida. <picture> con fallback JPG. */}
+        <motion.picture
+          key={slide.base}
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 1.6, ease: [0.4, 0, 0.2, 1] }}
-          className="absolute inset-0 size-full object-cover"
-        />
+          className="absolute inset-0 size-full"
+        >
+          <source type="image/avif" srcSet={`${slide.base}.avif`} />
+          <source type="image/webp" srcSet={`${slide.base}.webp`} />
+          <img
+            src={`${slide.base}.jpg`}
+            alt={slide.alt}
+            width={800}
+            height={1000}
+            fetchPriority={idx === 0 ? "high" : "low"}
+            loading={idx === 0 ? "eager" : "lazy"}
+            decoding="async"
+            className="absolute inset-0 size-full object-cover"
+          />
+        </motion.picture>
       </AnimatePresence>
 
       {/* Caption rotating bottom-center */}
@@ -85,14 +96,20 @@ function HeroSlider({ reduced }: { reduced: boolean }) {
       <div className="absolute inset-x-0 -bottom-7 z-10 flex justify-center gap-2">
         {HERO_SLIDES.map((s, i) => (
           <button
-            key={s.src}
+            key={s.base}
             type="button"
             onClick={() => setIdx(i)}
             aria-label={`Ver imagen ${i + 1}`}
-            className={`h-1.5 rounded-full transition-all duration-500 ${
-              i === idx ? "w-8 bg-emerald-brand" : "w-1.5 bg-bone/30 hover:bg-bone/50"
-            }`}
-          />
+            aria-current={i === idx}
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center"
+          >
+            <span
+              aria-hidden
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                i === idx ? "w-8 bg-emerald-brand" : "w-1.5 bg-bone/30 hover:bg-bone/50"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </>

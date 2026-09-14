@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Loader2, CheckCircle2 } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
-import { subscribeNewsletter } from "../lib/supabase";
+// NOTA lazy: subscribeNewsletter se carga con import() dinámico al enviar,
+// para no meter el chunk @supabase (~196KB) en el primer pintado.
 import { trackLeadFormSubmit } from "../lib/tracking";
 
 export function Newsletter() {
@@ -16,13 +17,25 @@ export function Newsletter() {
     if (!email) return;
     setStatus("loading");
     setError("");
-    const res = await subscribeNewsletter(email);
-    if (res.ok) {
-      setStatus("success");
-      trackLeadFormSubmit({ source: "newsletter", email });
-    } else {
+    try {
+      // Import dinámico: el chunk @supabase se descarga al enviar, no antes.
+      const { subscribeNewsletter, toFriendlySupabaseError } = await import("../lib/supabase");
+      let res: { ok: boolean; error?: string };
+      try {
+        res = await subscribeNewsletter(email);
+      } catch (submitErr) {
+        res = { ok: false, error: toFriendlySupabaseError(submitErr) };
+      }
+      if (res.ok) {
+        setStatus("success");
+        trackLeadFormSubmit({ source: "newsletter", email });
+      } else {
+        setStatus("error");
+        setError(res.error ?? "No pudimos guardar tu email.");
+      }
+    } catch {
       setStatus("error");
-      setError(res.error ?? "No pudimos guardar tu email.");
+      setError("No pudimos cargar el registro. Revisa tu internet e inténtalo de nuevo.");
     }
   }
 
@@ -72,7 +85,11 @@ export function Newsletter() {
               </form>
             )}
 
-            {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+            {error && (
+              <p className="mt-3 text-base text-red-300" role="alert">
+                {error}
+              </p>
+            )}
             <p className="mt-3 text-xs text-muted">
               Solo enviamos lo importante. Te puedes dar de baja en cualquier momento.
             </p>

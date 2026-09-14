@@ -32,15 +32,11 @@ import {
   Sparkles,
 } from "lucide-react";
 import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../data/countries";
-import {
-  createReservation,
-  fetchBankConfig,
-  sanitizePhone,
-  isValidEmail,
-  type BankConfig,
-  type EventRow,
-  type PaymentMethod,
-} from "../lib/supabase";
+// NOTA lazy: sanitizePhone/isValidEmail son funciones puras (import barato).
+// createReservation y fetchBankConfig se cargan con import() dinámico al usar
+// el modal, para no meter el chunk @supabase (~196KB) en el primer pintado.
+import { sanitizePhone, isValidEmail } from "../lib/supabase";
+import type { BankConfig, EventRow, PaymentMethod } from "../lib/supabase";
 import { siteConfig } from "../data/siteConfig";
 import { trackLeadFormSubmit, trackInitiateCheckout, trackCompleteRegistration } from "../lib/tracking";
 
@@ -93,10 +89,26 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
     };
   }, [isOpen, onClose]);
 
-  // Cargar datos bancarios al abrir + track InitiateCheckout
+  // Monto del depósito: usa deposit_amount del evento (default $20).
+  // (Declarado antes de los efectos porque el de apertura lo usa en el track.)
+  const depositAmount = event?.deposit_amount ?? 20;
+  const depositCurrency = event?.deposit_currency ?? "USD";
+
+  // Cargar datos bancarios al abrir + track InitiateCheckout.
+  // Import dinámico: el chunk @supabase se descarga aquí, no en el primer pintado.
+  const [bankError, setBankError] = useState(false);
   useEffect(() => {
     if (isOpen && event) {
-      if (!bank) fetchBankConfig().then(setBank);
+      if (!bank && !bankError) {
+        import("../lib/supabase")
+          .then(({ fetchBankConfig, takeLastSupabaseError }) =>
+            fetchBankConfig().then((cfg) => {
+              setBank(cfg);
+              if (!cfg && takeLastSupabaseError()) setBankError(true);
+            }),
+          )
+          .catch(() => setBankError(true));
+      }
       trackInitiateCheckout(event.title, depositAmount, event.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,27 +119,37 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
   const isPhoneValid = cleanPhone.length >= 7;
   const isFormValid = name.trim().length > 1 && isValidEmail(email) && isPhoneValid;
 
-  // Monto del depósito: usa deposit_amount del evento (default $20)
-  const depositAmount = event?.deposit_amount ?? 20;
-  const depositCurrency = event?.deposit_currency ?? "USD";
-
   async function handleSubmit() {
     if (!event || !isFormValid) return;
     setStatus("loading");
     setError("");
 
-    const res = await createReservation({
-      eventId: event.id,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      whatsapp: phoneFull,
-      countryCode: country.code,
-      countryName: country.name,
-      amount: depositAmount,
-      currency: depositCurrency,
-      paymentMethod: method,
-      honeypot,
-    });
+    // Import dinámico: el chunk @supabase se descarga al reservar, no antes.
+    let res: { ok: boolean; reservationId?: string; error?: string };
+    try {
+      const { createReservation, toFriendlySupabaseError } = await import("../lib/supabase");
+      try {
+        res = await createReservation({
+          eventId: event.id,
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          whatsapp: phoneFull,
+          countryCode: country.code,
+          countryName: country.name,
+          amount: depositAmount,
+          currency: depositCurrency,
+          paymentMethod: method,
+          honeypot,
+        });
+      } catch (submitErr) {
+        res = { ok: false, error: toFriendlySupabaseError(submitErr) };
+      }
+    } catch {
+      res = {
+        ok: false,
+        error: "No pudimos cargar la reserva. Revisa tu internet e inténtalo de nuevo.",
+      };
+    }
 
     if (!res.ok) {
       setStatus("error");
@@ -207,7 +229,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
             <button
               onClick={onClose}
               aria-label="Cerrar"
-              className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-white/10 bg-ink/60 text-bone/70 backdrop-blur transition-colors hover:border-bone/30 hover:text-bone"
+              className="absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full border border-white/10 bg-ink/60 text-bone/70 backdrop-blur transition-colors hover:border-bone/30 hover:text-bone relative before:absolute before:-inset-2 before:content-['']"
             >
               <X className="size-4" />
             </button>
@@ -215,7 +237,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
             <div className="p-6 sm:p-8">
               {/* Event header */}
               <div className="mb-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
-                <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+                <div className="flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-brand">
                   <FormatIcon className="size-3" /> {formatLabel}
                   {event.city && ` · ${event.city}`}
                 </div>
@@ -316,7 +338,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                   <button
                     type="button"
                     onClick={() => setStep("method")}
-                    className="inline-flex items-center gap-1 text-xs text-bone/60 hover:text-bone"
+                    className="inline-flex items-center gap-1 relative before:absolute before:-inset-2 before:content-[''] py-1 text-xs text-bone/60 hover:text-bone"
                   >
                     <ArrowLeft className="size-3" /> Cambiar método
                   </button>
@@ -416,7 +438,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                   </div>
 
                   {error && (
-                    <p className="mt-3 text-sm text-red-400" role="alert">
+                    <p className="mt-3 text-base text-red-300" role="alert">
                       {error}
                     </p>
                   )}
@@ -459,6 +481,26 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                       <BankRow label="Número de cuenta" value={bank.account_number} onCopy={copyToClipboard} copiedKey={copied} />
                       <BankRow label="Identificación" value={bank.identification} onCopy={copyToClipboard} copiedKey={copied} />
                       <BankRow label="Email" value={bank.email} onCopy={copyToClipboard} copiedKey={copied} />
+                    </div>
+                  ) : bankError ? (
+                    <div
+                      className="mt-4 rounded-xl border border-gold-warm/30 bg-gold-warm/10 p-4"
+                      role="alert"
+                    >
+                      <p className="text-base text-bone/90 leading-relaxed">
+                        No pudimos cargar los datos bancarios. Revisa tu internet.
+                        Tu reserva quedó guardada: escríbenos por WhatsApp y te
+                        pasamos los datos para la transferencia.
+                      </p>
+                      <a
+                        href={whatsappProofUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex h-12 items-center gap-2 rounded-full bg-emerald-brand px-6 text-base font-medium text-ink-900 shadow-glow-emerald hover:bg-emerald-glow"
+                      >
+                        <MessageCircle className="size-4" />
+                        Pedir datos por WhatsApp
+                      </a>
                     </div>
                   ) : (
                     <p className="mt-4 text-sm text-muted">Cargando datos bancarios...</p>
@@ -552,7 +594,7 @@ function BankRow({
   return (
     <div className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] uppercase tracking-eyebrow text-muted">{label}</p>
+        <p className="text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">{label}</p>
         <p className="mt-0.5 truncate text-sm text-bone">{value}</p>
       </div>
       <button

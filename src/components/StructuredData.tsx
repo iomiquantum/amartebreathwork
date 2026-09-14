@@ -15,6 +15,48 @@ function aggregateRating() {
   };
 }
 
+function eventSchema() {
+  // Solo datos reales de siteConfig. Sin fechas inventadas:
+  // startDate se incluye únicamente si nextDateISO está configurado,
+  // y subEvent solo con las sesiones confirmadas de upcomingSessions
+  // (hoy ambas están vacías: el calendario real vive en Supabase).
+  const base: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: `${siteConfig.brandName} · Breathwork Inmersivo`,
+    description: siteConfig.seoDescription,
+    eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: {
+      "@type": "Place",
+      name: siteConfig.location,
+      address: { "@type": "PostalAddress", addressCountry: "EC" },
+    },
+    organizer: {
+      "@type": "Organization",
+      name: siteConfig.brandName,
+      url: siteConfig.siteUrl,
+    },
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/LimitedAvailability",
+      url: siteConfig.whatsappGroupUrl,
+    },
+  };
+  if (siteConfig.nextDateISO) {
+    base.startDate = siteConfig.nextDateISO;
+  }
+  if (siteConfig.upcomingSessions.length > 0) {
+    base.subEvent = siteConfig.upcomingSessions.map((s) => ({
+      "@type": "Event",
+      name: `${siteConfig.brandName} · ${s.label}`,
+      startDate: s.dateISO,
+      location: { "@type": "Place", name: s.location },
+    }));
+  }
+  return base;
+}
+
 export function StructuredData() {
   useEffect(() => {
     const id = "amarte-jsonld";
@@ -50,30 +92,7 @@ export function StructuredData() {
         name: siteConfig.brandName,
         url: siteConfig.siteUrl,
       },
-      {
-        "@context": "https://schema.org",
-        "@type": "Event",
-        name: `${siteConfig.brandName} · Breathwork Inmersivo`,
-        description:
-          "Experiencia presencial de respiración, sonido y frecuencias para regular el sistema nervioso.",
-        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-        eventStatus: "https://schema.org/EventScheduled",
-        location: {
-          "@type": "Place",
-          name: "Quito, Ecuador",
-          address: { "@type": "PostalAddress", addressLocality: "Quito", addressCountry: "EC" },
-        },
-        organizer: {
-          "@type": "Organization",
-          name: siteConfig.brandName,
-          url: siteConfig.siteUrl,
-        },
-        offers: {
-          "@type": "Offer",
-          availability: "https://schema.org/LimitedAvailability",
-          url: siteConfig.whatsappGroupUrl,
-        },
-      },
+      eventSchema(),
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",

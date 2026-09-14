@@ -4,6 +4,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Building2, Users, Heart, Sparkles, GraduationCap, LayoutGrid, Snowflake, Leaf, Globe } from "lucide-react";
+import { PageMeta } from "../components/PageMeta";
 import { siteConfig } from "../data/siteConfig";
 
 type Item = {
@@ -73,8 +74,13 @@ export function PresentacionesPage() {
 
   return (
     <div className="min-h-screen bg-ink text-bone">
+      <PageMeta
+        title={`Presentaciones — ${siteConfig.brandName}`}
+        description="Todas las experiencias AMARTE en un solo lugar: corporativo, jóvenes y colegios, mujeres, hombres y eventos. Elige una categoría para abrir su presentación."
+        path="/presentaciones"
+      />
       <main className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-3 py-1 text-[11px] uppercase tracking-eyebrow text-emerald-glow">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-3 py-1 text-xs sm:text-[11px] uppercase tracking-eyebrow text-emerald-glow">
           <LayoutGrid className="size-3" /> Presentaciones
         </div>
         <h1 className="mt-5 font-display text-3xl sm:text-4xl lg:text-5xl">

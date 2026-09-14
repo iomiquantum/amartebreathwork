@@ -23,6 +23,10 @@ export function SectionBanner({
   alt,
   reverse = false,
 }: SectionBannerProps) {
+  // Variantes modernas solo cuando `image` es un JPG con .avif/.webp generados;
+  // si no, se renderiza únicamente el <img> original (sin requests rotos).
+  const base = image.replace(/\.jpg$/, "");
+  const hasVariants = base !== image;
   return (
     <section className="relative bg-ink py-20 sm:py-24">
       <div className="container-x">
@@ -35,21 +39,31 @@ export function SectionBanner({
             reverse ? "lg:[direction:rtl]" : ""
           }`}
         >
-          {/* Image side */}
+          {/* Image side — bajo el fold: loading lazy + <picture> con fallback JPG.
+              `base` deriva de `image` cuando apunta a /sections/*.jpg (variantes
+              .avif/.webp generadas); si no hay variantes, el <img> original sigue. */}
           <Link
             to={href}
             className="relative aspect-[4/3] overflow-hidden lg:aspect-auto"
             aria-label={cta}
           >
-            <img
-              src={image}
-              alt={alt}
-              loading="lazy"
-              decoding="async"
-              width={1000}
-              height={750}
-              className="absolute inset-0 size-full object-cover transition duration-[1200ms] ease-out group-hover:scale-[1.04]"
-            />
+            <picture className="absolute inset-0 size-full">
+              {hasVariants && (
+                <>
+                  <source type="image/avif" srcSet={`${base}.avif`} />
+                  <source type="image/webp" srcSet={`${base}.webp`} />
+                </>
+              )}
+              <img
+                src={image}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                width={1000}
+                height={750}
+                className="absolute inset-0 size-full object-cover transition duration-[1200ms] ease-out group-hover:scale-[1.04]"
+              />
+            </picture>
             <div
               aria-hidden
               className="absolute inset-0 bg-gradient-to-t from-ink-900 via-ink-900/30 to-transparent lg:bg-gradient-to-r"

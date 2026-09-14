@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { trackPageView } from "../lib/tracking";
+import { PageMeta } from "../components/PageMeta";
 import { SectionSkeleton } from "../components/SectionSkeleton";
 import { OriginStory } from "../components/OriginStory";
 import { useWhatsappCTA } from "../lib/whatsapp";
@@ -34,6 +35,11 @@ export function AboutPage() {
 
   return (
     <main>
+      <PageMeta
+        title="Sobre AMARTE · Una marca de respiración inmersiva"
+        description="AMARTE no nació de un curso ni de una franquicia. Nació de una historia personal y de la convicción de que el silencio bien diseñado puede regular lo que la vida acelerada desordena."
+        path="/sobre-amarte"
+      />
       {/* Hero compacto */}
       <section className="relative isolate overflow-hidden bg-ink pb-16 pt-32 sm:pt-36">
         <div

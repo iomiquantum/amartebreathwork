@@ -42,7 +42,7 @@ export function EventFormat() {
                 >
                   <Icon className="size-5 text-emerald-brand" strokeWidth={1.6} />
                   <div>
-                    <p className="text-[11px] uppercase tracking-eyebrow text-muted">
+                    <p className="text-xs sm:text-[11px] uppercase tracking-eyebrow text-muted">
                       {label}
                     </p>
                     <p className="mt-1 font-display text-lg text-bone">{value}</p>

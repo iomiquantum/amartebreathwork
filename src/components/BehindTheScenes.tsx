@@ -2,13 +2,15 @@ import { motion } from "framer-motion";
 import { Music4, Lightbulb, Radio, ScrollText } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 
+// `base` sin extensión: cada foto tiene variantes .avif / .webp / .jpg
+// (JPG como fallback universal). Alts originales conservados.
 const STEPS = [
   {
     n: "01",
     icon: ScrollText,
     title: "Diseño narrativo",
     body: "Cada sesión tiene una intención: soltar, integrar, abrir. Desde ahí escribimos la curva emocional del viaje completo.",
-    image: "/sections/bts-01.jpg",
+    base: "/sections/bts-01",
     alt: "Sala con candelabros y personas en sesión inmersiva AMARTE",
   },
   {
@@ -16,7 +18,7 @@ const STEPS = [
     icon: Music4,
     title: "Capas sonoras",
     body: "Construimos paisajes sonoros con stems originales, voces guías, drones y texturas que respiran con la respiración real.",
-    image: "/sections/bts-02.jpg",
+    base: "/sections/bts-02",
     alt: "Grupo con antifaces y audífonos AMARTE en sesión",
   },
   {
@@ -24,7 +26,7 @@ const STEPS = [
     icon: Radio,
     title: "Frecuencias específicas",
     body: "Seleccionamos rangos de frecuencia que invitan a estados de calma. No prometemos magia — son herramientas que acompañan.",
-    image: "/sections/bts-03.jpg",
+    base: "/sections/bts-03",
     alt: "Mujer sonriendo con audífonos AMARTE brillando en verde",
   },
   {
@@ -32,7 +34,7 @@ const STEPS = [
     icon: Lightbulb,
     title: "Ambiente físico",
     body: "Iluminación tenue, temperatura cuidada, distancia entre personas, silencio antes y después. Todo el cuerpo importa.",
-    image: "/sections/bts-04.jpg",
+    base: "/sections/bts-04",
     alt: "Hombre en sesión AMARTE con audífonos verdes brillando",
   },
 ];
@@ -53,7 +55,7 @@ export function BehindTheScenes() {
         />
 
         <div className="mt-14 grid gap-4 lg:grid-cols-4">
-          {STEPS.map(({ n, icon: Icon, title, body, image, alt }, i) => (
+          {STEPS.map(({ n, icon: Icon, title, body, base, alt }, i) => (
             <motion.div
               key={n}
               initial={{ opacity: 0, y: 18 }}
@@ -63,15 +65,20 @@ export function BehindTheScenes() {
               className="card-dark group relative overflow-hidden"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={image}
-                  alt={alt}
-                  width={600}
-                  height={600}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 size-full object-cover transition duration-700 ease-out group-hover:scale-[1.06]"
-                />
+                {/* Bajo el fold: loading lazy + <picture> con fallback JPG */}
+                <picture className="absolute inset-0 size-full">
+                  <source type="image/avif" srcSet={`${base}.avif`} />
+                  <source type="image/webp" srcSet={`${base}.webp`} />
+                  <img
+                    src={`${base}.jpg`}
+                    alt={alt}
+                    width={600}
+                    height={600}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 size-full object-cover transition duration-700 ease-out group-hover:scale-[1.06]"
+                  />
+                </picture>
                 <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink-900 via-ink-900/30 to-transparent" />
                 <span className="absolute left-5 top-4 font-display text-2xl text-emerald-brand drop-shadow-lg">{n}</span>
                 <div className="absolute right-4 top-4 grid size-9 place-items-center rounded-full bg-ink-900/80 backdrop-blur">

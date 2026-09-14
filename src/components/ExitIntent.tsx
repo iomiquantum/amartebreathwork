@@ -62,7 +62,7 @@ export function ExitIntent() {
             <button
               onClick={close}
               aria-label="Cerrar"
-              className="absolute right-4 top-4 grid size-9 place-items-center rounded-full border border-white/10 text-bone/70 transition-colors hover:border-bone/30 hover:text-bone"
+              className="absolute right-4 top-4 grid size-9 place-items-center rounded-full border border-white/10 text-bone/70 transition-colors hover:border-bone/30 hover:text-bone relative before:absolute before:-inset-2 before:content-['']"
             >
               <X className="size-4" />
             </button>

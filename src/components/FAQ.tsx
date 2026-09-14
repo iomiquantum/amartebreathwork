@@ -50,7 +50,7 @@ export function FAQ() {
               type="button"
               onClick={() => setQuery("")}
               aria-label="Limpiar búsqueda"
-              className="absolute right-3 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-muted hover:text-bone"
+              className="absolute right-3 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-muted hover:text-bone relative before:absolute before:-inset-2 before:content-['']"
             >
               <X className="size-4" />
             </button>

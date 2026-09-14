@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { trackPageView } from "../lib/tracking";
+import { PageMeta } from "../components/PageMeta";
 import { SectionSkeleton } from "../components/SectionSkeleton";
 import { NerveTest } from "../components/NerveTest";
 import { useWhatsappCTA } from "../lib/whatsapp";
@@ -28,6 +29,11 @@ export function TestPage() {
 
   return (
     <main>
+      <PageMeta
+        title="Test del sistema nervioso · 6 preguntas, 2 minutos — AMARTE"
+        description="¿Está tu sistema nervioso desregulado? Responde 6 preguntas en 2 minutos y descubre si AMARTE puede acompañarte. No es diagnóstico médico, es una guía rápida."
+        path="/test"
+      />
       {/* Hero compacto */}
       <section className="relative isolate overflow-hidden bg-ink pb-16 pt-32 sm:pt-36">
         <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-60" />

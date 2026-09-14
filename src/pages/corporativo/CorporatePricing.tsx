@@ -56,7 +56,7 @@ export function CorporatePricing() {
 
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Inversión
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
@@ -81,7 +81,7 @@ export function CorporatePricing() {
         >
           <div className="gradient-border rounded-[2rem] bg-ink-900 p-8 sm:p-12">
             <div className="flex flex-col items-center text-center">
-              <span className="text-[10px] uppercase tracking-eyebrow text-gold-warm">
+              <span className="text-xs sm:text-[10px] uppercase tracking-eyebrow text-gold-warm">
                 Desde
               </span>
               <div className="mt-2 flex items-baseline gap-2">
@@ -125,7 +125,7 @@ export function CorporatePricing() {
         {/* Lo que SIEMPRE incluye */}
         <div className="mx-auto mt-16 max-w-5xl">
           <div className="text-center">
-            <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+            <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
               Lo que siempre incluye
             </span>
             <h3 className="font-display mt-3 text-2xl text-bone sm:text-3xl">
@@ -177,7 +177,7 @@ export function CorporatePricing() {
               cotizamos sobre objetivos específicos del año.
               <br className="hidden sm:block" />
               Sin techo, sin paquete fijo —{" "}
-              <a href="#cotizar" className="text-orange-glow underline underline-offset-4">
+              <a href="#cotizar" className="py-0.5 text-orange-glow underline underline-offset-4">
                 cuéntanos qué tienes en mente
               </a>
               .

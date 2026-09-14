@@ -41,7 +41,7 @@ export function CookieBanner() {
               <p className="text-xs text-bone/85 sm:text-sm">
                 Usamos cookies básicas para entender cómo se usa la página. Sin venderle
                 tus datos a nadie.{" "}
-                <a href="/privacidad.html" className="underline decoration-emerald-brand/40 underline-offset-2 hover:text-emerald-glow">
+                <a href="/privacidad.html" className="py-0.5 underline decoration-emerald-brand/40 underline-offset-2 hover:text-emerald-glow">
                   Más detalles
                 </a>
                 .
@@ -50,13 +50,13 @@ export function CookieBanner() {
             <div className="flex w-full gap-2 sm:w-auto sm:flex-shrink-0">
               <button
                 onClick={decline}
-                className="h-10 flex-1 rounded-full border border-white/10 px-4 text-xs text-bone/80 transition-colors hover:border-bone/30 hover:text-bone sm:flex-none"
+                className="h-10 flex-1 relative before:absolute before:-inset-1 before:content-[''] rounded-full border border-white/10 px-4 text-xs text-bone/80 transition-colors hover:border-bone/30 hover:text-bone sm:flex-none"
               >
                 Solo esenciales
               </button>
               <button
                 onClick={accept}
-                className="h-10 flex-1 rounded-full bg-emerald-brand px-5 text-xs font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow sm:flex-none"
+                className="h-10 flex-1 relative before:absolute before:-inset-1 before:content-[''] rounded-full bg-emerald-brand px-5 text-xs font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow sm:flex-none"
               >
                 Aceptar
               </button>

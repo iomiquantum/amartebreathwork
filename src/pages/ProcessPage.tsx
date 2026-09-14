@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { trackPageView } from "../lib/tracking";
+import { PageMeta } from "../components/PageMeta";
 import { SectionSkeleton } from "../components/SectionSkeleton";
 import { HowItWorks } from "../components/HowItWorks";
 import { useWhatsappCTA } from "../lib/whatsapp";
@@ -34,6 +35,11 @@ export function ProcessPage() {
 
   return (
     <main>
+      <PageMeta
+        title="Cómo construimos cada experiencia — AMARTE"
+        description="Cada sesión AMARTE tiene intención narrativa, capas sonoras diseñadas, frecuencias específicas y ambiente físico cuidado al detalle. Descubre qué pasa antes de que entres."
+        path="/proceso"
+      />
       {/* Hero compacto */}
       <section className="relative isolate overflow-hidden bg-ink pb-16 pt-32 sm:pt-36">
         <div className="pointer-events-none absolute inset-0 bg-radial-emerald opacity-50" />

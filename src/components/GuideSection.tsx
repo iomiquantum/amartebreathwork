@@ -93,7 +93,7 @@ export function GuideSection() {
               </svg>
 
               {/* Label inferior */}
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/80">
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/80">
                 <span>{guide.name}</span>
                 <span className="text-emerald-glow">● Guía AMARTE</span>
               </div>

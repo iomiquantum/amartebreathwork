@@ -52,7 +52,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram AMARTE"
-              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow"
+              className="inline-flex items-center gap-2 relative before:absolute before:-inset-2 before:content-[''] transition-colors hover:text-emerald-glow"
             >
               <InstagramGlyph className="size-4" />
               {siteConfig.instagram}
@@ -62,7 +62,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="TikTok AMARTE"
-              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow"
+              className="inline-flex items-center gap-2 relative before:absolute before:-inset-2 before:content-[''] transition-colors hover:text-emerald-glow"
             >
               <TikTokGlyph className="size-4" />
               {siteConfig.tiktok}
@@ -70,7 +70,7 @@ export function Footer() {
             <a
               href={`mailto:${siteConfig.contactEmail}`}
               aria-label="Enviar email a AMARTE"
-              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-glow"
+              className="inline-flex items-center gap-2 relative before:absolute before:-inset-2 before:content-[''] transition-colors hover:text-emerald-glow"
             >
               <Mail className="size-4" strokeWidth={1.6} />
               {siteConfig.contactEmail}
@@ -83,10 +83,10 @@ export function Footer() {
             © {year} {siteConfig.brandName}. Todos los derechos reservados.
           </p>
           <nav className="flex flex-wrap items-center gap-x-5 gap-y-2" aria-label="Legal">
-            <a href="/privacidad.html" className="transition-colors hover:text-bone">
+            <a href="/privacidad.html" className="relative before:absolute before:-inset-2 before:content-[''] py-1 transition-colors hover:text-bone">
               Privacidad
             </a>
-            <a href="/terminos.html" className="transition-colors hover:text-bone">
+            <a href="/terminos.html" className="relative before:absolute before:-inset-2 before:content-[''] py-1 transition-colors hover:text-bone">
               Términos
             </a>
             <span>Quito · Ecuador</span>

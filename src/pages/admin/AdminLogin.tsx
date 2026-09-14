@@ -50,7 +50,7 @@ export function AdminLogin() {
               <Lock className="size-4 text-emerald-glow" />
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-eyebrow text-emerald-brand">
+              <p className="text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-brand">
                 Acceso restringido
               </p>
               <h1 className="font-display text-xl">Admin AMARTE</h1>

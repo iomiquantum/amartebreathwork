@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, MessageCircle } from "lucide-react";
-import { submitLead, type LeadIntent } from "../lib/supabase";
+// NOTA lazy: LeadIntent es solo tipo. submitLead se carga con import()
+// dinámico al enviar, para no meter el chunk @supabase en el primer pintado.
+import type { LeadIntent } from "../lib/supabase";
 import { siteConfig } from "../data/siteConfig";
 import { trackLeadFormSubmit, trackWhatsappClick } from "../lib/tracking";
 import { useWhatsappGate } from "../lib/whatsappGate";
@@ -43,21 +45,34 @@ export function LeadForm() {
       intent: (intent || undefined) as LeadIntent | undefined,
       source: "lead_form_multistep",
     };
-    const res = await submitLead(payload);
-    if (res.ok) {
-      setStatus("success");
-      trackLeadFormSubmit(payload);
-      // Marcar como registrado en el gate para que no vuelva a aparecer
-      markRegistered({
-        name: payload.name,
-        whatsapp: payload.whatsapp,
-        countryCode: "593",
-        countryName: "Ecuador",
-        registeredAt: new Date().toISOString(),
-      });
-    } else {
+    try {
+      // Import dinámico: el chunk @supabase se descarga al enviar, no antes.
+      const { submitLead, toFriendlySupabaseError } = await import("../lib/supabase");
+      let res: { ok: boolean; error?: string };
+      try {
+        res = await submitLead(payload);
+      } catch (submitErr) {
+        res = { ok: false, error: toFriendlySupabaseError(submitErr) };
+      }
+      if (res.ok) {
+        setStatus("success");
+        trackLeadFormSubmit(payload);
+        // Marcar como registrado en el gate para que no vuelva a aparecer
+        markRegistered({
+          name: payload.name,
+          whatsapp: payload.whatsapp,
+          countryCode: "593",
+          countryName: "Ecuador",
+          registeredAt: new Date().toISOString(),
+        });
+      } else {
+        setStatus("error");
+        setError(res.error ?? "No pudimos guardar tus datos. Intenta de nuevo.");
+      }
+    } catch {
+      // Falló la descarga del módulo (sin conexión): mensaje simple y reintentable.
       setStatus("error");
-      setError(res.error ?? "No pudimos guardar tus datos. Intenta de nuevo.");
+      setError("No pudimos cargar el registro. Revisa tu internet e inténtalo de nuevo.");
     }
   }
 
@@ -185,7 +200,7 @@ export function LeadForm() {
                               key={opt.value}
                               type="button"
                               onClick={() => setIntent(active ? "" : opt.value)}
-                              className={`rounded-full border px-4 py-2 text-xs transition-all ${
+                              className={`rounded-full border px-4 py-2 text-xs transition-all relative before:absolute before:-inset-1 before:content-[''] ${
                                 active
                                   ? "border-emerald-brand/50 bg-emerald-deep/50 text-emerald-glow"
                                   : "border-white/10 bg-white/[0.02] text-bone/80 hover:border-white/20"
@@ -243,14 +258,18 @@ export function LeadForm() {
                       </ul>
                       <p className="mt-3 text-muted">
                         Puedes darte de baja en cualquier momento. Tus datos no se comparten con terceros.
-                        Ver <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="underline decoration-emerald-brand/40 hover:text-emerald-glow">privacidad</a>.
+                        Ver <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="py-0.5 underline decoration-emerald-brand/40 hover:text-emerald-glow">privacidad</a>.
                       </p>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+              {error && (
+                <p className="mt-3 text-base text-red-300" role="alert">
+                  {error}
+                </p>
+              )}
 
               {/* Nav */}
               <div className="mt-8 flex items-center justify-between gap-3">

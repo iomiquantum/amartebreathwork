@@ -116,7 +116,7 @@ export function CorporateComparison() {
 
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Comparativa honesta
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
@@ -142,24 +142,24 @@ export function CorporateComparison() {
           <div className="overflow-hidden rounded-3xl border border-white/[0.08] bg-ink-900/40">
             {/* Header */}
             <div className="grid grid-cols-5 border-b border-white/[0.08] bg-white/[0.02]">
-              <div className="p-5 text-[10px] uppercase tracking-eyebrow text-bone/50">
+              <div className="p-5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/50">
                 Criterio
               </div>
               <div className="p-5 text-center text-xs uppercase tracking-eyebrow text-bone/70">
                 Team Building
-                <div className="mt-1 text-[10px] normal-case text-bone/40 tracking-normal">
+                <div className="mt-1 text-xs sm:text-[10px] normal-case text-bone/40 tracking-normal">
                   cuerdas · paintball · escape
                 </div>
               </div>
               <div className="p-5 text-center text-xs uppercase tracking-eyebrow text-bone/70">
                 Apps Meditación
-                <div className="mt-1 text-[10px] normal-case text-bone/40 tracking-normal">
+                <div className="mt-1 text-xs sm:text-[10px] normal-case text-bone/40 tracking-normal">
                   Calm · Headspace
                 </div>
               </div>
               <div className="p-5 text-center text-xs uppercase tracking-eyebrow text-bone/70">
                 Charlas wellbeing
-                <div className="mt-1 text-[10px] normal-case text-bone/40 tracking-normal">
+                <div className="mt-1 text-xs sm:text-[10px] normal-case text-bone/40 tracking-normal">
                   talleres · workshops
                 </div>
               </div>
@@ -169,7 +169,7 @@ export function CorporateComparison() {
                   <span className="inline-flex items-center gap-1.5 text-xs uppercase tracking-eyebrow text-orange-glow">
                     <Sparkles className="size-3" /> AMARTE
                   </span>
-                  <span className="text-[10px] text-bone/50">breathwork inmersivo</span>
+                  <span className="text-xs sm:text-[10px] text-bone/50">breathwork inmersivo</span>
                 </div>
               </div>
             </div>
@@ -229,12 +229,12 @@ export function CorporateComparison() {
                   {col.name}
                 </h3>
               </div>
-              <p className="mt-0.5 text-[11px] text-bone/45">{col.subtitle}</p>
+              <p className="mt-0.5 text-xs sm:text-[11px] text-bone/45">{col.subtitle}</p>
 
               <ul className="mt-4 space-y-3">
                 {ROWS.map((row) => (
                   <li key={row.label} className="flex items-start justify-between gap-3 border-t border-white/[0.04] pt-3 first:border-0 first:pt-0">
-                    <span className="text-[11px] uppercase tracking-eyebrow text-bone/50">
+                    <span className="text-xs sm:text-[11px] uppercase tracking-eyebrow text-bone/50">
                       {row.label}
                     </span>
                     <div className="flex-shrink-0 text-right">

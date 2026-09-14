@@ -56,7 +56,7 @@ export function Schedule() {
                 <p className="font-display text-3xl tabular-nums leading-none text-bone">
                   {new Date(s.dateISO).getDate()}
                 </p>
-                <p className="mt-1 text-[10px] uppercase tracking-eyebrow">
+                <p className="mt-1 text-xs sm:text-[10px] uppercase tracking-eyebrow">
                   {new Date(s.dateISO).toLocaleDateString("es-EC", { month: "short" })}
                 </p>
               </div>
@@ -85,7 +85,7 @@ export function Schedule() {
                     location: s.location,
                   })
                 }
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 text-xs text-bone/85 transition-all hover:border-emerald-brand/50 hover:bg-emerald-deep/30 hover:text-emerald-glow"
+                className="inline-flex h-10 relative before:absolute before:-inset-1 before:content-[''] items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 text-xs text-bone/85 transition-all hover:border-emerald-brand/50 hover:bg-emerald-deep/30 hover:text-emerald-glow"
               >
                 <CalendarPlus className="size-3.5" />
                 Agregar al calendario

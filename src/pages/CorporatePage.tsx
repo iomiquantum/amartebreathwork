@@ -24,6 +24,7 @@ import {
   Plus,
   Minus,
 } from "lucide-react";
+import { PageMeta } from "../components/PageMeta";
 import { submitCorporateInquiry, isValidEmail } from "../lib/supabase";
 import { trackLeadFormSubmit, trackPageView } from "../lib/tracking";
 import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../data/countries";
@@ -167,6 +168,11 @@ export function CorporatePage() {
 
   return (
     <main className="bg-ink text-bone antialiased">
+      <PageMeta
+        title="AMARTE Corporativo · Breathwork para empresas en Ecuador"
+        description="Experiencias inmersivas de breathwork para equipos empresariales. Reducción de estrés, cohesión, productividad. Sesiones presenciales en Ecuador + online. Cotización personalizada."
+        path="/corporativo"
+      />
       <CorporateHero />
       <CorporateStats />
       <CorporateBenefits />
@@ -201,7 +207,7 @@ function CorporateHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 rounded-full border border-orange-brand/30 bg-orange-deep/30 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-orange-glow"
+              className="inline-flex items-center gap-2 rounded-full border border-orange-brand/30 bg-orange-deep/30 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-glow"
             >
               <Building2 className="size-3" /> Para empresas
             </motion.span>
@@ -300,10 +306,10 @@ function CorporateHero() {
               </div>
 
               {/* Labels */}
-              <div className="absolute left-5 top-5 flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-bone/60">
+              <div className="absolute left-5 top-5 flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/60">
                 <Building2 className="size-3 text-orange-brand" /> Sesión privada
               </div>
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-[10px] uppercase tracking-eyebrow text-bone/60">
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/60">
                 <span>Equipo completo</span>
                 <span className="text-orange-brand">● Respirando juntos</span>
               </div>
@@ -337,7 +343,7 @@ function CorporateStats() {
                 {s.value}
               </p>
               <p className="mt-3 text-sm text-bone/85 leading-snug">{s.label}</p>
-              <p className="mt-1 text-[10px] uppercase tracking-eyebrow text-muted">{s.source}</p>
+              <p className="mt-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">{s.source}</p>
             </motion.div>
           ))}
         </div>
@@ -355,7 +361,7 @@ function CorporateBenefits() {
     <section id="beneficios" className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Beneficios
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
@@ -405,7 +411,7 @@ function CorporateUseCases() {
       <div className="pointer-events-none absolute inset-0 bg-radial-gold opacity-40" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-gold-warm">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-gold-warm">
             Cuándo lo necesitas
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -445,7 +451,7 @@ function CorporateProcess() {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Cómo trabajamos
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -508,7 +514,7 @@ function CorporateLogistics() {
     <section className="relative bg-ink-900 py-24 sm:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Logística
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -532,7 +538,7 @@ function CorporateLogistics() {
               >
                 <Icon className="size-5 text-orange-brand" strokeWidth={1.6} />
                 <div>
-                  <p className="text-[10px] uppercase tracking-eyebrow text-muted">{item.label}</p>
+                  <p className="text-xs sm:text-[10px] uppercase tracking-eyebrow text-muted">{item.label}</p>
                   <p className="mt-1.5 font-display text-lg text-bone">{item.value}</p>
                 </div>
               </motion.div>
@@ -555,7 +561,7 @@ function CorporateFAQ() {
     <section className="relative bg-ink py-24 sm:py-32">
       <div className="container-tight">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Preguntas frecuentes
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-4xl text-balance">
@@ -692,7 +698,7 @@ function CorporateForm() {
             </p>
             <p className="mt-3 text-sm text-muted">
               Si necesitas algo urgente, escríbenos directo a{" "}
-              <a href={`mailto:${siteConfig.contactEmail}`} className="text-orange-glow underline">
+              <a href={`mailto:${siteConfig.contactEmail}`} className="py-0.5 text-orange-glow underline">
                 {siteConfig.contactEmail}
               </a>
             </p>
@@ -707,7 +713,7 @@ function CorporateForm() {
       <div className="pointer-events-none absolute inset-0 bg-radial-orange opacity-30" />
       <div className="container-tight relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-orange-brand">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
             Cotización
           </span>
           <h2 className="h-display mt-4 text-3xl sm:text-5xl text-balance">
@@ -728,7 +734,7 @@ function CorporateForm() {
           <div className="gradient-border rounded-3xl bg-ink-900 p-7 sm:p-10">
             {/* Sección: Empresa */}
             <div className="mb-7">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-orange-brand">
+              <div className="flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
                 <Briefcase className="size-3.5" /> Sobre tu empresa
               </div>
 
@@ -745,7 +751,7 @@ function CorporateForm() {
 
             {/* Sección: Sobre la sesión */}
             <div className="mb-7">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-orange-brand">
+              <div className="flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
                 <Target className="size-3.5" /> Sobre la sesión
               </div>
 
@@ -808,7 +814,7 @@ function CorporateForm() {
 
             {/* Sección: Tu contacto */}
             <div className="mb-7">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-eyebrow text-orange-brand">
+              <div className="flex items-center gap-2 text-xs sm:text-[10px] uppercase tracking-eyebrow text-orange-brand">
                 <Mail className="size-3.5" /> Tus datos de contacto
               </div>
 

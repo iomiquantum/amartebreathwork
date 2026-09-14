@@ -106,7 +106,7 @@ export function AudioWavePreview() {
             </div>
           </div>
 
-          <p className="relative mt-5 text-center text-[11px] text-muted">
+          <p className="relative mt-5 text-center text-xs sm:text-[11px] text-muted">
             Esta es una representación visual. El audio real solo se vive en la sesión.
           </p>
         </motion.div>

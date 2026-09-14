@@ -65,7 +65,7 @@ export function SideRail() {
                   transition={{ duration: 0.25, ease: "easeOut" }}
                   className="block h-1 rounded-full"
                 />
-                <span className="absolute right-full mr-3 whitespace-nowrap rounded-full border border-white/10 bg-ink-900/95 px-2 py-1 text-[10px] uppercase tracking-eyebrow text-bone opacity-0 backdrop-blur transition-opacity duration-200 group-hover:opacity-100">
+                <span className="absolute right-full mr-3 whitespace-nowrap rounded-full border border-white/10 bg-ink-900/95 px-2 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone opacity-0 backdrop-blur transition-opacity duration-200 group-hover:opacity-100">
                   {s.label}
                 </span>
               </button>

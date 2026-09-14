@@ -3,7 +3,17 @@
 
 import { GenderPage } from "./gender/GenderPage";
 import { MEN_CONTENT } from "./gender/genderContent";
+import { PageMeta } from "../components/PageMeta";
 
 export function MenPage() {
-  return <GenderPage content={MEN_CONTENT} />;
+  return (
+    <>
+      <PageMeta
+        title={MEN_CONTENT.seoTitle}
+        description={MEN_CONTENT.seoDescription}
+        path={MEN_CONTENT.route}
+      />
+      <GenderPage content={MEN_CONTENT} />
+    </>
+  );
 }

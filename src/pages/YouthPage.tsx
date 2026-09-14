@@ -27,6 +27,7 @@ import {
   Plus,
   Minus,
 } from "lucide-react";
+import { PageMeta } from "../components/PageMeta";
 import { submitYouthInquiry, isValidEmail } from "../lib/supabase";
 import { trackLeadFormSubmit, trackPageView } from "../lib/tracking";
 import { COUNTRIES, DEFAULT_COUNTRY, type Country } from "../data/countries";
@@ -435,6 +436,11 @@ export function YouthPage() {
 
   return (
     <main className="bg-ink text-bone antialiased">
+      <PageMeta
+        title="AMARTE Jóvenes · Breathwork para niños y colegios en Ecuador"
+        description="Breathwork adaptado para niños y adolescentes 9-17 años en Ecuador. Programas para familias y colegios. Regulación emocional con base neurocientífica, alineado al currículo SEL del Ministerio de Educación."
+        path="/jovenes"
+      />
       <YouthHero />
       <YouthRealityStats />
       <YouthWhatIs />
@@ -472,7 +478,7 @@ function YouthHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 rounded-full border border-lavender-soft/40 bg-lavender-deep/20 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-lavender-soft"
+              className="inline-flex items-center gap-2 rounded-full border border-lavender-soft/40 bg-lavender-deep/20 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-lavender-soft"
             >
               <Sparkles className="size-3" /> AMARTE Jóvenes · 9 a 17 años
             </motion.span>
@@ -550,7 +556,7 @@ function YouthHero() {
               <div className="absolute inset-0 bg-noise opacity-40 mix-blend-overlay" />
               <div className="relative flex h-full flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-bone/10 px-3 py-1 text-[10px] uppercase tracking-eyebrow text-bone/70">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-bone/10 px-3 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/70">
                     <Activity className="size-3" /> Lo que la ciencia muestra
                   </div>
                   <p className="mt-6 text-3xl font-light leading-tight text-bone sm:text-4xl">
@@ -579,7 +585,7 @@ function YouthRealityStats() {
     <section className="relative bg-ink-900 py-20 sm:py-28">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-bone/20 bg-bone/5 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-bone/70">
+          <span className="inline-flex items-center gap-2 rounded-full border border-bone/20 bg-bone/5 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/70">
             <AlertTriangle className="size-3" /> La realidad de Ecuador
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -602,7 +608,7 @@ function YouthRealityStats() {
             >
               <div className="text-4xl font-light text-coral-warm sm:text-5xl">{stat.value}</div>
               <p className="mt-3 text-sm text-bone/85 leading-snug">{stat.label}</p>
-              <p className="mt-3 text-[10px] uppercase tracking-eyebrow text-bone/40">{stat.source}</p>
+              <p className="mt-3 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/40">{stat.source}</p>
             </motion.div>
           ))}
         </div>
@@ -636,7 +642,7 @@ function YouthWhatIs() {
       <div className="container-x relative">
         <div className="grid items-start gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-emerald-glow">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-glow">
               <Brain className="size-3" /> Qué es realmente
             </span>
             <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -702,7 +708,7 @@ function YouthBenefits() {
     <section className="bg-ink-900 py-20 sm:py-28">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gold-warm/30 bg-gold-warm/10 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-gold-warm">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gold-warm/30 bg-gold-warm/10 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-gold-warm">
             <Award className="size-3" /> Beneficios documentados
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl">
@@ -728,7 +734,7 @@ function YouthBenefits() {
               <b.icon className="size-7 text-lavender-soft" />
               <h3 className="mt-4 text-lg font-medium text-bone">{b.title}</h3>
               <p className="mt-2 text-sm text-bone/70 leading-relaxed">{b.body}</p>
-              <p className="mt-4 border-t border-bone/10 pt-3 text-[11px] text-bone/40 italic">
+              <p className="mt-4 border-t border-bone/10 pt-3 text-xs sm:text-[11px] text-bone/40 italic">
                 {b.source}
               </p>
             </motion.div>
@@ -749,7 +755,7 @@ function YouthSessionByAge() {
       <div className="pointer-events-none absolute inset-0 bg-radial-lavender opacity-30" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-lavender-soft/30 bg-lavender-deep/20 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-lavender-soft">
+          <span className="inline-flex items-center gap-2 rounded-full border border-lavender-soft/30 bg-lavender-deep/20 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-lavender-soft">
             <Clock className="size-3" /> Protocolos por edad
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -827,7 +833,7 @@ function YouthForSchools() {
       <div className="container-x">
         <div className="grid items-start gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-emerald-glow">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-glow">
               <School className="size-3" /> Para colegios
             </span>
             <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -884,7 +890,7 @@ function YouthForSchools() {
                       <div className="flex items-center gap-3">
                         <h3 className="text-xl font-medium text-bone">{t.tier}</h3>
                         {t.recommended && (
-                          <span className="rounded-full bg-emerald-brand/20 px-2.5 py-0.5 text-[10px] uppercase tracking-eyebrow text-emerald-glow">
+                          <span className="rounded-full bg-emerald-brand/20 px-2.5 py-0.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-glow">
                             Recomendado
                           </span>
                         )}
@@ -926,7 +932,7 @@ function YouthForFamilies() {
       <div className="pointer-events-none absolute inset-0 bg-radial-coral opacity-30" />
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-coral-warm/40 bg-coral-warm/10 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-coral-warm">
+          <span className="inline-flex items-center gap-2 rounded-full border border-coral-warm/40 bg-coral-warm/10 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-coral-warm">
             <Home className="size-3" /> Para familias
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -954,7 +960,7 @@ function YouthForFamilies() {
               }`}
             >
               {t.recommended && (
-                <div className="absolute -top-3 left-6 rounded-full bg-coral-warm px-3 py-1 text-[10px] uppercase tracking-eyebrow text-ink-900">
+                <div className="absolute -top-3 left-6 rounded-full bg-coral-warm px-3 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-ink-900">
                   Más elegido
                 </div>
               )}
@@ -996,7 +1002,7 @@ function YouthSafety() {
     <section className="bg-ink-900 py-20 sm:py-28">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-emerald-glow">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-glow">
             <Shield className="size-3" /> Seguridad ante todo
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -1091,7 +1097,7 @@ function YouthMethodologyVs() {
     <section className="bg-ink py-20 sm:py-28">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gold-warm/30 bg-gold-warm/10 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-gold-warm">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gold-warm/30 bg-gold-warm/10 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-gold-warm">
             <Activity className="size-3" /> Comparativa
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -1150,7 +1156,7 @@ function YouthSchoolProcess() {
     <section className="bg-ink-900 py-20 sm:py-28">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-emerald-glow">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-glow">
             <GraduationCap className="size-3" /> Proceso para colegios
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -1199,7 +1205,7 @@ function YouthCertification() {
         >
           <div className="pointer-events-none absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
           <div className="relative">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold-warm/40 bg-gold-warm/15 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-gold-warm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold-warm/40 bg-gold-warm/15 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-gold-warm">
               <Award className="size-3" /> Próximamente
             </span>
             <h2 className="h-display mt-5 text-3xl leading-tight sm:text-4xl text-balance">
@@ -1252,7 +1258,7 @@ function YouthVoices() {
     <section className="bg-ink-900 py-20 sm:py-28">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-bone/20 bg-bone/5 px-4 py-1.5 text-[10px] uppercase tracking-eyebrow text-bone/70">
+          <span className="inline-flex items-center gap-2 rounded-full border border-bone/20 bg-bone/5 px-4 py-1.5 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/70">
             <Heart className="size-3" /> Voces
           </span>
           <h2 className="h-display mt-5 text-4xl leading-tight sm:text-5xl text-balance">
@@ -1511,7 +1517,7 @@ function YouthForm() {
             <h2 className="h-display mt-6 text-3xl">Gracias. Recibimos tu mensaje.</h2>
             <p className="mt-4 text-base text-bone/80">
               Te contactaremos en las próximas 24h por WhatsApp. Si es urgente, escríbenos directo
-              al <a href="https://wa.me/593995656078" className="text-emerald-glow underline">+593 99 565 6078</a>.
+              al <a href="https://wa.me/593995656078" className="py-0.5 text-emerald-glow underline">+593 99 565 6078</a>.
             </p>
           </motion.div>
         </div>

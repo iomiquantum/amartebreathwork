@@ -16,6 +16,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { fetchEventBySlug, type EventRow } from "../lib/supabase";
+import { PageMeta } from "../components/PageMeta";
 import { siteConfig } from "../data/siteConfig";
 import { ReservationModal } from "../components/ReservationModal";
 import { CTAButton } from "../components/CTAButton";
@@ -25,16 +26,14 @@ export function EventPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [event, setEvent] = useState<EventRow | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+  // Estado inicial derivado de `slug` en el propio render (sin efecto):
+  // sin slug no hay nada que cargar → notFound directo, sin loading.
+  const [loading, setLoading] = useState(() => Boolean(slug));
+  const [notFound, setNotFound] = useState(() => !slug);
   const [reserveOpen, setReserveOpen] = useState(false);
 
   useEffect(() => {
-    if (!slug) {
-      setNotFound(true);
-      setLoading(false);
-      return;
-    }
+    if (!slug) return;
     let mounted = true;
     fetchEventBySlug(slug).then((ev) => {
       if (!mounted) return;
@@ -161,6 +160,11 @@ export function EventPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-ink text-bone">
+        <PageMeta
+          title={`Eventos — ${siteConfig.brandName}`}
+          description={siteConfig.seoDescription}
+          path={`/evento/${slug ?? ""}`}
+        />
         <ScreenReaderLoading label="Cargando evento…" />
         <article className="mx-auto max-w-3xl px-4 pb-20 pt-24 sm:px-6 sm:pt-32">
           <Skeleton className="h-3 w-32" />
@@ -189,6 +193,11 @@ export function EventPage() {
   if (notFound || !event) {
     return (
       <div className="grid min-h-screen place-items-center bg-ink px-4 text-bone">
+        <PageMeta
+          title={`Evento no encontrado — ${siteConfig.brandName}`}
+          description={siteConfig.seoDescription}
+          path={`/evento/${slug ?? ""}`}
+        />
         <div className="max-w-md text-center">
           <p className="text-xs uppercase tracking-eyebrow text-emerald-brand">404</p>
           <h1 className="mt-3 font-display text-3xl">Evento no encontrado</h1>
@@ -227,6 +236,12 @@ export function EventPage() {
 
   return (
     <div className="min-h-screen bg-ink text-bone">
+      <PageMeta
+        title={`${event.title} — ${siteConfig.brandName}`}
+        description={event.description ?? siteConfig.seoDescription}
+        path={`/evento/${event.slug}`}
+        ogType="event"
+      />
       <article className="mx-auto max-w-3xl px-4 pb-20 pt-24 sm:px-6 sm:pt-32">
         <Link
           to="/"
@@ -241,7 +256,7 @@ export function EventPage() {
           transition={{ duration: 0.5 }}
           className="mt-6"
         >
-          <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-eyebrow text-emerald-brand">
+          <div className="flex flex-wrap items-center gap-2 text-xs sm:text-[11px] uppercase tracking-eyebrow text-emerald-brand">
             <FormatIcon className="size-3.5" />
             {event.format}
             {event.city && <span className="text-bone/40">·</span>}

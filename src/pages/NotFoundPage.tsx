@@ -45,7 +45,7 @@ export function NotFoundPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-3 py-1 text-[11px] uppercase tracking-eyebrow text-emerald-glow">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-brand/30 bg-emerald-deep/20 px-3 py-1 text-xs sm:text-[11px] uppercase tracking-eyebrow text-emerald-glow">
             <Compass className="size-3" /> 404
           </div>
 

@@ -5,7 +5,7 @@
 // Crear eventos: por ahora desde Supabase Studio (Table Editor → breathwork_events).
 // Status válidos: draft (no se ve), published, sold_out, cancelled, past.
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -18,8 +18,13 @@ import {
   CalendarPlus,
   MessageCircle,
   CreditCard,
+  RefreshCw,
+  WifiOff,
 } from "lucide-react";
-import { fetchUpcomingEvents, type EventRow } from "../lib/supabase";
+// NOTA lazy: EventRow es solo tipo (se borra al compilar). Las funciones de
+// Supabase se cargan con import() dinámico dentro de loadEvents, DESPUÉS del
+// primer pintado, para no meter el chunk @supabase (~196KB) en la carga inicial.
+import type { EventRow } from "../lib/supabase";
 import { useWhatsappCTA } from "../lib/whatsapp";
 import { trackAddToCart, trackViewContent } from "../lib/tracking";
 import { SectionHeader } from "./SectionHeader";
@@ -55,7 +60,7 @@ function FormatBadge({ format }: { format: EventRow["format"] }) {
   }[format];
   const Icon = cfg.icon;
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-eyebrow ${cfg.color}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow ${cfg.color}`}>
       <Icon className="size-3" strokeWidth={1.8} />
       {cfg.label}
     </span>
@@ -65,22 +70,53 @@ function FormatBadge({ format }: { format: EventRow["format"] }) {
 export function EventsCalendar() {
   const [events, setEvents] = useState<EventRow[]>([]);
   const [loading, setLoading] = useState(true);
+  // Mensaje amable cuando Supabase no responde (red caída / timeout).
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [filterFormat, setFilterFormat] = useState<"all" | EventRow["format"]>("all");
   const [filterCity, setFilterCity] = useState<string>("all");
   const [selectedEvent, setSelectedEvent] = useState<EventRow | null>(null);
   const wa = useWhatsappCTA("event_format");
+  const loadSeq = useRef(0);
+
+  // Import dinámico: el chunk @supabase se descarga aquí, no en el primer
+  // pintado. Todo setState vive en callbacks (nunca síncrono en el efecto).
+  const runLoad = useCallback(() => {
+    const seq = ++loadSeq.current;
+    import("../lib/supabase")
+      .then(({ fetchUpcomingEvents, takeLastSupabaseError }) =>
+        fetchUpcomingEvents(50).then(
+          (data) => {
+            if (loadSeq.current !== seq) return;
+            setEvents(data);
+            // [] puede ser "sin eventos" o "sin conexión": el slot lo distingue.
+            setLoadError(data.length === 0 ? (takeLastSupabaseError()?.message ?? null) : null);
+            setLoading(false);
+          },
+          () => {
+            if (loadSeq.current !== seq) return;
+            setEvents([]);
+            setLoadError("No pudimos cargar la agenda. Revisa tu internet y toca Reintentar.");
+            setLoading(false);
+          },
+        ),
+      )
+      .catch(() => {
+        if (loadSeq.current !== seq) return;
+        setEvents([]);
+        setLoadError("No pudimos cargar la agenda. Revisa tu internet y toca Reintentar.");
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
-    let mounted = true;
-    fetchUpcomingEvents(50).then((data) => {
-      if (!mounted) return;
-      setEvents(data);
-      setLoading(false);
-    });
-    return () => {
-      mounted = false;
-    };
-  }, []);
+    runLoad();
+  }, [runLoad]);
+
+  function handleRetry() {
+    setLoading(true);
+    setLoadError(null);
+    runLoad();
+  }
 
   const cities = useMemo(() => {
     const set = new Set<string>();
@@ -130,6 +166,38 @@ export function EventsCalendar() {
               />
             ))}
           </div>
+        ) : loadError ? (
+          /* Error amable (sin conexión / Supabase no responde) — texto grande y botón amplio */
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            className="mx-auto mt-14 max-w-2xl rounded-3xl border border-white/[0.06] bg-white/[0.015] p-8 text-center sm:p-10"
+            role="alert"
+          >
+            <WifiOff className="mx-auto size-10 text-gold-soft" strokeWidth={1.4} />
+            <h3 className="font-display mt-5 text-2xl text-bone">
+              No pudimos cargar la agenda
+            </h3>
+            <p className="mt-3 text-base text-bone/80 leading-relaxed">{loadError}</p>
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={handleRetry}
+                className="inline-flex h-12 items-center gap-2 rounded-full bg-emerald-brand px-7 text-base font-medium text-ink-900 shadow-glow-emerald transition-all hover:bg-emerald-glow"
+              >
+                <RefreshCw className="size-4" strokeWidth={2} />
+                Reintentar
+              </button>
+              <a
+                {...wa}
+                className="inline-flex h-12 items-center gap-2 rounded-full border border-white/15 px-7 text-base text-bone/90 transition-all hover:border-emerald-brand/50 hover:text-emerald-glow"
+              >
+                <MessageCircle className="size-4" strokeWidth={1.8} />
+                Preguntar por WhatsApp
+              </a>
+            </div>
+          </motion.div>
         ) : events.length === 0 ? (
           /* Empty state */
           <motion.div
@@ -160,7 +228,7 @@ export function EventsCalendar() {
             <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-2">
               <button
                 onClick={() => setFilterFormat("all")}
-                className={`rounded-full px-4 py-1.5 text-xs uppercase tracking-eyebrow transition-colors ${
+                className={`rounded-full px-4 py-1.5 text-xs uppercase tracking-eyebrow transition-colors relative before:absolute before:-inset-1 before:content-[''] ${
                   filterFormat === "all"
                     ? "bg-emerald-brand text-ink-900"
                     : "border border-white/10 text-bone/70 hover:border-white/30"
@@ -172,7 +240,7 @@ export function EventsCalendar() {
                 <button
                   key={f}
                   onClick={() => setFilterFormat(f)}
-                  className={`rounded-full px-4 py-1.5 text-xs uppercase tracking-eyebrow transition-colors ${
+                  className={`rounded-full px-4 py-1.5 text-xs uppercase tracking-eyebrow transition-colors relative before:absolute before:-inset-1 before:content-[''] ${
                     filterFormat === f
                       ? "bg-emerald-brand text-ink-900"
                       : "border border-white/10 text-bone/70 hover:border-white/30"
@@ -222,7 +290,7 @@ export function EventsCalendar() {
                             <p className="font-display text-4xl tabular-nums leading-none text-bone sm:text-3xl">
                               {new Date(e.date_iso).getDate()}
                             </p>
-                            <p className="text-[10px] uppercase tracking-eyebrow text-emerald-glow">
+                            <p className="text-xs sm:text-[10px] uppercase tracking-eyebrow text-emerald-glow">
                               {new Date(e.date_iso).toLocaleDateString("es-EC", { month: "short" })}
                             </p>
                           </div>
@@ -232,12 +300,12 @@ export function EventsCalendar() {
                             <div className="flex flex-wrap items-center gap-2">
                               <FormatBadge format={e.format} />
                               {e.is_featured && (
-                                <span className="inline-flex items-center gap-1 rounded-full border border-gold-warm/30 bg-gold-warm/10 px-2.5 py-1 text-[10px] uppercase tracking-eyebrow text-gold-soft">
+                                <span className="inline-flex items-center gap-1 rounded-full border border-gold-warm/30 bg-gold-warm/10 px-2.5 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-gold-soft">
                                   <Sparkles className="size-3" /> Destacado
                                 </span>
                               )}
                               {e.status === "sold_out" && (
-                                <span className="inline-flex items-center gap-1 rounded-full border border-rose-400/30 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase tracking-eyebrow text-rose-300">
+                                <span className="inline-flex items-center gap-1 rounded-full border border-rose-400/30 bg-rose-500/10 px-2.5 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-rose-300">
                                   Cupos agotados
                                 </span>
                               )}

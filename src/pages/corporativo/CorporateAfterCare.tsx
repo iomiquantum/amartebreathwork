@@ -45,7 +45,7 @@ export function CorporateAfterCare() {
 
       <div className="container-x relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block text-[10px] uppercase tracking-eyebrow text-gold-warm">
+          <span className="inline-block text-xs sm:text-[10px] uppercase tracking-eyebrow text-gold-warm">
             Después de la sesión
           </span>
           <h2 className="h-display mt-4 text-4xl sm:text-5xl text-balance">
@@ -80,7 +80,7 @@ export function CorporateAfterCare() {
                   <div className="grid size-12 place-items-center rounded-2xl border border-orange-brand/40 bg-orange-deep/40 text-orange-glow">
                     <Icon className="size-5" strokeWidth={1.6} />
                   </div>
-                  <span className="inline-block rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-eyebrow text-bone/70">
+                  <span className="inline-block rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/70">
                     {item.badge}
                   </span>
                 </div>

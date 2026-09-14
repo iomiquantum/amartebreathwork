@@ -183,7 +183,7 @@ export function NerveTest() {
                   >
                     <div className="absolute inset-0 bg-noise opacity-30 mix-blend-overlay" />
                     <div className="relative">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-ink-900/60 px-3 py-1 text-[10px] uppercase tracking-eyebrow text-bone/80 backdrop-blur">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-ink-900/60 px-3 py-1 text-xs sm:text-[10px] uppercase tracking-eyebrow text-bone/80 backdrop-blur">
                         <Activity className="size-3 text-emerald-glow" />
                         Resultado · {score}/10
                       </span>
