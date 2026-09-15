@@ -82,9 +82,10 @@ Deploy `b30d631` ● Ready: hash nuevo, título prerenderizado
 
 ## 6. Pendiente (orden)
 
-1. Fase 1: ya PASS, falta decisión de publicación (ciclo público/deploy/privado).
-2. Fases 2, 3, 4 del PLAN-MAESTRO (workflows por fase, reglas: 3 rondas E2E,
-   sin commit sin OK).
+1. Fases 0–4: TODAS terminadas con PASS (23/23). Verificado a mano lo crítico:
+   leads sin éxito falso, PII fuera de píxeles/logs, consent ICE, sync
+   reproducible, `npm test` verde, CSP documentada.
+2. Decisión de publicación (ciclo público/deploy/privado) de GEO + Fases 0–4.
 3. Publicar oleada GEO + Fases (mismo ciclo).
 4. BEON: commit/push propio + su deploy (repo privado → mismo muro Hobby).
 5. Datos reales de negocio para schemas (fechas/lugar/precio ICE-PLANT,
