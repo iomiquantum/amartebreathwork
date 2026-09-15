@@ -3,20 +3,66 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/be-on", "destination": "https://amarte-be-on-web.vercel.app/" },
-    { "source": "/be-on/:path*", "destination": "https://amarte-be-on-web.vercel.app/:path*" },
-    { "source": "/_next/:path*", "destination": "https://amarte-be-on-web.vercel.app/_next/:path*" },
-    { "source": "/comunidad", "destination": "https://amarte-be-on-web.vercel.app/comunidad" },
-    { "source": "/comunidad/:path*", "destination": "https://amarte-be-on-web.vercel.app/comunidad/:path*" },
-    { "source": "/respira", "destination": "https://amarte-be-on-web.vercel.app/respira" },
-    { "source": "/respira/:path*", "destination": "https://amarte-be-on-web.vercel.app/respira/:path*" },
-    { "source": "/manifiesto", "destination": "https://amarte-be-on-web.vercel.app/manifiesto" },
-    { "source": "/manifiesto/:path*", "destination": "https://amarte-be-on-web.vercel.app/manifiesto/:path*" },
-    { "source": "/gracias", "destination": "https://amarte-be-on-web.vercel.app/gracias" },
-    { "source": "/gracias/:path*", "destination": "https://amarte-be-on-web.vercel.app/gracias/:path*" },
-    { "source": "/privacidad", "destination": "https://amarte-be-on-web.vercel.app/privacidad" },
-    { "source": "/terminos", "destination": "https://amarte-be-on-web.vercel.app/terminos" },
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/api/forms",
+      "destination": "/api/forms"
+    },
+    {
+      "source": "/be-on",
+      "destination": "https://amarte-be-on-web.vercel.app/"
+    },
+    {
+      "source": "/be-on/:path*",
+      "destination": "https://amarte-be-on-web.vercel.app/:path*"
+    },
+    {
+      "source": "/_next/:path*",
+      "destination": "https://amarte-be-on-web.vercel.app/_next/:path*"
+    },
+    {
+      "source": "/comunidad",
+      "destination": "https://amarte-be-on-web.vercel.app/comunidad"
+    },
+    {
+      "source": "/comunidad/:path*",
+      "destination": "https://amarte-be-on-web.vercel.app/comunidad/:path*"
+    },
+    {
+      "source": "/respira",
+      "destination": "https://amarte-be-on-web.vercel.app/respira"
+    },
+    {
+      "source": "/respira/:path*",
+      "destination": "https://amarte-be-on-web.vercel.app/respira/:path*"
+    },
+    {
+      "source": "/manifiesto",
+      "destination": "https://amarte-be-on-web.vercel.app/manifiesto"
+    },
+    {
+      "source": "/manifiesto/:path*",
+      "destination": "https://amarte-be-on-web.vercel.app/manifiesto/:path*"
+    },
+    {
+      "source": "/gracias",
+      "destination": "https://amarte-be-on-web.vercel.app/gracias"
+    },
+    {
+      "source": "/gracias/:path*",
+      "destination": "https://amarte-be-on-web.vercel.app/gracias/:path*"
+    },
+    {
+      "source": "/privacidad",
+      "destination": "https://amarte-be-on-web.vercel.app/privacidad"
+    },
+    {
+      "source": "/terminos",
+      "destination": "https://amarte-be-on-web.vercel.app/terminos"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
   ],
   "headers": [
     {
@@ -44,7 +90,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://*.vercel-insights.com https://www.googletagmanager.com https://connect.facebook.net https://analytics.tiktok.com https://*.clarity.ms https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; media-src 'self' blob: data: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.vercel-insights.com https://va.vercel-scripts.com https://www.google-analytics.com https://*.google-analytics.com https://*.facebook.com https://www.facebook.com https://*.tiktok.com https://analytics.tiktok.com https://*.clarity.ms https://c.bing.com https://ipapi.co; worker-src 'self'; manifest-src 'self'; frame-src 'self' https://*.payphone.app; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' https://challenges.cloudflare.com 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com https://www.googletagmanager.com https://connect.facebook.net https://analytics.tiktok.com https://*.clarity.ms https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; media-src 'self' blob: data: https:; connect-src 'self' https://challenges.cloudflare.com https://*.supabase.co wss://*.supabase.co https://*.vercel-insights.com https://va.vercel-scripts.com https://www.google-analytics.com https://*.google-analytics.com https://*.facebook.com https://www.facebook.com https://*.tiktok.com https://analytics.tiktok.com https://*.clarity.ms https://c.bing.com https://ipapi.co; worker-src 'self'; manifest-src 'self'; frame-src 'self' https://challenges.cloudflare.com https://*.payphone.app; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests"
         }
       ]
     },
@@ -80,6 +126,19 @@
         {
           "key": "Content-Type",
           "value": "application/xml; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/admin/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
         }
       ]
     }

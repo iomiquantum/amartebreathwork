@@ -43,6 +43,10 @@ const STATIC_ROUTES = [
   { loc: `${SITE_URL}/presentaciones`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE_URL}/proceso`, priority: "0.7", changefreq: "monthly" },
   { loc: `${SITE_URL}/sobre-amarte`, priority: "0.7", changefreq: "monthly" },
+  { loc: `${SITE_URL}/test`, priority: "0.7", changefreq: "monthly" },
+  // Embeds estáticos servidos desde public/ice y public/plant.
+  { loc: `${SITE_URL}/ice`, priority: "0.9", changefreq: "weekly" },
+  { loc: `${SITE_URL}/plant`, priority: "0.9", changefreq: "weekly" },
 ];
 
 function escapeXml(str) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Loader2, CheckCircle2 } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
@@ -11,10 +11,34 @@ export function Newsletter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  // Honeypot con nombre no fijo: se rota al montar vía ref (sin re-render).
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const pool = ["contacto_extra", "datos_adicionales", "info_complemento", "referencia_extra"];
+    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    const el = honeypotRef.current;
+    if (el) {
+      el.name = chosen;
+      el.id = `newsletter-${chosen}`;
+    }
+  }, []);
+  const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // Bot que llenó la trampa: éxito simulado sin fricción ni llamada.
+    if (honeypot) {
+      setStatus("success");
+      return;
+    }
     if (!email) return;
+    // Validación sin fricción: mensaje amable antes de llamar al servidor.
+    if (!emailLooksValid) {
+      setStatus("error");
+      setError("Revisa tu email: parece que le falta algo (ej. tu@email.com).");
+      return;
+    }
     setStatus("loading");
     setError("");
     try {
@@ -57,6 +81,7 @@ export function Newsletter() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                role="status"
                 className="mt-6 flex items-center gap-3 rounded-2xl border border-emerald-brand/30 bg-emerald-deep/30 p-4 text-bone"
               >
                 <CheckCircle2 className="size-5 text-emerald-glow" />
@@ -64,11 +89,30 @@ export function Newsletter() {
               </motion.div>
             ) : (
               <form onSubmit={onSubmit} className="mt-7 flex flex-col gap-3 sm:flex-row">
+                {/* Honeypot anti-bots: invisible para humanos, nombre no fijo */}
+                <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
+                  <input
+                    ref={honeypotRef}
+                    type="text"
+                    id="newsletter-contacto_extra"
+                    name="contacto_extra"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
                 <div className="relative flex-1">
+                  <label htmlFor="newsletter-email" className="sr-only">Tu email</label>
                   <Mail className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted" />
                   <input
+                    id="newsletter-email"
+                    name="email"
                     type="email"
                     required
+                    autoComplete="email"
+                    aria-describedby="newsletter-privacy"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tu@email.com"
@@ -90,7 +134,7 @@ export function Newsletter() {
                 {error}
               </p>
             )}
-            <p className="mt-3 text-xs text-muted">
+            <p id="newsletter-privacy" className="mt-3 text-sm text-bone/80">
               Solo enviamos lo importante. Te puedes dar de baja en cualquier momento.
             </p>
           </div>

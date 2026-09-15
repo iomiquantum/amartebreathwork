@@ -80,12 +80,25 @@ Deploy `b30d631` ● Ready: hash nuevo, título prerenderizado
 - `gh repo edit --visibility public|private --accept-visibility-change-consequences`.
 - Auditoría pre-publicar: `git grep -E "eyJ|sb_secret|service_role.*key"` sin valores.
 
-## 6. Pendiente (orden)
+## 6. Revisión final pre-commit (lista para OK)
 
-1. Fases 0–4: TODAS terminadas con PASS (23/23). Verificado a mano lo crítico:
-   leads sin éxito falso, PII fuera de píxeles/logs, consent ICE, sync
-   reproducible, `npm test` verde, CSP documentada.
-2. Decisión de publicación (ciclo público/deploy/privado) de GEO + Fases 0–4.
+- Builds: BW `npm run build` OK (dist fresco con prerender 8 rutas) ·
+  ICE/PLANT `tsc -b` OK · BEON `npm run build` OK.
+- `npm test` BW en verde. E2E local: `/`, `/presentaciones` (título
+  prerenderizado), `/ice/`, `/plant/`, `/llms.txt`, OGs en 200.
+- `npx eslint .`: 13 errores + 1 warning, TODOS preexistentes (archivos
+  intactos desde HEAD: admin, audio, pixels, toast, whatsappGate). Decisión:
+  no tocarlos (cambiar efectos en admin/audio a ciegas sí mete riesgo).
+- Inventario para commit (BW, 93 rutas: oleadas GEO + Fases 0–4 + docs);
+  BEON (Fase 0/1/GEO); ICE/PLANT (commits locales iniciales + cambios Fase 1–3
+  encima, sin remoto).
+- Nada commiteado a la espera del OK del dueño.
+
+## 7. Pendiente (orden)
+
+1. OK del dueño → commits/pushes (BW, BEON; crear remotos ICE/PLANT).
+2. Publicación (ciclo público/deploy verificado/privado, BW y BEON).
+3. Datos del negocio (fechas/lugar/precio, WhatsApp ICE, LOPDP).
 3. Publicar oleada GEO + Fases (mismo ciclo).
 4. BEON: commit/push propio + su deploy (repo privado → mismo muro Hobby).
 5. Datos reales de negocio para schemas (fechas/lugar/precio ICE-PLANT,

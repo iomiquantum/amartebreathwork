@@ -1,3 +1,4 @@
+import { csvCell } from "../../lib/csv";
 // Lista de leads con filtro por búsqueda + export CSV.
 
 import { useEffect, useMemo, useState } from "react";
@@ -54,9 +55,7 @@ export function AdminLeads() {
       headers
         .map((h) => {
           const val = (l as unknown as Record<string, unknown>)[h];
-          if (val == null) return "";
-          const str = String(val).replaceAll('"', '""');
-          return /[",\n]/.test(str) ? `"${str}"` : str;
+          return csvCell(val);
         })
         .join(","),
     );

@@ -1,3 +1,4 @@
+import { submitSecurePayload } from "./secureForms";
 // Supabase LAZY — @supabase/supabase-js (~196KB) NUNCA se importa de forma
 // estática desde este módulo. El cliente real solo se descarga con
 // `import()` dinámico la primera vez que una acción lo necesita (enviar un
@@ -5,7 +6,7 @@
 // ni descarga ese chunk.
 //
 // Lo que SÍ es síncrono y barato (sin dependencias pesadas):
-// - supabaseConfigured, sanitizePhone, isValidEmail, MAX_ATTEMPTS_PER_PHONE
+// - supabaseConfigured, sanitizePhone, isValidEmail
 // - todos los `type` / `interface` (se borran al compilar)
 // - `supabase`: proxy compatible que carga el cliente bajo demanda. Existe
 //   solo para no romper a los consumidores que no pueden migrar aún
@@ -242,29 +243,9 @@ export function isValidEmail(email: string): boolean {
   return EMAIL_REGEX.test(email.trim());
 }
 
-// Límite de intentos por número de WhatsApp (anti-bot soft cap)
-export const MAX_ATTEMPTS_PER_PHONE = 3;
+// Los límites y las escrituras de formularios se verifican en /api/forms.
 
-export async function countLeadAttempts(whatsapp: string): Promise<number> {
-  const client = await getQueryClient();
-  if (!client) return 0;
-  try {
-    const { data, error } = await withTimeout(
-      client.rpc("count_lead_attempts", { p_whatsapp: whatsapp }),
-      QUERY_TIMEOUT_MS,
-      MSG_SLOW,
-    );
-    if (error) {
-      console.warn("[supabase] count_lead_attempts failed", error);
-      return 0;
-    }
-    return (data as number) ?? 0;
-  } catch (err) {
-    recordTransportError(err);
-    console.warn("[supabase] count_lead_attempts failed", err);
-    return 0;
-  }
-}
+
 
 // ============================================
 // LEADS
@@ -292,41 +273,9 @@ export interface LeadInput {
 
 export async function submitLead(
   lead: LeadInput
-): Promise<{ ok: boolean; error?: string; simulated?: boolean; blocked?: "bot" | "limit" }> {
-  // Bot protection: honeypot
-  if (lead.honeypot && lead.honeypot.length > 0) {
-    return { ok: false, error: "Bot detectado", blocked: "bot" };
-  }
-
-  // Validación email si fue provisto
-  if (lead.email && !isValidEmail(lead.email)) {
-    return { ok: false, error: "Email inválido" };
-  }
-
-  // Soft cap: máximo 3 intentos por mismo whatsapp (ventana cerrada / re-registro permitido x3)
-  if (supabaseConfigured) {
-    const attempts = await countLeadAttempts(lead.whatsapp);
-    if (attempts >= MAX_ATTEMPTS_PER_PHONE) {
-      return {
-        ok: false,
-        error: `Ya estás registrado. Si necesitas el link del grupo, escríbenos por WhatsApp.`,
-        blocked: "limit",
-      };
-    }
-  }
-
-  const client = await getQueryClient();
-  if (!client) {
-    const transportError = takeLastSupabaseError();
-    if (transportError) return { ok: false, error: transportError.message };
-    console.warn("[supabase] Not configured — guardando solo en consola.");
-    console.log("[lead]", lead);
-    return { ok: true, simulated: true };
-  }
-
-  try {
-    const { error } = await withTimeout(
-      client.from("breathwork_leads").insert({
+): Promise<{ ok: boolean; error?: string; blocked?: "bot" | "limit" }> {
+  if (lead.honeypot && lead.honeypot.length > 0) return {ok:false,error:"Bot detectado",blocked:"bot"};
+  return submitSecurePayload("lead", {
         name: lead.name,
         whatsapp: lead.whatsapp,
         country_code: lead.countryCode ?? "593",
@@ -336,26 +285,7 @@ export async function submitLead(
         email: lead.email ?? null,
         source: lead.source ?? "landing",
         user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-      }),
-      QUERY_TIMEOUT_MS,
-      MSG_SLOW,
-    );
-
-    if (error) {
-      console.error("[supabase] insert lead failed", error);
-      return { ok: false, error: error.message };
-    }
-  } catch (err) {
-    recordTransportError(err);
-    console.error("[supabase] insert lead failed", err);
-    return { ok: false, error: toFriendlySupabaseError(err) };
-  }
-
-  if (lead.email && isValidEmail(lead.email)) {
-    subscribeNewsletter(lead.email).catch(() => undefined);
-  }
-
-  return { ok: true };
+       honeypot_value: lead.honeypot || undefined });
 }
 
 // ============================================
@@ -470,54 +400,8 @@ export interface ReservationResult {
 }
 
 export async function createReservation(input: ReservationInput): Promise<ReservationResult> {
-  if (input.honeypot && input.honeypot.length > 0) {
-    return { ok: false, error: "Bot detectado", blocked: "bot" };
-  }
-  if (!isValidEmail(input.email)) {
-    return { ok: false, error: "Email inválido" };
-  }
-  const client = await getQueryClient();
-  if (!client) {
-    const transportError = takeLastSupabaseError();
-    if (transportError) return { ok: false, error: transportError.message };
-    return { ok: true, reservationId: "simulated" };
-  }
-
-  // NOTA: NO usamos .select() porque anon role NO tiene SELECT en breathwork_reservations
-  // (por privacidad). Generamos un tracking code client-side para mostrar al usuario.
-  const trackingCode = `RES-${Date.now().toString(36).toUpperCase()}`;
-
-  try {
-    const { error } = await withTimeout(
-      client.from("breathwork_reservations").insert({
-        event_id: input.eventId,
-        name: input.name,
-        email: input.email.trim().toLowerCase(),
-        whatsapp: input.whatsapp,
-        country_code: input.countryCode ?? "593",
-        country_name: input.countryName ?? "Ecuador",
-        amount: input.amount,
-        currency: input.currency,
-        payment_method: input.paymentMethod,
-        payment_status: "pending",
-        admin_notes: `tracking_code:${trackingCode}`,
-        user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-      }),
-      QUERY_TIMEOUT_MS,
-      MSG_SLOW,
-    );
-
-    if (error) {
-      console.error("[supabase] create reservation failed", error);
-      return { ok: false, error: error.message };
-    }
-  } catch (err) {
-    recordTransportError(err);
-    console.error("[supabase] create reservation failed", err);
-    return { ok: false, error: toFriendlySupabaseError(err) };
-  }
-
-  return { ok: true, reservationId: trackingCode };
+  if (input.honeypot && input.honeypot.length > 0) return {ok:false,error:"Bot detectado",blocked:"bot"};
+  return submitSecurePayload("reservation", { event_id: input.eventId, name: input.name, email: input.email.trim().toLowerCase(), whatsapp: input.whatsapp, country_code: input.countryCode ?? "593", country_name: input.countryName ?? "Ecuador", payment_method: input.paymentMethod });
 }
 
 // ============================================
@@ -588,31 +472,10 @@ export interface CorporateInquiryInput {
 export async function submitCorporateInquiry(
   input: CorporateInquiryInput
 ): Promise<{ ok: boolean; error?: string; blocked?: "bot" }> {
-  if (input.honeypot && input.honeypot.length > 0) {
-    return { ok: false, error: "Bot detectado", blocked: "bot" };
-  }
-  if (!isValidEmail(input.contactEmail)) {
-    return { ok: false, error: "Email inválido" };
-  }
-  const client = await getQueryClient();
-  if (!client) {
-    const transportError = takeLastSupabaseError();
-    if (transportError) return { ok: false, error: transportError.message };
-    console.log("[corp inquiry]", input);
-    return { ok: true };
-  }
-
-  const utm = typeof window !== "undefined"
-    ? {
-        utm_source: sessionStorage.getItem("amarte_utm_source"),
-        utm_medium: sessionStorage.getItem("amarte_utm_medium"),
-        utm_campaign: sessionStorage.getItem("amarte_utm_campaign"),
-      }
-    : { utm_source: null, utm_medium: null, utm_campaign: null };
-
-  try {
-    const { error } = await withTimeout(
-      client.from("breathwork_corporate_inquiries").insert({
+  if (input.honeypot && input.honeypot.length > 0) return {ok:false,error:"Bot detectado",blocked:"bot"};
+  const utm = {utm_source: null as string | null, utm_medium: null as string | null, utm_campaign: null as string | null};
+  try { for (const key of Object.keys(utm) as (keyof typeof utm)[]) utm[key] = sessionStorage.getItem(`amarte_${key}`); } catch { /* Storage may be disabled. */ }
+  return submitSecurePayload("corporate", {
         contact_name: input.contactName,
         contact_email: input.contactEmail.trim().toLowerCase(),
         contact_role: input.contactRole ?? null,
@@ -631,21 +494,7 @@ export async function submitCorporateInquiry(
         utm_medium: utm.utm_medium,
         utm_campaign: utm.utm_campaign,
         user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-      }),
-      QUERY_TIMEOUT_MS,
-      MSG_SLOW,
-    );
-
-    if (error) {
-      console.error("[supabase] corp inquiry failed", error);
-      return { ok: false, error: error.message };
-    }
-  } catch (err) {
-    recordTransportError(err);
-    console.error("[supabase] corp inquiry failed", err);
-    return { ok: false, error: toFriendlySupabaseError(err) };
-  }
-  return { ok: true };
+       honeypot_value: input.honeypot || undefined });
 }
 
 // ============================================
@@ -677,31 +526,10 @@ export interface GenderInquiryInput {
 export async function submitGenderInquiry(
   input: GenderInquiryInput
 ): Promise<{ ok: boolean; error?: string; blocked?: "bot" }> {
-  if (input.honeypot && input.honeypot.length > 0) {
-    return { ok: false, error: "Bot detectado", blocked: "bot" };
-  }
-  if (input.email && !isValidEmail(input.email)) {
-    return { ok: false, error: "Email inválido" };
-  }
-  const client = await getQueryClient();
-  if (!client) {
-    const transportError = takeLastSupabaseError();
-    if (transportError) return { ok: false, error: transportError.message };
-    console.log("[gender inquiry]", input);
-    return { ok: true };
-  }
-
-  const utm = typeof window !== "undefined"
-    ? {
-        utm_source: sessionStorage.getItem("amarte_utm_source"),
-        utm_medium: sessionStorage.getItem("amarte_utm_medium"),
-        utm_campaign: sessionStorage.getItem("amarte_utm_campaign"),
-      }
-    : { utm_source: null, utm_medium: null, utm_campaign: null };
-
-  try {
-    const { error } = await withTimeout(
-      client.from("breathwork_gender_inquiries").insert({
+  if (input.honeypot && input.honeypot.length > 0) return {ok:false,error:"Bot detectado",blocked:"bot"};
+  const utm = {utm_source: null as string | null, utm_medium: null as string | null, utm_campaign: null as string | null};
+  try { for (const key of Object.keys(utm) as (keyof typeof utm)[]) utm[key] = sessionStorage.getItem(`amarte_${key}`); } catch { /* Storage may be disabled. */ }
+  return submitSecurePayload("gender", {
         audience: input.audience,
         name: input.name,
         whatsapp: input.whatsapp,
@@ -720,26 +548,7 @@ export async function submitGenderInquiry(
         utm_medium: utm.utm_medium,
         utm_campaign: utm.utm_campaign,
         user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-      }),
-      QUERY_TIMEOUT_MS,
-      MSG_SLOW,
-    );
-
-    if (error) {
-      console.error("[supabase] gender inquiry failed", error);
-      return { ok: false, error: error.message };
-    }
-  } catch (err) {
-    recordTransportError(err);
-    console.error("[supabase] gender inquiry failed", err);
-    return { ok: false, error: toFriendlySupabaseError(err) };
-  }
-
-  if (input.email && isValidEmail(input.email)) {
-    subscribeNewsletter(input.email).catch(() => undefined);
-  }
-
-  return { ok: true };
+       honeypot_value: input.honeypot || undefined });
 }
 
 // ============================================
@@ -779,32 +588,10 @@ export interface YouthInquiryInput {
 export async function submitYouthInquiry(
   input: YouthInquiryInput
 ): Promise<{ ok: boolean; error?: string; blocked?: "bot" }> {
-  if (input.honeypot && input.honeypot.length > 0) {
-    return { ok: false, error: "Bot detectado", blocked: "bot" };
-  }
-  const emailToCheck = input.inquiryType === "school" ? input.contactEmail : input.parentEmail;
-  if (emailToCheck && !isValidEmail(emailToCheck)) {
-    return { ok: false, error: "Email inválido" };
-  }
-  const client = await getQueryClient();
-  if (!client) {
-    const transportError = takeLastSupabaseError();
-    if (transportError) return { ok: false, error: transportError.message };
-    console.log("[youth inquiry]", input);
-    return { ok: true };
-  }
-
-  const utm = typeof window !== "undefined"
-    ? {
-        utm_source: sessionStorage.getItem("amarte_utm_source"),
-        utm_medium: sessionStorage.getItem("amarte_utm_medium"),
-        utm_campaign: sessionStorage.getItem("amarte_utm_campaign"),
-      }
-    : { utm_source: null, utm_medium: null, utm_campaign: null };
-
-  try {
-    const { error } = await withTimeout(
-      client.from("breathwork_youth_inquiries").insert({
+  if (input.honeypot && input.honeypot.length > 0) return {ok:false,error:"Bot detectado",blocked:"bot"};
+  const utm = {utm_source: null as string | null, utm_medium: null as string | null, utm_campaign: null as string | null};
+  try { for (const key of Object.keys(utm) as (keyof typeof utm)[]) utm[key] = sessionStorage.getItem(`amarte_${key}`); } catch { /* Storage may be disabled. */ }
+  return submitSecurePayload("youth", {
         inquiry_type: input.inquiryType,
         parent_name: input.parentName ?? null,
         parent_email: input.parentEmail ? input.parentEmail.trim().toLowerCase() : null,
@@ -830,61 +617,22 @@ export async function submitYouthInquiry(
         utm_medium: utm.utm_medium,
         utm_campaign: utm.utm_campaign,
         user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-      }),
-      QUERY_TIMEOUT_MS,
-      MSG_SLOW,
-    );
-
-    if (error) {
-      console.error("[supabase] youth inquiry failed", error);
-      return { ok: false, error: error.message };
-    }
-  } catch (err) {
-    recordTransportError(err);
-    console.error("[supabase] youth inquiry failed", err);
-    return { ok: false, error: toFriendlySupabaseError(err) };
-  }
-
-  // Auto-suscribir al newsletter si dio email válido
-  const emailForNewsletter = input.inquiryType === "school" ? input.contactEmail : input.parentEmail;
-  if (emailForNewsletter && isValidEmail(emailForNewsletter)) {
-    subscribeNewsletter(emailForNewsletter).catch(() => undefined);
-  }
-
-  return { ok: true };
+       honeypot_value: input.honeypot || undefined });
 }
 
 export async function subscribeNewsletter(email: string) {
-  if (!isValidEmail(email)) return { ok: false, error: "Email inválido" };
-
-  const client = await getQueryClient();
-  if (!client) {
-    const transportError = takeLastSupabaseError();
-    if (transportError) return { ok: false, error: transportError.message };
-    console.warn("[supabase] Not configured — guardando solo en consola.");
-    console.log("[newsletter]", email);
-    return { ok: true, simulated: true };
-  }
-
-  try {
-    const { error } = await withTimeout(
-      client.from("breathwork_subscribers").insert({
+  return submitSecurePayload("newsletter", {
         email: email.trim().toLowerCase(),
         source: "landing",
-      }),
-      QUERY_TIMEOUT_MS,
-      MSG_SLOW,
-    );
+      });
+}
 
-    if (error) {
-      console.error("[supabase] insert subscriber failed", error);
-      if (error.code === "23505") return { ok: true };
-      return { ok: false, error: error.message };
-    }
-  } catch (err) {
-    recordTransportError(err);
-    console.error("[supabase] insert subscriber failed", err);
-    return { ok: false, error: toFriendlySupabaseError(err) };
-  }
-  return { ok: true };
+// MFA uses the same lazy authenticated client as the admin dashboard.
+export async function getAdminAuth() {
+  return (await loadSupabaseClient()).auth;
+}
+export async function checkAdminAccess(): Promise<boolean> {
+  const client = await loadSupabaseClient();
+  const { data, error } = await client.rpc('is_amarte_admin');
+  return !error && data === true;
 }

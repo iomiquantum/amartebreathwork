@@ -1,0 +1,41 @@
+{
+  "app": "plant",
+  "base": "/plant/",
+  "source": {
+    "dir": "/Users/iomijhondavid/Documents/PROYECTOS CLAUDE CODE/M4MACIOMI-JD/OPUS47/PLANT-SOUND-IMMERSION",
+    "commit": "d91977c",
+    "dirty": true
+  },
+  "builder": {
+    "node": "v24.14.1",
+    "tsc": "5.9.3",
+    "vite": "6.4.3"
+  },
+  "files": {
+    "assets/BenefitsSection-DgMBbmNb.js": "1df9efec29dd81359accd1fc91f73a970e99e041929ff04d7290b475ab07ce5e",
+    "assets/CinematicQuote-VtubQUdz.js": "0804c1fa08c955b10ed3d06bf13c42011eb702d2e52e9283c1c413c978481261",
+    "assets/Differentiators-BwMSYuKb.js": "880a082f99c0bdd36def4eb4c84491540dc87d258d2eef3a3c313b2387f45224",
+    "assets/EventFormat-BHWyi9vt.js": "65bea58fb68a9ac85c925d95f7f39899a5dea6e505f5be109665d5df4be2ba4c",
+    "assets/ExperienceSection-BPFLQkmr.js": "af7e6561ef06b222c402322f69723f8e82884f33c46c709a13a9b555e71d9eee",
+    "assets/FAQ-CiABFnHn.js": "fc04018e94b3967d893582d6075262648cf5e4d975c308029e723a81045c7b91",
+    "assets/FinalCTA-CwYXMKbp.js": "d670bbbfe63c2970615f3dd3d98a0da7bbf23e2734e3b39e86cafaa40f189dc7",
+    "assets/FloatingWhatsappButton-CtIiEvjw.js": "46c74912f55b08871987fd21a9e46e5db9dfbaf76489dc588a6d9c77b8d6203f",
+    "assets/ForWhoSection-CTP4Vp9_.js": "33ed50f08f39434d3c2405e9f3cc6b331d30a32e0d991a4df729349f2d51a769",
+    "assets/HowItWorks-CJB8l-qD.js": "e75dde29ff7e704faba0522a7049a0bdea8321c1d72d3ba465c06ce9a92e08ec",
+    "assets/IncludesSection-sNxHfMCu.js": "30eadb0ced8620ae5dbc9a0087962d28d88b8f7e0e70ce908cfe3b41f508a72f",
+    "assets/LocationsSection-VLej1B9b.js": "7bd44e6c3f4d03d1ae2c53e590f94fd403f083abc1a241f75ca9b2bebad2d622",
+    "assets/ProblemSection-CxwAha2g.js": "70f537d71c28e68a8fc999f02bdac4a88ab6e9b9eb182c77cc0c976b0a9a165e",
+    "assets/ResponsibleNotice-DuXpxO9h.js": "74ca1a6ee20e86fa84c04076f29f3231cb011f4cc3577303bb9a3783c939d347",
+    "assets/SectionHeader-DWyPkJT-.js": "d674f102615c449a2f67835dd7e535e8f6f596ec0cca9f25f12a87ff628fc611",
+    "assets/WhatsappCommunity-Y2kbveNZ.js": "bbc399c3fb22be0165eb9f1aa0e11426e5f4d648d816f4933ff793ccc5119d93",
+    "assets/icons-DX5DQGPC.js": "834e61dcce23b78d4e765cadac370d304ec45d51e9762dcc5538a9c203a0f490",
+    "assets/index-D0sJ0hZ0.css": "05f06157cbf2bfebcd3abf4cc88846918ae103317a35c336d4d73ab490381ff0",
+    "assets/index-S7osNjnA.js": "f36b739fd807946339e9e10bd4a0572a49cd6e05ded4059eda34c36d9e22f419",
+    "assets/motion-DAi8O9ND.js": "4da819db72c12c793d06ea4eded2b2809fee211666b30304b80e21da5c7b960d",
+    "assets/vendor-react-Bd3GDJFJ.js": "e4a561676ed1ac18a5c6cdcbca71b70d1f5ecbd40bdda7765b3d05009de16b95",
+    "favicon.svg": "c07efb6419346757a90326567d5083041692f0cd48bb54d61993684a548f6ecf",
+    "index.html": "60f274d65a351868ea7582eba3d19e3956f5c7640e42a903c2af5490543eff58",
+    "llms.txt": "617736549a8d38b50c655cf220d0a3f0ec4860f49a6f7ededad0b3393ad342d6",
+    "og-image.png": "34092495bc24ebb682697decd0650de66b7889d3e4b792fbfc3e87f0e6da2fe8"
+  }
+}

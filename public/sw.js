@@ -4,7 +4,7 @@
 //  - Static (CSS/JS/fonts/images en /assets/): cache-first con stale-while-revalidate.
 //  - Resto: network-first transparente.
 
-const VERSION = "v1-2026-05-21";
+const VERSION = "v2-security-2026-09-15";
 const STATIC_CACHE = `amarte-static-${VERSION}`;
 const HTML_CACHE = `amarte-html-${VERSION}`;
 
@@ -53,7 +53,8 @@ self.addEventListener("fetch", (event) => {
   // No cachear requests cross-origin (Supabase, ipapi, etc.)
   if (url.origin !== self.location.origin) return;
   // No interceptar el admin (datos sensibles + queremos siempre fresco)
-  if (url.pathname.startsWith("/admin")) return;
+  if (/^\/(admin|api|be-on|_next|comunidad|respira|manifiesto|gracias)(\/|$)/.test(url.pathname)) return;
+  if (url.search || req.headers.has("authorization")) return;
   // No interceptar HMR / sourcemaps
   if (url.pathname.includes("__vite") || url.pathname.endsWith(".map")) return;
 
@@ -64,7 +65,9 @@ self.addEventListener("fetch", (event) => {
         try {
           const fresh = await fetch(req);
           const cache = await caches.open(HTML_CACHE);
-          cache.put(req, fresh.clone());
+          if (fresh.ok && !fresh.redirected && !/no-store|private/i.test(fresh.headers.get("cache-control") || "")) {
+            cache.put(req, fresh.clone());
+          }
           return fresh;
         } catch {
           const cache = await caches.open(HTML_CACHE);

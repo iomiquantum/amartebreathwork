@@ -13,6 +13,8 @@ const TABLES = [
   "breathwork_reservations",
   "breathwork_corporate_inquiries",
   "amarte_bank_config",
+  "breathwork_gender_inquiries",
+  "breathwork_youth_inquiries",
 ];
 
 const BUCKET = "backups";
@@ -26,6 +28,9 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  // Reject malformed unauthenticated requests before reading Vault.
+  const candidate = req.headers.get("x-backup-secret");
+  if (!candidate || !/^[a-f0-9]{64}$/i.test(candidate)) return new Response("Unauthorized", {status:401});
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, serviceKey, {
@@ -37,7 +42,7 @@ Deno.serve(async (req: Request) => {
   );
   if (secretErr || !expectedSecret) {
     return new Response(
-      JSON.stringify({ error: "Vault secret unavailable", details: secretErr?.message }),
+      JSON.stringify({ error: "Backup unavailable" }),
       { status: 500, headers: { "Content-Type": "application/json" } },
     );
   }
@@ -64,12 +69,15 @@ Deno.serve(async (req: Request) => {
   const summary: Record<string, { rows: number; bytes: number }> = {};
 
   for (const table of TABLES) {
-    const { data, error } = await supabase.from(table).select("*");
-    if (error) {
-      return new Response(
-        JSON.stringify({ error: `Failed reading ${table}`, details: error.message }),
-        { status: 500, headers: { "Content-Type": "application/json" } },
-      );
+    // Explicit pagination: Supabase defaults to a capped result set.
+    const data: unknown[] = [];
+    for (let offset = 0; ; offset += 500) {
+      const { data: page, error } = await supabase.from(table).select("*").order("id").range(offset, offset + 499);
+      if (error) return new Response(JSON.stringify({error:"Backup read failed"}), {status:500});
+      data.push(...(page ?? []));
+      if ((page?.length ?? 0) < 500) break;
+      // Never silently produce a truncated successful backup.
+      if (data.length >= 100000) return new Response(JSON.stringify({error:"Backup requires external export"}), {status:503});
     }
     dump[table] = data ?? [];
     const json = JSON.stringify(data ?? []);
@@ -88,7 +96,7 @@ Deno.serve(async (req: Request) => {
 
   if (uploadRes.error) {
     return new Response(
-      JSON.stringify({ error: "Upload failed", details: uploadRes.error.message }),
+      JSON.stringify({ error: "Backup upload failed" }),
       { status: 500, headers: { "Content-Type": "application/json" } },
     );
   }

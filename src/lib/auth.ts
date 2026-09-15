@@ -5,9 +5,7 @@ import { supabase } from "./supabase";
 import type { Session } from "@supabase/supabase-js";
 
 // Allowlist de admins. Para agregar otro admin, edita esta constante y re-deploy.
-// IMPORTANTE: en el server (RLS) también deberías restringir, pero como Supabase
-// con `authenticated` role tiene acceso completo en este proyecto, mantén esta
-// lista corta y de confianza.
+// La autorización real está en is_amarte_admin() y las políticas RLS.
 export const ADMIN_EMAILS = [
   "breathwork@amarteinc.com",
   "amarteinc@gmail.com",
@@ -27,6 +25,7 @@ export async function sendMagicLink(email: string): Promise<{ ok: boolean; error
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
+      shouldCreateUser: false,
       emailRedirectTo: `${window.location.origin}/admin`,
     },
   });

@@ -64,7 +64,14 @@ export function WhatsappGateProvider({ children }: { children: ReactNode }) {
     if (typeof window === "undefined") return;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setLead(JSON.parse(raw));
+      if (raw) {
+        const old = JSON.parse(raw);
+        if (typeof old.registeredAt === "string" && Date.parse(old.registeredAt) > Date.now() - 90 * 86400000) {
+          const minimal = {name:"",whatsapp:"",countryCode:"",countryName:"",registeredAt:old.registeredAt};
+          setLead(minimal);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({registeredAt:old.registeredAt}));
+        } else localStorage.removeItem(STORAGE_KEY);
+      }
     } catch {
       // ignore corrupted
     }
@@ -94,7 +101,7 @@ export function WhatsappGateProvider({ children }: { children: ReactNode }) {
   const markRegistered = useCallback(
     (newLead: RegisteredLead) => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(newLead));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({registeredAt:newLead.registeredAt}));
       } catch {
         // ignore quota
       }

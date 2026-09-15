@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 // NOTA lazy: LeadIntent es solo tipo. submitLead se carga con import()
@@ -19,6 +19,11 @@ const intents: { value: LeadIntent; label: string }[] = [
 
 const STEP_LABELS = ["Tus datos", "Tu intención", "Confirmar"];
 
+// Nombres de honeypot rotados por montaje (no fijo): los bots que aprenden
+// un name/id estático ("website", "company"...) no lo encuentran. El valor
+// se mapea a `honeypot` del payload; el servidor lo rechaza en silencio.
+const HONEYPOT_NAMES = ["contacto_extra", "datos_adicionales", "info_complemento", "referencia_extra"];
+
 export function LeadForm() {
   const { markRegistered } = useWhatsappGate();
   const [step, setStep] = useState(0);
@@ -28,8 +33,22 @@ export function LeadForm() {
   const [intent, setIntent] = useState<LeadIntent | "">("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  const [touched0, setTouched0] = useState(false);
+  // Nombre trampa no fijo: se rota al montar vía ref (sin re-render;
+  // el valor viaja en estado y se mapea a `honeypot` del payload).
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const chosen = HONEYPOT_NAMES[Math.floor(Math.random() * HONEYPOT_NAMES.length)];
+    const el = honeypotRef.current;
+    if (el) {
+      el.name = chosen;
+      el.id = `lead-${chosen}`;
+    }
+  }, []);
 
   const canNext0 = name.trim().length > 1 && whatsapp.trim().length >= 7;
+  const hint0 = !canNext0 && touched0;
   const canNext1 = true; // ciudad e intent son opcionales pero los pedimos en el step 2
 
   const next = () => setStep((s) => Math.min(s + 1, STEP_LABELS.length - 1));
@@ -44,6 +63,7 @@ export function LeadForm() {
       city: city.trim() || undefined,
       intent: (intent || undefined) as LeadIntent | undefined,
       source: "lead_form_multistep",
+      honeypot: honeypot || undefined,
     };
     try {
       // Import dinámico: el chunk @supabase se descarga al enviar, no antes.
@@ -56,7 +76,9 @@ export function LeadForm() {
       }
       if (res.ok) {
         setStatus("success");
-        trackLeadFormSubmit(payload);
+        // Fase 0: el PII (name/whatsapp/city/intent) solo va a Supabase.
+        // A Meta/TikTok/GA4 solo viaja señal anonimizada (source).
+        trackLeadFormSubmit({ source: payload.source });
         // Marcar como registrado en el gate para que no vuelva a aparecer
         markRegistered({
           name: payload.name,
@@ -98,6 +120,7 @@ export function LeadForm() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
+              role="status"
               className="mt-8 flex flex-col items-start gap-5 rounded-2xl border border-emerald-brand/30 bg-emerald-deep/30 p-6"
             >
               <div className="flex items-center gap-3">
@@ -121,9 +144,24 @@ export function LeadForm() {
             </motion.div>
           ) : (
             <>
+              {/* Honeypot anti-bots: invisible para humanos, nombre no fijo */}
+              <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
+                <input
+                  ref={honeypotRef}
+                  type="text"
+                  id="lead-contacto_extra"
+                  name="contacto_extra"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+
               {/* Progress */}
               <div className="mt-8">
-                <div className="flex items-center justify-between text-xs uppercase tracking-eyebrow text-muted">
+                <div aria-live="polite" className="flex items-center justify-between text-xs uppercase tracking-eyebrow text-muted">
                   <span>
                     Paso {step + 1} · {STEP_LABELS[step]}
                   </span>
@@ -154,19 +192,22 @@ export function LeadForm() {
                       label="Nombre"
                       id="name"
                       value={name}
-                      onChange={setName}
+                      onChange={(v) => { setName(v); setTouched0(true); }}
                       placeholder="Tu nombre"
                       required
                       autoFocus
+                      autoComplete="name"
                     />
                     <Field
                       label="WhatsApp"
                       id="whatsapp"
                       type="tel"
                       value={whatsapp}
-                      onChange={setWhatsapp}
+                      onChange={(v) => { setWhatsapp(v); setTouched0(true); }}
                       placeholder="+593 9..."
                       required
+                      autoComplete="tel"
+                      describedBy="lead-step0-hint"
                     />
                   </motion.div>
                 )}
@@ -189,18 +230,19 @@ export function LeadForm() {
                       placeholder="Quito, Guayaquil…"
                     />
                     <div>
-                      <label className="text-xs uppercase tracking-eyebrow text-bone/60">
-                        ¿Qué estás buscando?
-                      </label>
-                      <div className="mt-3 flex flex-wrap gap-2">
+                      <span id="lead-intent-label" className="text-xs uppercase tracking-eyebrow text-bone/60">
+                        ¿Qué estás buscando? <span className="text-bone/60">(opcional)</span>
+                      </span>
+                      <div role="group" aria-labelledby="lead-intent-label" className="mt-3 flex flex-wrap gap-2">
                         {intents.map((opt) => {
                           const active = intent === opt.value;
                           return (
                             <button
                               key={opt.value}
                               type="button"
+                              aria-pressed={active}
                               onClick={() => setIntent(active ? "" : opt.value)}
-                              className={`rounded-full border px-4 py-2 text-xs transition-all relative before:absolute before:-inset-1 before:content-[''] ${
+                              className={`rounded-full border px-4 py-2 text-xs transition-all relative before:absolute before:-inset-1 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-brand/60 ${
                                 active
                                   ? "border-emerald-brand/50 bg-emerald-deep/50 text-emerald-glow"
                                   : "border-white/10 bg-white/[0.02] text-bone/80 hover:border-white/20"
@@ -265,6 +307,12 @@ export function LeadForm() {
                 )}
               </AnimatePresence>
 
+              {hint0 && step === 0 && (
+                <p id="lead-step0-hint" className="mt-3 text-sm text-bone/80">
+                  Escribe tu nombre y un WhatsApp válido (7+ dígitos) para continuar. Sin prisa.
+                </p>
+              )}
+
               {error && (
                 <p className="mt-3 text-base text-red-300" role="alert">
                   {error}
@@ -325,6 +373,8 @@ function Field({
   type = "text",
   required,
   autoFocus,
+  autoComplete,
+  describedBy,
 }: {
   label: string;
   id: string;
@@ -334,12 +384,14 @@ function Field({
   type?: string;
   required?: boolean;
   autoFocus?: boolean;
+  autoComplete?: string;
+  describedBy?: string;
 }) {
   return (
     <div>
       <label htmlFor={id} className="text-xs uppercase tracking-eyebrow text-bone/60">
         {label}
-        {required && <span className="ml-1 text-emerald-brand">*</span>}
+        {required && <span aria-hidden="true" className="ml-1 text-emerald-brand">*</span>}
       </label>
       <input
         id={id}
@@ -347,6 +399,8 @@ function Field({
         type={type}
         required={required}
         autoFocus={autoFocus}
+        autoComplete={autoComplete}
+        aria-describedby={describedBy}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

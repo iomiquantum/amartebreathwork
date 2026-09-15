@@ -90,6 +90,15 @@
       linear-gradient(135deg, rgba(0,200,150,0.5), rgba(212,175,55,0.25), rgba(0,200,150,0.1)) border-box;
     border: 1px solid transparent;
   }
+  /* Revelado del hero en CSS puro (sin esperar a framer-motion):
+     el H1 y el copy pintan con el primer paint aunque el JS de
+     animación tarde o falle. El estado final es opacidad 1. */
+  .hero-reveal {
+    opacity: 0;
+    animation: hero-rise 0.8s ease-out forwards;
+    animation-delay: var(--d, 0s);
+  }
+
   /* Borde gradiente dinámico que sigue --color-primary y --color-secondary.
      Usado por las landings /mujeres y /hombres en el visual del hero. */
   .gradient-border-primary {
@@ -132,6 +141,25 @@
 }
 
 @layer utilities {
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Movimiento reducido: contenido visible de inmediato, sin animación. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-reveal {
+      opacity: 1;
+      animation: none;
+    }
+  }
+
   .text-balance {
     text-wrap: balance;
   }

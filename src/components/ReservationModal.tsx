@@ -14,7 +14,7 @@
 //    - Por ahora muestra mensaje "preparando integración"
 //    - Cuando se integre: redirige a widget PayPhone
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   X,
@@ -61,6 +61,19 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
   const [bank, setBank] = useState<BankConfig | null>(null);
   const [reservationId, setReservationId] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  // Honeypot con nombre no fijo: se rota al montar vía ref (sin re-render).
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const pool = ["contacto_extra", "datos_adicionales", "info_complemento", "referencia_extra"];
+    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    const el = honeypotRef.current;
+    if (el) {
+      el.name = chosen;
+      el.id = `res-${chosen}`;
+    }
+  }, []);
 
   // Reset al cerrar
   useEffect(() => {
@@ -74,25 +87,53 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
     }
   }, [isOpen]);
 
-  // ESC para cerrar + body scroll lock (a11y)
+  // ESC para cerrar + body scroll lock + focus-trap con retorno (a11y).
+  // Al abrir se guarda el foco previo; al cerrar se devuelve. Tab circula
+  // solo dentro del diálogo; al abrir, el foco cae en el primer control.
   useEffect(() => {
     if (!isOpen) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab" || !dialogRef.current) return;
+      const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const t = window.setTimeout(() => {
+      const first = dialogRef.current?.querySelector<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href]'
+      );
+      first?.focus();
+    }, 60);
     return () => {
+      window.clearTimeout(t);
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      returnFocusRef.current?.focus?.();
     };
   }, [isOpen, onClose]);
 
   // Monto del depósito: usa deposit_amount del evento (default $20).
   // (Declarado antes de los efectos porque el de apertura lo usa en el track.)
-  const depositAmount = event?.deposit_amount ?? 20;
-  const depositCurrency = event?.deposit_currency ?? "USD";
+  const depositAmount = event?.deposit_amount ?? event?.price_amount ?? 0;
+  const depositCurrency = event?.deposit_amount != null ? event.deposit_currency : event?.price_currency ?? "USD";
 
   // Cargar datos bancarios al abrir + track InitiateCheckout.
   // Import dinámico: el chunk @supabase se descarga aquí, no en el primer pintado.
@@ -219,6 +260,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
           onClick={onClose}
         >
           <motion.div
+            ref={dialogRef}
             initial={{ scale: 0.96, opacity: 0, y: 12 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.97, opacity: 0, y: 8 }}
@@ -278,11 +320,12 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                     . El resto lo pagas el día del evento.
                   </p>
 
-                  <div className="mt-5 space-y-3">
+                  <div role="group" aria-label="Método de pago" className="mt-5 space-y-3">
                     <button
                       type="button"
+                      aria-pressed={method === "payphone"}
                       onClick={() => setMethod("payphone")}
-                      className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-all ${
+                      className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-brand/60 ${
                         method === "payphone"
                           ? "border-emerald-brand/60 bg-emerald-deep/30"
                           : "border-white/10 bg-white/[0.02] hover:border-white/20"
@@ -300,8 +343,9 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
 
                     <button
                       type="button"
+                      aria-pressed={method === "transferencia"}
                       onClick={() => setMethod("transferencia")}
-                      className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-all ${
+                      className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-brand/60 ${
                         method === "transferencia"
                           ? "border-emerald-brand/60 bg-emerald-deep/30"
                           : "border-white/10 bg-white/[0.02] hover:border-white/20"
@@ -349,12 +393,16 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                     Necesarios para enviarte la confirmación de tu cupo.
                   </p>
 
-                  {/* Honeypot */}
-                  <div style={{ position: "absolute", left: "-9999px" }} aria-hidden>
+                  {/* Honeypot anti-bots: invisible para humanos, nombre no fijo */}
+                  <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
                     <input
+                      ref={honeypotRef}
                       type="text"
+                      id="res-contacto_extra"
+                      name="contacto_extra"
                       tabIndex={-1}
                       autoComplete="off"
+                      aria-hidden="true"
                       value={honeypot}
                       onChange={(e) => setHoneypot(e.target.value)}
                     />
@@ -369,6 +417,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                         id="res-name"
                         type="text"
                         required
+                        autoComplete="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Tu nombre y apellido"
@@ -384,6 +433,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                         id="res-email"
                         type="email"
                         required
+                        autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="tu@email.com"
@@ -415,6 +465,7 @@ export function ReservationModal({ event, isOpen, onClose }: Props) {
                           id="res-phone"
                           type="tel"
                           required
+                          autoComplete="tel"
                           inputMode="numeric"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}

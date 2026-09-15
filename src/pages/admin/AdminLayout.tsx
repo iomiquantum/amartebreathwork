@@ -1,3 +1,4 @@
+import { AdminMfa } from "../../components/AdminMfa";
 // Layout compartido del admin: sidebar con navegación + outlet.
 // Aplica AuthGuard implícito (si no hay sesión válida, redirige a /admin/login).
 
@@ -45,6 +46,7 @@ export function AdminLayout() {
   }
 
   return (
+    <AdminMfa>
     <div className="min-h-screen bg-ink text-bone">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-12 pt-24 sm:px-6 lg:flex-row lg:gap-8">
         <aside className="w-full shrink-0 lg:w-60">
@@ -78,6 +80,7 @@ export function AdminLayout() {
         </main>
       </div>
     </div>
+    </AdminMfa>
   );
 }
 

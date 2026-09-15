@@ -234,12 +234,32 @@ export function trackFinalCTA() {
   trackWhatsappClick("final_cta");
 }
 
-export function trackLeadFormSubmit(payload: Record<string, unknown>) {
+// Fase 0 (datos y consentimiento): NUNCA enviar PII en claro a vendors
+// externos (Meta/TikTok/GA4). name, whatsapp, city e intent solo viajan
+// a Supabase (lib/supabase.ts); aquí el evento sale SIN payload sensible:
+// solo señales no identificables (source/method). Aunque un llamante pase
+// PII por error, se descarta antes de emitir.
+export interface LeadMarketingSignal {
+  source?: string;
+  method?: string;
+  // Se aceptan claves extra solo por compatibilidad con llamantes
+  // existentes (newsletter, gate, reserva…): se IGNORAN siempre y nunca
+  // se reenvían a vendors. Así ningún PII llega a Meta/TikTok/GA4.
+  [k: string]: unknown;
+}
+export function trackLeadFormSubmit(payload: LeadMarketingSignal = {}) {
   if (typeof window === "undefined" || !isMarketingAllowed()) return;
-  window.fbq?.("track", "Lead", payload);
-  window.ttq?.track("SubmitForm", payload);
-  window.gtag?.("event", "generate_lead", payload);
-  window.dataLayer?.push({ event: "lead_form_submit", ...payload });
+  const raw = payload.source ?? payload.method ?? "lead_form";
+  const source = typeof raw === "string" && raw.length > 0 ? raw : "lead_form";
+  // Señal anonimizada: solo `source`. Nunca se propaga el resto del objeto
+  // (name/whatsapp/city/intent u otras claves) a ningún vendor.
+  const safeMeta = { content_name: source, status: "completed" };
+  const safeGa = { method: source };
+  const safeLayer = { event: "lead_form_submit", source };
+  window.fbq?.("track", "Lead", safeMeta);
+  window.ttq?.track("SubmitForm", { content_name: source });
+  window.gtag?.("event", "generate_lead", safeGa);
+  window.dataLayer?.push(safeLayer);
   window.clarity?.("event", "lead_form_submit");
   // Tag importante para Clarity heatmaps
   window.clarity?.("set", "is_lead", "true");

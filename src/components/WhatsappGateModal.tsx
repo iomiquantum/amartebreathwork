@@ -37,6 +37,19 @@ export function WhatsappGateModal() {
   const [honeypot, setHoneypot] = useState(""); // Trap para bots
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  // Honeypot con nombre no fijo (antes id/name fijos): se rota al montar vía ref.
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const pool = ["contacto_extra", "datos_adicionales", "info_complemento", "referencia_extra"];
+    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    const el = honeypotRef.current;
+    if (el) {
+      el.name = chosen;
+      el.id = `gate-${chosen}`;
+    }
+  }, []);
 
   // Reset cuando se cierra
   useEffect(() => {
@@ -51,18 +64,44 @@ export function WhatsappGateModal() {
     }
   }, [isOpen, status]);
 
-  // ESC para cerrar + body scroll lock cuando está abierto (a11y)
+  // ESC para cerrar + body scroll lock + focus-trap con retorno (a11y).
   useEffect(() => {
     if (!isOpen) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeGate();
+      if (e.key === "Escape") {
+        closeGate();
+        return;
+      }
+      if (e.key !== "Tab" || !dialogRef.current) return;
+      const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const t = window.setTimeout(() => {
+      const first = dialogRef.current?.querySelector<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href]'
+      );
+      first?.focus();
+    }, 60);
     return () => {
+      window.clearTimeout(t);
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      returnFocusRef.current?.focus?.();
     };
   }, [isOpen, closeGate]);
 
@@ -169,6 +208,7 @@ export function WhatsappGateModal() {
           onClick={closeGate}
         >
           <motion.div
+            ref={dialogRef}
             initial={{ scale: 0.96, opacity: 0, y: 12 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.97, opacity: 0, y: 8 }}
@@ -210,20 +250,19 @@ export function WhatsappGateModal() {
 
                   {/* Form */}
                   <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                    {/* Honeypot trap — invisible para humanos, bots llenan campos */}
-                    <div className="absolute opacity-0 pointer-events-none" aria-hidden style={{ position: 'absolute', left: '-9999px' }}>
-                      <label htmlFor="amarte_website">
-                        Website (deja en blanco)
-                        <input
-                          type="text"
-                          id="amarte_website"
-                          name="website"
-                          tabIndex={-1}
-                          autoComplete="off"
-                          value={honeypot}
-                          onChange={(e) => setHoneypot(e.target.value)}
-                        />
-                      </label>
+                    {/* Honeypot trap — invisible para humanos, nombre no fijo */}
+                    <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', top: 'auto', width: 1, height: 1, overflow: 'hidden' }}>
+                      <input
+                        ref={honeypotRef}
+                        type="text"
+                        id="gate-contacto_extra"
+                        name="contacto_extra"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        aria-hidden="true"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                      />
                     </div>
 
                     {/* Nombre */}
@@ -236,6 +275,7 @@ export function WhatsappGateModal() {
                         type="text"
                         required
                         autoFocus
+                        autoComplete="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Tu nombre"
@@ -268,6 +308,7 @@ export function WhatsappGateModal() {
                           id="gate-phone"
                           type="tel"
                           required
+                          autoComplete="tel"
                           inputMode="numeric"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
@@ -283,13 +324,14 @@ export function WhatsappGateModal() {
                     {/* Email opcional */}
                     <div>
                       <label htmlFor="gate-email" className="text-xs uppercase tracking-eyebrow text-bone/60">
-                        Email <span className="text-muted/60">(opcional)</span>
+                        Email <span className="text-bone/60">(opcional)</span>
                       </label>
                       <div className="relative mt-1.5">
                         <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted" />
                         <input
                           id="gate-email"
                           type="email"
+                          autoComplete="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="tu@email.com"

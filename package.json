@@ -9,7 +9,9 @@
     "build": "tsc -b && vite build",
     "postbuild": "node scripts/prerender-meta.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node scripts/verify-subpaths.mjs && node scripts/smoke-fase3.mjs && node scripts/smoke-lead-consent-canonical.mjs",
+    "sync:embeds": "node scripts/sync-embeds.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.105.4",
@@ -24,6 +26,7 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
@@ -34,6 +37,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "playwright": "^1.63.0",
     "postcss": "^8.5.14",
     "tailwindcss": "^3.4.13",
     "typescript": "~6.0.2",

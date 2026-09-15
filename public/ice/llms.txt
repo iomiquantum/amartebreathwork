@@ -1,0 +1,19 @@
+# ICE RESET INMERSIVO
+
+> Hielo · Respiración · Música · Frecuencias. Experiencias inmersivas de hielo
+> con respiración guiada, música y frecuencias para entrenar calma, presencia
+> y regulación del sistema nervioso.
+
+- Proyecto: landing de conversión a WhatsApp (Vite + React + TypeScript).
+- Ruta pública: https://breathwork.amarteinc.com/ice/
+- Fuente: repo ICE-RESET-INMERSIVO (index.html + src/data/siteConfig.ts).
+- Formato: experiencias presenciales con cupos limitados (60 a 120 minutos,
+  modalidades MORNING RESET y NIGHT RESET). Fecha, lugar y horario de la
+  próxima edición se anuncian en el grupo privado de WhatsApp ("Por anunciar"
+  en el código al momento de escribir este archivo).
+- Contacto: grupo privado de WhatsApp (los enlaces en `src/data/siteConfig.ts`
+  — `WHATSAPP_GROUP_URL` y `WHATSAPP_MESSAGE_URL` — aún son marcadores
+  `REEMPLAZAR_AQUI` / `593XXXXXXXXX`; reemplazar por los enlaces reales).
+- Secciones: Hero, Formato del evento, Cómo funciona, Qué incluye,
+  Beneficios, Para quién es, Comunidad WhatsApp, Diferenciadores,
+  Preguntas frecuentes (11), Aviso responsable y CTA final.

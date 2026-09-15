@@ -422,22 +422,36 @@ No me ofende. La frecuencia debe ser elegida.`,
 
 export function renderTemplate(template: string, vars: EmailVars): string {
   return template
-    .replaceAll("{{name}}", vars.name)
+    .replaceAll("{{name}}", () => vars.name)
     .replaceAll("{{whatsapp_group_url}}", vars.whatsapp_group_url)
     .replaceAll("{{next_event_url}}", vars.next_event_url)
     .replaceAll("{{site_url}}", vars.site_url)
     .replaceAll("{{unsubscribe_url}}", vars.unsubscribe_url);
 }
 
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]!);
+}
+function safeEmailVars(vars: EmailVars): EmailVars {
+  const out = {...vars};
+  for (const key of ["whatsapp_group_url","next_event_url","site_url","unsubscribe_url"] as const) {
+    const url = new URL(vars[key]);
+    if (url.protocol !== "https:" || url.username || url.password) throw new Error("Unsafe email link");
+    out[key] = url.href;
+  }
+  return out;
+}
 export function renderEmail(
   template: EmailTemplate,
   vars: EmailVars,
 ): { subject: string; preheader: string; text: string; html: string } {
+  vars = safeEmailVars(vars);
+  const htmlVars = Object.fromEntries(Object.entries(vars).map(([key,value]) => [key,escapeHtml(value)])) as EmailVars;
   return {
-    subject: renderTemplate(template.subject, vars),
+    subject: renderTemplate(template.subject, vars).replace(/[\r\n]/g," "),
     preheader: renderTemplate(template.preheader, vars),
     text: renderTemplate(template.body, vars),
-    html: wrapHtml(renderTemplate(template.htmlBody, vars), vars),
+    html: wrapHtml(renderTemplate(template.htmlBody, htmlVars), htmlVars),
   };
 }
 

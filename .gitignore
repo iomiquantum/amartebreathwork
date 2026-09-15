@@ -26,3 +26,8 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Secrets must never be committed
+.env*
+!.env.example
+!.env.*.example
